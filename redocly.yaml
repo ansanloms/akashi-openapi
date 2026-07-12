@@ -1,0 +1,15 @@
+extends:
+  - recommended-strict
+
+apis:
+  example:
+    root: ./api.yaml
+plugins:
+  - "./redocly/plugins/index.ts"
+rules:
+  info-license: off
+  no-invalid-media-type-examples: off
+  operation-2xx-response: off
+  operation-4xx-response: off
+preprocessors:
+  ansanloms/inline-examples: on
