@@ -1,0 +1,40 @@
+type: object
+description: 工数削除のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      staff_id:
+        type: integer
+        description: 従業員 ID。
+      date:
+        type: string
+        description: 日付。
+        example: 2019-08-03
+      project_id:
+        type: integer
+        description: プロジェクト ID。
+      daily_hour_items:
+        type: array
+        description: プロジェクトのタスク毎の工数の配列。
+        items:
+          type: object
+          description: 削除された結果のタスク毎の工数。
+          properties:
+            task_id:
+              type: integer
+              description: 削除された結果のタスク ID。
+            minute:
+              type: integer
+              description: 削除された結果の工数 (分)。
+  errors:
+    type: array
+    description: 失敗の原因となったエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

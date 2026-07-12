@@ -1,0 +1,35 @@
+type: object
+description: 組織作成のリクエスト。
+required:
+  - token
+  - organizations
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  organizations:
+    type: array
+    description: 生成する組織を配列で指定する。
+    items:
+      type: object
+      description: 生成する組織。
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          maxLength: 32
+          description: 組織の名称。UTF-8 かつ機種依存文字 (1) と/を含まない。最大 32 文字。
+        name_en:
+          type: string
+          maxLength: 64
+          description: 組織の名称 (英語)。UTF-8 かつ機種依存文字 (1) と/を含まない。最大 64 文字。
+        code:
+          type: string
+          maxLength: 32
+          description: 組織コード。a〜z、A〜Z、0〜9 と - のみ。最大 32 文字。
+        parent_organization:
+          type: string
+          description: >-
+            生成する組織が所属する親組織。最上位 (企業を含まない) の親組織から/区切りで記述する。
+            UTF-8 かつ機種依存文字 (1) を含まない。

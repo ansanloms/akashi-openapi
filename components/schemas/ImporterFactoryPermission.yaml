@@ -1,0 +1,33 @@
+type: object
+description: 管理権限設定の指定と管理先の指定の内容。従業員番号かメールアドレスのいずれかが必須。
+required:
+  - manager_permission_name
+properties:
+  staff_code:
+    type: string
+    description: 従業員番号。従業員番号かメールアドレスのいずれかが必須。
+  staff_email:
+    type: string
+    description: メールアドレス。従業員番号かメールアドレスのいずれかが必須。
+  manager_permission_name:
+    type: string
+    description: 管理権限名称。
+  manage_organization_path:
+    type: string
+    description: 管理先組織パス。管理先組織パスか管理先組織コードのいずれかが必須。
+  manage_organization_code:
+    type: string
+    description: 管理先組織コード。管理先組織パスか管理先組織コードのいずれかが必須。
+  manage_subordinate_organizations_immed_path:
+    type: string
+    description: >-
+      下位組織の管理 (即時反映・パス)。
+      指定できる値は「下位組織を管理対象にしない」「下位組織を直接管理対象とする」「サブ組織所属を除く＋直下組織管理者を直接管理する」のいずれか。
+      未指定の場合は「下位組織を管理対象にしない」となる。
+  manage_subordinate_organizations_immed_code:
+    type: string
+    description: >-
+      下位組織の管理 (即時反映・コード)。
+      指定できる値は「下位組織を管理対象にしない」「下位組織を直接管理対象とする」「サブ組織所属を除く＋直下組織管理者を直接管理する」のいずれか。
+      未指定の場合は「下位組織を管理対象にしない」となる。
+additionalProperties: true

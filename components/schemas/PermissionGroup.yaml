@@ -1,0 +1,16 @@
+type: object
+description: 権限グループ。
+properties:
+  permissionGroupId:
+    type: integer
+    description: 権限グループ ID。
+  permissionType:
+    type: integer
+    description: "権限種別。1 : 企業管理者、2 : 一般管理者、3 : 従業員。"
+    enum:
+      - 1
+      - 2
+      - 3
+  name:
+    type: string
+    description: 権限グループ名。

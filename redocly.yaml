@@ -8,6 +8,9 @@ plugins:
   - "./redocly/plugins/index.ts"
 rules:
   info-license: off
+  # AKASHI 公開 API はタスク系のみ /{企業ID}/{project_id}/tasks の形であり、
+  # 他のパス (/{企業ID}/manhours/{staff_id} 等) と構造上の曖昧さが避けられないため無効化。
+  no-ambiguous-paths: off
   no-invalid-media-type-examples: off
   operation-2xx-response: off
   operation-4xx-response: off

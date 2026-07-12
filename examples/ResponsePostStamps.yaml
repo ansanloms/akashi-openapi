@@ -1,0 +1,6 @@
+success: true
+response:
+  login_company_code: sample001
+  staff_id: 123
+  type: 11
+  stampedAt: 2017/03/14 08:57:00

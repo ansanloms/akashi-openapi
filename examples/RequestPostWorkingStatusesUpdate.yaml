@@ -1,0 +1,19 @@
+token: 1962f066-7024-4a00-bde9-1cb35f2309c1
+update:
+  - staff_id: "1"
+    date: 2026-02-02
+    working_statuses:
+      - 直帰
+      - 早退
+    replace: true
+  - staff_id: "1"
+    date: 2026-02-03
+    working_statuses: []
+    replace: true
+  - staff_id: "1"
+    date: 2026-02-04
+    working_statuses:
+      - 遅刻
+    replace: false
+    if_not:
+      - テレワーク

@@ -1,0 +1,28 @@
+type: object
+description: プロジェクト従業員追加解除のリクエスト。
+required:
+  - token
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  assign:
+    type: array
+    description: 追加、または更新する従業員の配列。
+    items:
+      type: object
+      description: 追加、または更新する従業員。
+      required:
+        - staff_id
+      properties:
+        staff_id:
+          type: integer
+          description: 従業員 ID。
+        owner:
+          type: boolean
+          description: true ならオーナーとして扱う。デフォルトは false。
+  unassign:
+    type: array
+    description: 解除する従業員 ID の配列。
+    items:
+      type: integer

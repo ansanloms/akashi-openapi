@@ -1,0 +1,33 @@
+type: object
+description: プロジェクト削除のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 削除したプロジェクト。
+    properties:
+      project_id:
+        type: integer
+        description: プロジェクト ID。
+      name:
+        type: string
+        description: プロジェクト名称。
+      short_name:
+        type:
+          - string
+          - "null"
+        description: プロジェクト略称。
+      project_code:
+        type:
+          - string
+          - "null"
+        description: プロジェクトコード。
+  errors:
+    type: array
+    description: 失敗の原因となったエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

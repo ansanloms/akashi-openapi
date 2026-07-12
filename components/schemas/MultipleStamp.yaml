@@ -1,0 +1,14 @@
+type: object
+description: 従業員ごとの打刻情報。
+properties:
+  staff_id:
+    type: integer
+    description: 取得した打刻に紐づく従業員の ID。
+  count:
+    type: integer
+    description: 従業員の打刻数。
+  stamps:
+    type: array
+    description: 打刻データの配列。
+    items:
+      $ref: ./Stamp.yaml

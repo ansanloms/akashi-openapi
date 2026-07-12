@@ -1,0 +1,9 @@
+type: object
+description: 組織の概要。
+properties:
+  organizationId:
+    type: integer
+    description: 組織 ID。
+  name:
+    type: string
+    description: 組織名。

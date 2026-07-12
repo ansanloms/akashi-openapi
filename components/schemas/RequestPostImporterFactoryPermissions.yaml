@@ -1,0 +1,14 @@
+type: object
+description: 権限と管理先指定のリクエスト。
+required:
+  - token
+  - permissions
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  permissions:
+    type: array
+    description: 管理権限設定の指定と管理先の指定の配列。
+    items:
+      $ref: ./ImporterFactoryPermission.yaml

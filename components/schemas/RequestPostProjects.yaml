@@ -1,0 +1,14 @@
+type: object
+description: プロジェクト作成更新のリクエスト。
+required:
+  - token
+  - projects
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  projects:
+    type: array
+    description: 作成、または更新するプロジェクトの配列。
+    items:
+      $ref: ./ProjectInput.yaml

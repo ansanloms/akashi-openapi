@@ -1,0 +1,46 @@
+post:
+  operationId: postImporterFactoryPermissions
+  summary: 権限と管理先指定。
+  tags:
+    - importerFactory
+  description:
+    $ref: ./descriptions/postImporterFactoryPermissions.md
+  security: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+  requestBody:
+    description: 管理権限設定の指定と管理先の指定の情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestPostImporterFactoryPermissions.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestPostImporterFactoryPermissions.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseStaffs.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseStaffs.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

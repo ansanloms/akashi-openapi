@@ -1,0 +1,14 @@
+type: object
+description: アラート。
+properties:
+  month:
+    type: string
+    description: アラートの発生した月度。
+    example: 2017/03/01
+  date:
+    type: string
+    description: アラートの発生した日付。
+    example: 2017/04/15
+  alert_type:
+    $ref: ./EnumAlertType.yaml
+    description: アラート種別。

@@ -1,0 +1,98 @@
+patch:
+  operationId: patchStaffs
+  summary: 従業員新規登録・更新。
+  tags:
+    - staffs
+  description:
+    $ref: ./descriptions/patchStaffs.md
+  security: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      schema:
+        type: string
+  requestBody:
+    description: 新規登録、または更新する従業員の情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestPatchStaffs.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestPatchStaffs.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponsePatchStaffs.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponsePatchStaffs.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml
+get:
+  operationId: getStaffs
+  summary: 従業員取得。
+  tags:
+    - staffs
+  description:
+    $ref: ./descriptions/getStaffs.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      schema:
+        type: string
+    - in: query
+      name: target
+      required: false
+      description: 取得する従業員のトークン。
+      schema:
+        type: string
+    - in: query
+      name: page
+      required: false
+      description: >-
+        管理下にある従業員をすべて取得する場合のページ位置。
+        1 ページに取得できるのは 20 人分まで。
+        レスポンスに記載される TotalCount を参考に 0 から始まるページを指定する。
+      schema:
+        type: integer
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseGetStaffs.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseGetStaffs.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

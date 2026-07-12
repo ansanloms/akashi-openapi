@@ -1,0 +1,95 @@
+get:
+  operationId: getProjectsProjectId
+  summary: プロジェクト取得 (プロジェクト ID 指定)。
+  tags:
+    - projects
+  description:
+    $ref: ./descriptions/getProjectsProjectId.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: project_id
+      required: true
+      description: プロジェクト ID。
+      schema:
+        type: integer
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseGetProjectsProjectId.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseGetProjectsProjectId.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml
+delete:
+  operationId: deleteProjectsProjectId
+  summary: プロジェクト削除。
+  tags:
+    - projects
+  description:
+    $ref: ./descriptions/deleteProjectsProjectId.md
+  security: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: project_id
+      required: true
+      description: プロジェクト ID。
+      schema:
+        type: integer
+  requestBody:
+    description: 削除の情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestDeleteProjectsProjectId.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestDeleteProjectsProjectId.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseDeleteProjectsProjectId.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseDeleteProjectsProjectId.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

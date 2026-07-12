@@ -1,0 +1,419 @@
+type: object
+description: >-
+  個別就業設定。従業員番号かメールアドレスのいずれかが必須。
+  パラメータの詳細は公開 API 仕様の添付「個別就業設定パラメータ」を参照。
+required:
+  - working_category
+  - weekly_working_days
+  - rest_period
+  - handling_of_leaving_punch
+properties:
+  staff_code:
+    type: string
+    description: 従業員番号。メールアドレスの記載がない場合は必須。
+  staff_email:
+    type: string
+    description: メールアドレス。従業員番号の記載がない場合は必須。
+  working_condition_template_name:
+    type: string
+    description: テンプレート名称。
+  effective_date:
+    type: string
+    description: 反映日。yyyy/mm/dd 形式の日付。未入力の場合は当日を補完する。
+    example: 2023/02/02
+  recount_method:
+    type: string
+    description: 再集計方法。打刻基準/実績基準/再集計しない。反映日が現在日以前の場合は必須。
+  working_category:
+    type: string
+    description: >-
+      労働区分。
+      普通労働制/フレックス/裁量労働制/管理監督者/1 ヶ月単位の変形労働時間/1 年単位の変形労働時間。
+  attendance_display_name:
+    type: string
+    description: 出勤簿表示名称。
+  variable_agreement_setting_name:
+    type: string
+    description: 1 年変形協定名称。1 年変形の場合は必須。
+  variable_scheduled_working_hours_type:
+    type: string
+    description: >-
+      月の所定労働時間。
+      月度毎・個別に設定する/週の所定労働時間による/日の所定労働時間の合計。
+      1 ヶ月単位の変形労働時間制の場合は必須。
+  variable_monthly_scheduled_working_hours:
+    type: string
+    description: >-
+      変形月所定労働時間。1〜12 月を HHH:MM の/区切りで指定する。
+      月の所定労働時間が「月度毎・個別に設定する」の場合は必須。
+  variable_scheduled_working_hours_time:
+    type: string
+    description: 週の所定労働時間。HH:MM 形式。月の所定労働時間が「週の所定労働時間による」の場合は必須。
+  weekly_legal_working_hours:
+    type: string
+    description: 週の法定労働時間。40 時間/44 時間。変形労働の場合は必須。
+  prescribed_working_hours_of_schedule_change:
+    type: string
+    description: 予定変更時の当日の所定労働時間。
+  wday_start:
+    type: string
+    description: 週の開始曜日。変形期間の開始に合わせる/就業マスターに従う。変形労働の場合は必須。
+  fixed_working_time:
+    type: string
+    description: 所定労働時間。H:MM 形式。フレックスは除く。
+  weekly_working_days:
+    type: string
+    description: 年休の付与に用いる週の労働日数。予定時刻設定の労働日数を用いる/1〜4/5 以上。
+  shift_setting_type:
+    type: string
+    description: シフト設定方法。毎月シフトを個別設定する/曜日毎に勤務時間を設定する。変形労働の場合は必須。
+  plan_start_and_end_time_sun:
+    type: string
+    description: 出勤・退勤時刻 (日曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (日曜) を入力する場合は必須。
+  plan_start_and_end_time_mon:
+    type: string
+    description: 出勤・退勤時刻 (月曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (月曜) を入力する場合は必須。
+  plan_start_and_end_time_tue:
+    type: string
+    description: 出勤・退勤時刻 (火曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (火曜) を入力する場合は必須。
+  plan_start_and_end_time_wed:
+    type: string
+    description: 出勤・退勤時刻 (水曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (水曜) を入力する場合は必須。
+  plan_start_and_end_time_thu:
+    type: string
+    description: 出勤・退勤時刻 (木曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (木曜) を入力する場合は必須。
+  plan_start_and_end_time_fri:
+    type: string
+    description: 出勤・退勤時刻 (金曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (金曜) を入力する場合は必須。
+  plan_start_and_end_time_sat:
+    type: string
+    description: 出勤・退勤時刻 (土曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (土曜) を入力する場合は必須。
+  plan_start_and_end_time_hol:
+    type: string
+    description: 出勤・退勤時刻 (祝日)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (祝日) を入力する場合は必須。
+  plan_break_start_and_end_time_sun:
+    type: string
+    description: 休憩時刻 (日曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+  plan_break_start_and_end_time_mon:
+    type: string
+    description: 休憩時刻 (月曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+  plan_break_start_and_end_time_tue:
+    type: string
+    description: 休憩時刻 (火曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+  plan_break_start_and_end_time_wed:
+    type: string
+    description: 休憩時刻 (水曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+  plan_break_start_and_end_time_thu:
+    type: string
+    description: 休憩時刻 (木曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+  plan_break_start_and_end_time_fri:
+    type: string
+    description: 休憩時刻 (金曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+  plan_break_start_and_end_time_sat:
+    type: string
+    description: 休憩時刻 (土曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+  plan_break_start_and_end_time_hol:
+    type: string
+    description: 休憩時刻 (祝日)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+  half_day_holiday:
+    type: string
+    description: 所定半休日の曜日。
+  rest_period:
+    type: string
+    description: 規定休憩。利用しない/従業員は表示のみ/従業員も修正可。
+  rest_period_time:
+    type: string
+    description: >-
+      規定休憩時刻。H:MM-H:MM-(白昼時間から先に休憩時間を引く/深夜時間から先に休憩時間を引く)。
+      複数の場合は/区切りで 1〜15 個。規定休憩が「利用しない」以外の場合は必須。
+  rest_period_volume_based_calculation:
+    type: string
+    description: 規定休憩の従量計算。ON/OFF。規定休憩が「従業員は表示のみ、従業員も修正可」の場合は必須。
+  rest_period_calculation:
+    type: string
+    description: 規定休憩の自動計算。ON/OFF。規定休憩が「従業員は表示のみ、従業員も修正可」の場合は必須。
+  rest_period_with_private_outing:
+    type: string
+    description: 規定休憩の計算時に私用外出を休憩時間とみなす。ON/OFF。規定休憩が「従業員は表示のみ、従業員も修正可」の場合は必須。
+  rest_period_calculation_with_working_hour_per_day:
+    type: string
+    description: 1 日の実働時間で規定休憩を計算する。ON/OFF。規定休憩が「従業員は表示のみ、従業員も修正可」の場合は必須。
+  fixed_holidays:
+    type: string
+    description: 所定休日。日〜土、祝、なし。複数の場合は/区切り。
+  legal_holidays:
+    type: string
+    description: 法定休日。日〜土、祝、なし。複数の場合は/区切り。
+  holiday_working_minutes_type:
+    type: string
+    description: >-
+      休暇時の労働時間。予定時刻に合わせる/換算時間に合わせる/標準労働時刻に合わせる。
+      管理監督者は除く。「標準労働時刻に合わせる」はフレックスの場合のみ入力可。
+  morning_holiday_working_minutes:
+    type: string
+    description: 休暇換算時間設定 (半日午前)。H:MM 形式。48 時間 ≦ 半日 (午前+午後)。管理監督者は除く。
+  afternoon_holiday_working_minutes:
+    type: string
+    description: 休暇換算時間設定 (半日午後)。H:MM 形式。48 時間 ≦ 半日 (午前+午後)。管理監督者は除く。
+  holiday_working_minutes_actual:
+    type: string
+    description: 休暇換算時間設定 (実労働加算)。ON/OFF。「換算時間に合わせる」場合に必須。管理監督者は除く。
+  holiday_working_minutes_for_all_day:
+    type: string
+    description: 休暇換算時間設定 (全日)。H:MM 形式。「換算時間に合わせる」場合に必須。管理監督者は除く。
+  half_holiday_usable_if_working_hours_exceed:
+    type: string
+    description: 実働時間 ≧ 所定労働時間になる場合の半休取得可否。取得できる/取得できない。
+  actual_working_hours_for_standard_working:
+    type: string
+    description: 半休取得制限における基準となる実働時間。実働時間/実働時間＋半休換算時間。実働時間に応じて半休の取得制限をする場合は必須。
+  hourly_holiday_usage_for_standard_working:
+    type: string
+    description: >-
+      実働時間と時間休換算時間の合計が、所定労働時間の 1 時間を超えない範囲での時間休の取得。
+      取得できる/取得できない。休暇時の労働時間が「所定労働時間に合わせる」の場合は必須。
+  limit_of_working_hours_compensatory_holidays:
+    type: string
+    description: >-
+      代休取得時の控除時間上限 (取得代休発生日実働時間の最大値)。H:MM 形式。
+      デフォルト値は 7:45。管理監督者は除く。
+  prescribed_working_hours:
+    type: string
+    description: 予定が空の場合に用いる所定労働時間。H:MM 形式。変形労働の場合は必須。
+  calculation_of_time_over_the_reference_time:
+    type: string
+    description: >-
+      基準時刻外の労働時間の算出。基準時刻を越えた時間を算出しない/基準時刻を越えた時間を算出する。
+      管理監督者は除く。
+  reference_start_time:
+    type: string
+    description: 基準開始時刻。H:MM 形式。「基準時刻を越えた時間を算出する」の場合は必須。管理監督者は除く。
+  reference_end_time:
+    type: string
+    description: 基準終了時刻。H:MM 形式。「基準時刻を越えた時間を算出する」の場合は必須。管理監督者は除く。
+  early_or_late_judgement_time_with_half_holiday:
+    type: string
+    description: 半休取得時の遅刻/早退判定時刻。利用する/利用しない。管理監督者は除く。
+  late_judgement_time_with_morning_off:
+    type: string
+    description: 午前半休時遅刻判定時刻。H:MM 形式。「利用する」の場合は必須。管理監督者は除く。
+  early_judgement_time_with_afternoon_off:
+    type: string
+    description: 午後半休時早退判定時刻。H:MM 形式。「利用する」の場合は必須。管理監督者は除く。
+  lateness_early_leave_grace:
+    type: string
+    description: 遅刻/早退判定の許容時間。H:MM 形式。
+  lateness_grace_period:
+    type: string
+    description: 遅刻許容時間。H:MM 形式。
+  early_leave_grace_period:
+    type: string
+    description: 早退許容時間。H:MM 形式。
+  outside_workplace_type:
+    type: string
+    description: >-
+      事業場外労働換算時間。予定時刻に合わせる/換算時間に合わせる。
+      管理監督者は除く。フレックスの時は「標準労働時刻に合わせる」となる。
+  outside_workplace_minutes_for_half_day:
+    type: string
+    description: 事業場外労働換算時間設定 (半日)。H:MM 形式。「換算時間に合わせる」場合に必須。管理監督者は除く。
+  outside_workplace_minutes_for_all_day:
+    type: string
+    description: 事業場外労働換算時間設定 (全日)。H:MM 形式。「換算時間に合わせる」場合に必須。管理監督者は除く。
+  behavior_of_directly_punch:
+    type: string
+    description: >-
+      直行直帰打刻時の動作設定。
+      予定内の直行/直帰打刻は予定の時刻が実績時刻に入る/予定内外に関わらず直行/直帰打刻は予定の時刻が実績時刻に入る。
+      管理監督者は除く。「予定時刻に合わせる」「標準労働時刻に合わせる」場合に必須。
+  use_fixed_overtime:
+    type: string
+    description: 固定残業時間。ON/OFF。管理監督者は除く。
+  fixed_overtime_minutes:
+    type: string
+    description: 固定残業時間設定。H:MM 形式。固定残業時間 ON の場合に必須。管理監督者は除く。
+  display_early_or_late_on_summaries:
+    type: string
+    description: 遅刻、早退時間集計表示。ON/OFF。裁量労働制のみ必須。普通労働制、フレックスは除く。
+  display_midnight_workings_on_summaries:
+    type: string
+    description: 深夜時間集計表示。ON/OFF。普通労働制、フレックスは除く。
+  overtime_basis:
+    type: string
+    description: 残業時間。所定時間外/予定時間超過。普通労働制のみ必須。
+  use_cut_overtime_to_start_time:
+    type: string
+    description: 残業時間丸め (予定出勤時刻に丸める)。ON/OFF。普通労働制のみ必須。
+  use_cut_overtime_to_end_time:
+    type: string
+    description: 残業時間丸め (予定退勤時刻に丸める)。ON/OFF。普通労働制のみ必須。
+  standard_prescribed_working_hours_for_overtime_shortage:
+    type: string
+    description: 超過・不足の基準となる所定労働時間を設定する。ON/OFF。
+  standard_working_hours_for_overtime:
+    type: string
+    description: 超過時間の基準となる所定労働時間。H:MM 形式。
+  standard_working_hours_for_shortage:
+    type: string
+    description: 不足時間の基準となる所定労働時間。H:MM 形式。
+  standard_time:
+    type: string
+    description: 標準労働時刻。H:MM-H:MM、なし。フレックスかつ休暇時の労働時間が「標準時刻に合わせる」の場合は必須。
+  flex_core_time:
+    type: string
+    description: コアタイム。H:MM-H:MM、なし。フレックスのみ。休憩時刻を入力する場合は必須。
+  flexible_time_start_time:
+    type: string
+    description: フレキシブルタイム開始時刻。H:MM、なし。00:00〜23:59。
+  flexible_time_end_time:
+    type: string
+    description: フレキシブルタイム終了時刻。H:MM、なし。フレキシブルタイム (開始時刻) + 48 時間以内。
+  flex_break_time:
+    type: string
+    description: 休憩時刻。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックス以外は除く。
+  flex_standard_working_hours:
+    type: string
+    description: 基準となる労働時間。平日労働時間/平日フレキシブルタイム内時間。フレックスのみ必須。
+  settlement_type:
+    type: string
+    description: >-
+      清算時間。実労働日数/暦日数/実労働日数 (超過・不足の基準時間が異なる)。フレックスのみ必須。
+  settlement_multiplier_working_days:
+    type: string
+    description: >-
+      清算時間 (実労働日数-時間)。H:MM 形式。
+      実労働日数、または実労働日数 (超過・不足の基準時間が異なる) の場合に必須。フレックスのみ必須。
+  settlement_multiplier_add_standard_time:
+    type: string
+    description: >-
+      清算時間 (超過・不足の基準時間が異なる)。H:MM 形式。
+      実労働日数 (超過・不足の基準時間が異なる) の場合に必須。フレックスのみ必須。
+      超過時間の基準、不足時間の基準を/区切りで 2 個入力する。
+  settlement_multiplier_calendar_days:
+    type: string
+    description: >-
+      清算時間 (暦日数-時間)。H:MM 形式。暦日数の場合に必須。フレックスのみ必須。
+      28〜31 日分を/区切りで 5 個入力する。
+  is_expect_absence_and_unpaid_vacation:
+    type: string
+    description: >-
+      所定労働日数 (欠勤日・無給の休暇/休職日を除く) を用いる。ON/OFF。
+      実労働日数、または実労働日数 (超過・不足の基準時間が異なる) の場合に必須。フレックスのみ必須。
+  use_cut_overtime_to_standard_start_time:
+    type: string
+    description: 残業時間まるめ (開始時刻の標準労働時間にまるめる)。ON/OFF。フレックスのみ必須。
+  use_cut_overtime_to_standard_end_time:
+    type: string
+    description: 残業時間まるめ (終了時刻の標準労働時間にまるめる)。ON/OFF。フレックスのみ必須。
+  deemed_working_time:
+    type: string
+    description: みなし労働時間。H:MM 形式。裁量労働制のみ必須。
+  use_deemed_working_minutes_for_working_minutes_on_fixed_holiday:
+    type: string
+    description: 所定休日の労働時間もみなし労働時間を用いる。用いる/用いない。裁量労働制のみ必須。
+  display_overtimes_on_summaries:
+    type: string
+    description: 残業時間集計表示。ON/OFF。管理監督者のみ必須。
+  display_holiday_workings_on_summaries:
+    type: string
+    description: 休日出勤集計表示。ON/OFF。管理監督者のみ必須。
+  display_weekday_workings_on_summaries:
+    type: string
+    description: 平日出勤集計表示。ON/OFF。管理監督者のみ必須。
+  working_category_editable:
+    type: string
+    description: 労働日区分入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+  substituted_working_holiday_editable:
+    type: string
+    description: 振替休日/振替出勤入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+  overtimes_editable:
+    type: string
+    description: 早出/残業入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+  plan_times_editable:
+    type: string
+    description: 予定出勤/退勤/休憩/私用外出入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+  result_times_editable:
+    type: string
+    description: 実績出勤/退勤入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+  result_breaks_editable:
+    type: string
+    description: 実績休憩入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+  going_out_for_personal_purposes_editable:
+    type: string
+    description: 実績私用外出入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+  result_times_on_vacation_editable:
+    type: string
+    description: 全日休暇時の実績入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+  punch_on_vacation_enabled:
+    type: string
+    description: 全日休暇時の打刻可否。打刻可/打刻不可。タイムレコーダープランの場合に入力値があっても無視する。
+  ampm_holidays_usable:
+    type: string
+    description: 午前半休＋午後半休。取得可/取得不可。タイムレコーダープランの場合に入力値があっても無視する。
+  estimated_times_editable:
+    type: string
+    description: 見込勤務入力可否。入力可/入力不可/非表示。タイムレコーダープランの場合に入力値があっても無視する。
+  handling_of_leaving_punch:
+    type: string
+    description: 翌日の予定時刻を超えた退勤打刻の扱い。当日の退勤打刻として扱う/翌日の退勤打刻として扱う。
+  display_alert_shift_create:
+    type: string
+    description: シフト作成時のアラート表示。利用する/利用しない。プレミアムプラン以外の場合に入力値があっても無視する。
+  night_work_limited:
+    type: string
+    description: 深夜労働制限。制限する/制限しない。プレミアムプラン以外の場合に入力値があっても無視する。
+  night_work_limited_at:
+    type: string
+    description: >-
+      深夜労働制限期日。yyyy/mm/dd 形式の日付。深夜労働が「制限する」の場合は必須。
+      プレミアムプラン以外の場合に入力値があっても無視する。
+  work_interval:
+    type: string
+    description: 勤務間インターバル制限。制限する/制限しない。プレミアムプラン以外の場合に入力値があっても無視する。
+  work_interval_system:
+    type: string
+    description: >-
+      勤務間インターバル。HH:MM 形式。勤務間インターバル制限が「制限する」場合は必須。
+      プレミアムプラン以外の場合に入力値があっても無視する。
+  limited_weekly_28hours:
+    type: string
+    description: >-
+      週 28 時間労働制限。制限する/制限しない。シフト作成時のアラート表示が「利用する」の場合は必須。
+      プレミアムプラン以外の場合に入力値があっても無視する。
+  max_continuous_working_days_per_month:
+    type: string
+    description: >-
+      連続勤務制限日数。整数 (2〜99)。シフト作成時のアラート表示が「利用する」の場合は必須。
+      プレミアムプラン以外の場合に入力値があっても無視する。
+  max_working_minutes_per_month:
+    type: string
+    description: >-
+      月間労働時間。HH:MM (00:00〜99:00) を 1 月度から 12 月度までの順番に/区切りで指定する。
+      シフト作成時のアラート表示が「利用する」の場合は必須。
+      プレミアムプラン以外の場合に入力値があっても無視する。
+  monthly_scheduled_holidays:
+    type: string
+    description: >-
+      月間休日日数。整数 (0〜99) を 1 月度から 12 月度までの順番に/区切りで指定する。
+      シフト作成時のアラート表示が「利用する」の場合は必須。
+      プレミアムプラン以外の場合に入力値があっても無視する。
+  standard_working_hours:
+    type: string
+    description: 工数の基準となる労働時間。実働時間/総労働時間。プレミアムプラン以外の場合に入力値があっても無視する。
+  allowed_minus:
+    type: string
+    description: 労働時間以上の工数入力。許容する/許容しない。プレミアムプラン以外の場合に入力値があっても無視する。
+  hourly_wage:
+    type: integer
+    description: 賃率/時給。整数 (0〜99999)。プレミアムプラン以外の場合に入力値があっても無視する。
+  time_frame_aggregation_flg:
+    type: string
+    description: 時間帯別集計。ON/OFF。プレミアムプラン以外の場合に入力値があっても無視する。
+  time_frame_aggregation_agreement:
+    type: string
+    description: 規定休憩無視同意 (時間帯別集計)。同意済/未同意。プレミアムプラン以外の場合に入力値があっても無視する。
+  time_frame_aggregation_items:
+    type: string
+    description: >-
+      時間帯別集計項目。項目名|HH:MM-HH:MM (00:00〜72:00) 形式。複数の場合は/区切り。
+      プレミアムプラン以外の場合に入力値があっても無視する。

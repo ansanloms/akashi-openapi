@@ -1,0 +1,14 @@
+token: xxxxxxxxxxxxxxxx
+organizations:
+  - staff_code: s001
+    organization_change_date: 2023/2/1
+    is_delete_change_history_after_change_date: "YES"
+    new_organization_path: 組織A
+    employment_category: 正社員
+    sub_organization_code: org002
+  - staff_email: s002@example.com
+    organization_change_date: 2023/2/2
+    is_delete_change_history_after_change_date: "NO"
+    employment_category: 正社員
+    new_organization_code: org002
+    sub_organization_path: 組織A

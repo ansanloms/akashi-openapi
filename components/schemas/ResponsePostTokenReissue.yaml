@@ -1,0 +1,35 @@
+type: object
+description: アクセストークン再発行のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      login_company_code:
+        type: string
+        description: ログイン企業 ID。
+      staff_id:
+        type: integer
+        description: 従業員 ID。
+      agency_manager_id:
+        type:
+          - integer
+          - "null"
+        description: 代理管理者の ID。
+      token:
+        type: string
+        description: アクセストークン。
+      expired_at:
+        type: string
+        description: アクセストークンの有効期限。yyyy/mm/dd HH:MM:SS 形式。
+        example: 2017/10/09 00:00:00
+  errors:
+    type: array
+    description: 失敗の原因となったエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

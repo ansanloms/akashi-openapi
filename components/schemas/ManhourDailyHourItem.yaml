@@ -1,0 +1,9 @@
+type: object
+description: タスク毎の工数。
+properties:
+  task_id:
+    type: integer
+    description: タスク ID。
+  minute:
+    type: integer
+    description: 工数 (分)。

@@ -1,0 +1,14 @@
+type: object
+description: 異動日を指定した異動のリクエスト。
+required:
+  - token
+  - organizations
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  organizations:
+    type: array
+    description: 異動内容の配列。
+    items:
+      $ref: ./ImporterFactoryOrganization.yaml

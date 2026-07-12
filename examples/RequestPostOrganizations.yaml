@@ -1,0 +1,11 @@
+token: xxxxxxxxxxxxxxxx
+organizations:
+  - name: 第一事業本部
+    code: "001"
+    parent_organization: ""
+  - name: 営業部
+    code: "0011"
+    parent_organization: 第一事業本部
+  - name: 一課
+    code: "00111"
+    parent_organization: 第一事業本部/営業部

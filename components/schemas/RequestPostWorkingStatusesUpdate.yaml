@@ -1,0 +1,51 @@
+type: object
+description: 勤務処理更新のリクエスト。
+required:
+  - token
+  - update
+properties:
+  login_company_code:
+    type: string
+    description: 企業のログイン企業 ID。
+  token:
+    type: string
+    description: アクセストークン。
+  update:
+    type: array
+    description: 勤務処理更新リスト。最大 1,000 件まで指定可能。
+    maxItems: 1000
+    items:
+      type: object
+      description: 勤務処理の更新対象。
+      required:
+        - staff_id
+        - date
+        - working_statuses
+        - replace
+      properties:
+        staff_id:
+          type: string
+          description: 勤務処理を更新する従業員 ID。
+        date:
+          type: string
+          description: 更新対象の日付。YYYY-MM-DD 形式。
+          example: 2026-02-02
+        working_statuses:
+          type: array
+          description: >-
+            更新する勤務処理ラベルリスト。未指定の場合は空配列として扱う。
+            カスタム勤務処理リストに登録済みのラベルのみ指定可能。
+          items:
+            type: string
+        replace:
+          type: boolean
+          description: >-
+            更新する方法を指定する項目。
+            true は既存の勤務処理を全て置き換える。false は既存の勤務処理に追加する。
+        if_not:
+          type: array
+          description: >-
+            排他制御用ラベルリスト。
+            既存の勤務処理に本リストのいずれかが含まれている場合、更新しない。
+          items:
+            type: string

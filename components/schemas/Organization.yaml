@@ -1,0 +1,29 @@
+type: object
+description: 組織。
+properties:
+  organizationId:
+    type: integer
+    description: 組織の ID。
+  name:
+    type: string
+    description: 組織名。
+  code:
+    type:
+      - string
+      - "null"
+    description: 組織コード。
+  label:
+    type:
+      - string
+      - "null"
+    description: 組織のラベル。
+  parentId:
+    type:
+      - integer
+      - "null"
+    description: 親の組織 ID。
+  displayPunchTypes:
+    type: array
+    description: 表示する打刻ボタンの配列。
+    items:
+      $ref: ./DisplayPunchType.yaml

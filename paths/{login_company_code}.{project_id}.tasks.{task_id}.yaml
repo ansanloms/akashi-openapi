@@ -1,0 +1,107 @@
+get:
+  operationId: getTasksTaskId
+  summary: タスク取得 (タスク ID 指定)。
+  tags:
+    - tasks
+  description:
+    $ref: ./descriptions/getTasksTaskId.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: project_id
+      required: true
+      description: プロジェクト ID。
+      schema:
+        type: integer
+    - in: path
+      name: task_id
+      required: true
+      description: タスク ID。
+      schema:
+        type: integer
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseGetTasksTaskId.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseGetTasksTaskId.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml
+delete:
+  operationId: deleteTasksTaskId
+  summary: タスク削除。
+  tags:
+    - tasks
+  description:
+    $ref: ./descriptions/deleteTasksTaskId.md
+  security: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: project_id
+      required: true
+      description: プロジェクト ID。
+      schema:
+        type: integer
+    - in: path
+      name: task_id
+      required: true
+      description: タスク ID。
+      schema:
+        type: integer
+  requestBody:
+    description: 削除の情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestDeleteTasksTaskId.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestDeleteTasksTaskId.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseDeleteTasksTaskId.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseDeleteTasksTaskId.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

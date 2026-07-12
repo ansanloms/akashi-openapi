@@ -1,0 +1,32 @@
+token: xxxxxxxxxxxxxxxx
+working_condition_settings:
+  - staff_code: s001
+    effective_date: 2023/02/02
+    recount_method: 実績基準
+    working_category: 普通労働制
+    fixed_working_time: "08:30"
+    weekly_working_days: 予定時刻設定の労働日数を用いる
+    rest_period: 利用しない
+    handling_of_leaving_punch: 当日の退勤打刻として扱う
+    holiday_working_minutes_type: 予定時刻に合わせる
+    morning_holiday_working_minutes: "04:10"
+    afternoon_holiday_working_minutes: "04:20"
+    calculation_of_time_over_the_reference_time: 基準時刻を越えた時間を算出しない
+    early_or_late_judgement_time_with_half_holiday: 利用しない
+    outside_workplace_type: 予定時刻に合わせる
+    behavior_of_directly_punch: 予定内の直行/直帰打刻は予定の時刻が実績時刻に入る
+    use_fixed_overtime: "OFF"
+    overtime_basis: 所定時間外
+    use_cut_overtime_to_start_time: "OFF"
+    use_cut_overtime_to_end_time: "OFF"
+    display_alert_shift_create: 利用する
+    standard_working_hours: 実働時間
+    allowed_minus: 許容する
+    time_frame_aggregation_flg: "OFF"
+    time_frame_aggregation_agreement: 未同意
+    night_work_limited: 制限しない
+    work_interval: 制限しない
+    limited_weekly_28hours: 制限しない
+    max_continuous_working_days_per_month: "6"
+    max_working_minutes_per_month: 187:00/170:00/187:00/178:30/187:00/178:30/187:00/187:00/178:30/187:00/178:30/187:00
+    monthly_scheduled_holidays: 5/5/5/5/5/5/5/5/5/5/5/5

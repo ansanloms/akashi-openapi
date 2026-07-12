@@ -1,0 +1,11 @@
+type: object
+description: 従業員ごとの勤務実績情報。
+properties:
+  staff_id:
+    type: integer
+    description: 取得した勤務実績に紐づく従業員の ID。
+  working_records:
+    type: array
+    description: 実績データの配列。
+    items:
+      $ref: ./WorkingRecord.yaml

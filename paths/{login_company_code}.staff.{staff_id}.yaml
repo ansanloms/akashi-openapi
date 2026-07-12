@@ -1,0 +1,52 @@
+delete:
+  operationId: deleteStaffStaffId
+  summary: 従業員退職/削除。
+  tags:
+    - staffs
+  description:
+    $ref: ./descriptions/deleteStaffStaffId.md
+  security: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: staff_id
+      required: true
+      description: マネーフォワード クラウド勤怠 Plus の従業員 ID。
+      schema:
+        type: integer
+  requestBody:
+    description: 退職、または削除の情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestDeleteStaffStaffId.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestDeleteStaffStaffId.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseDeleteStaffStaffId.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseDeleteStaffStaffId.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

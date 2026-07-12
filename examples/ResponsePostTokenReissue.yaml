@@ -1,0 +1,7 @@
+success: true
+response:
+  login_company_code: sample001
+  staff_id: 123
+  agency_manager_id: 45
+  token: xxxxxxxxxxxxxxxxxxxxxxxx
+  expired_at: 2017/10/09 00:00:00

@@ -1,0 +1,14 @@
+type: object
+description: 従業員退職/削除のリクエスト。
+required:
+  - token
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  retirement_date:
+    type: string
+    description: >-
+      退職日。YYYY/MM/DD 形式の日付。
+      指定されている場合は退職処理、未指定の場合は削除処理となる。
+    example: 2017/03/31

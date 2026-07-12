@@ -1,0 +1,87 @@
+type: object
+description: 新規登録、または更新する従業員。
+required:
+  - last_name
+  - first_name
+properties:
+  staff_id:
+    type: integer
+    description: >-
+      マネーフォワード クラウド勤怠 Plus の従業員 ID。
+      指定されている場合は更新、未指定の場合は新規登録する。該当するデータがない場合はエラーとなる。
+  staff_code:
+    type: string
+    maxLength: 20
+    description: 従業員番号。重複不可。a〜z、A〜Z、0〜9、-、_ のみ。最大 20 文字。
+  last_name:
+    type: string
+    maxLength: 30
+    description: 姓。機種依存文字 (2) を含まない。最大 30 文字。
+  first_name:
+    type: string
+    maxLength: 30
+    description: 名。機種依存文字 (2) を含まない。最大 30 文字。
+  last_name_en:
+    type: string
+    maxLength: 30
+    description: 姓・英語。機種依存文字 (2) を含まない。最大 30 文字。
+  first_name_en:
+    type: string
+    maxLength: 30
+    description: 名・英語。機種依存文字 (2) を含まない。最大 30 文字。
+  last_name_kana:
+    type: string
+    maxLength: 30
+    description: 姓 (カナ)。全角カタカナと一部記号のみ。最大 30 文字。
+  first_name_kana:
+    type: string
+    maxLength: 30
+    description: 名 (カナ)。全角カタカナと一部記号のみ。最大 30 文字。
+  organization:
+    type: string
+    description: >-
+      登録済組織を最上位 (企業) の親組織から/区切りで記述する。従業員作成の場合は必須。
+      最上位組織に所属させる場合は「企業」のみを記述する。
+      最上位組織 (企業) よりも下位の組織に所属させる場合は、「企業」を除いたすべての親組織から当該組織まで/区切りで記述する。
+      該当するデータがない場合はエラーとなる。
+  employment_category:
+    type: string
+    description: 登録済雇用区分名称。該当するデータがない場合はエラーとなる。
+  idm_number:
+    type: string
+    minLength: 16
+    maxLength: 16
+    description: IDm 番号。重複不可。0〜9、a〜f、A〜F のみで 16 文字。
+  email:
+    type: string
+    description: メールアドレス。重複不可。メールアドレスとして有効な文字列。
+  tel:
+    type: string
+    maxLength: 13
+    description: 電話番号。0〜9 と - のみ。最大 13 文字。
+  sex:
+    type: string
+    description: 性別。男/女。
+  tag:
+    type: string
+    maxLength: 255
+    description: タグ。複数の場合はカンマ区切り。機種依存文字 (1) を含まない。最大 255 文字。
+  remarks:
+    type: string
+    maxLength: 5000
+    description: 備考。機種依存文字 (1) を含まない。最大 5,000 文字。
+  entry_date:
+    type: string
+    description: 入社日。YYYY/MM/DD 形式の日付。
+    example: 2017/04/01
+  use_start_date:
+    type: string
+    description: 利用開始日。YYYY/MM/DD 形式の日付。
+    example: 2017/04/01
+  paid_holiday_base_date:
+    type: string
+    description: 年休基準日。YYYY/MM/DD 形式の日付。
+    example: 2017/04/01
+  use_other_login_method:
+    type: boolean
+    description: 認証連携以外でログインしない。Boolean 型以外を指定した場合は true と判断される。

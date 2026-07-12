@@ -1,0 +1,60 @@
+get:
+  operationId: getStampsStaffId
+  summary: 打刻情報取得 (従業員 ID 指定)。
+  tags:
+    - stamps
+  description:
+    $ref: ./descriptions/getStampsStaffId.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: staff_id
+      required: true
+      description: 取得対象の従業員 ID。従業員番号ではない。
+      schema:
+        type: integer
+    - in: query
+      name: start_date
+      required: true
+      description: 打刻取得期間の開始日時。yyyymmddHHMMSS の形式で指定する。
+      schema:
+        type: string
+      example: "20170501000000"
+    - in: query
+      name: end_date
+      required: true
+      description: >-
+        打刻取得期間の終了日時。yyyymmddHHMMSS の形式で指定する。
+        開始日時、終了日時で指定できる最長期間は 6 ヶ月まで。
+        また 1 回のリクエストで取得できる打刻は 1,000 件まで。
+      schema:
+        type: string
+      example: "20170531000000"
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseGetStamps.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseGetStamps.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

@@ -1,0 +1,33 @@
+type: object
+description: 従業員退職/削除のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      login_company_code:
+        type: string
+        description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      staff_id:
+        type: integer
+        description: 従業員 ID。
+      staff_code:
+        type:
+          - string
+          - "null"
+        description: 従業員番号。
+      email:
+        type:
+          - string
+          - "null"
+        description: メールアドレス。
+  errors:
+    type: array
+    description: エラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

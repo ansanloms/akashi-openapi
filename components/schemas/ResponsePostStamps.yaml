@@ -1,0 +1,30 @@
+type: object
+description: 打刻のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      login_company_code:
+        type: string
+        description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      staff_id:
+        type: integer
+        description: 従業員 ID。
+      type:
+        type: integer
+        description: 打刻種別。
+      stampedAt:
+        type: string
+        description: サーバー側での打刻日時。
+        example: 2017/03/14 08:57:00
+  errors:
+    type: array
+    description: エラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

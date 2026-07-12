@@ -1,0 +1,17 @@
+type: object
+description: 勤務処理更新のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: >-
+      処理の成功失敗を示す。
+      成功の場合は true、一部成功の場合は true (errors あり)、失敗の場合は false。
+  errors:
+    type:
+      - array
+      - "null"
+    description: エラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

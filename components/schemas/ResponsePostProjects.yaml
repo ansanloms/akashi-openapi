@@ -1,0 +1,60 @@
+type: object
+description: プロジェクト作成更新のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      count:
+        type: integer
+        description: 作成更新プロジェクトの件数。
+      projects:
+        type: array
+        description: 作成更新されたプロジェクトの配列。
+        items:
+          type: object
+          description: 作成更新されたプロジェクト。
+          properties:
+            project_id:
+              type: integer
+              description: プロジェクト ID。
+            name_ja:
+              type: string
+              description: プロジェクト名称。
+            short_name_ja:
+              type:
+                - string
+                - "null"
+              description: プロジェクト略称。
+            project_code:
+              type:
+                - string
+                - "null"
+              description: プロジェクトコード。
+            remarks:
+              type:
+                - string
+                - "null"
+              description: 備考。
+            start_date:
+              type:
+                - string
+                - "null"
+              description: プロジェクト開始日。
+              example: 2019-08-01
+            end_date:
+              type:
+                - string
+                - "null"
+              description: プロジェクト終了日。
+              example: 2019-08-31
+  errors:
+    type: array
+    description: 失敗の原因となったエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

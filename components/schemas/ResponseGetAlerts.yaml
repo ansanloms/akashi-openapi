@@ -1,0 +1,31 @@
+type: object
+description: アラート情報取得のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      login_company_code:
+        type: string
+        description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      staff_id:
+        type: integer
+        description: 従業員 ID。
+      count:
+        type: integer
+        description: 取得されたアラートの件数。
+      alerts:
+        type: array
+        description: 取得されたアラートの配列。
+        items:
+          $ref: ./Alert.yaml
+  errors:
+    type: array
+    description: 失敗の原因となったエラーについてのエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

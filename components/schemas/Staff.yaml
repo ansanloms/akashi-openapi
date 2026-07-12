@@ -1,0 +1,71 @@
+type: object
+description: 従業員。
+properties:
+  staffId:
+    type: integer
+    description: 従業員 ID。
+  email:
+    type:
+      - string
+      - "null"
+    description: メールアドレス。
+  lastName:
+    type: string
+    description: 姓。
+  firstName:
+    type: string
+    description: 名。
+  lastNameKana:
+    type:
+      - string
+      - "null"
+    description: カナ (姓)。
+  firstNameKana:
+    type:
+      - string
+      - "null"
+    description: カナ (名)。
+  organization:
+    $ref: ./OrganizationSummary.yaml
+    description: 組織 (メイン)。
+  subgroups:
+    type: array
+    description: 組織 (サブグループ) の配列。
+    items:
+      $ref: ./OrganizationSummary.yaml
+  employmentCategory:
+    $ref: ./EmploymentCategory.yaml
+    description: 雇用区分。
+  tag:
+    type:
+      - string
+      - "null"
+    description: タグ。
+  staffNum:
+    type:
+      - string
+      - "null"
+    description: 従業員番号。
+  idmNum:
+    type:
+      - string
+      - "null"
+    description: IDm 番号。
+  cardTypeId:
+    type:
+      - integer
+      - "null"
+    description: カード種別。
+  remarks:
+    type:
+      - string
+      - "null"
+    description: 備考。
+  permissionGroup:
+    $ref: ./PermissionGroup.yaml
+    description: 権限グループ。
+  managedOrganizations:
+    type: array
+    description: 管理対象組織。指定されている組織のみで、配下の組織は含めない。
+    items:
+      $ref: ./OrganizationSummary.yaml

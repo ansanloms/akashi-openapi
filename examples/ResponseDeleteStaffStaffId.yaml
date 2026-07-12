@@ -1,0 +1,6 @@
+success: true
+response:
+  login_company_code: sample001
+  staff_id: 123
+  staff_code: s001
+  email: sample@example.com

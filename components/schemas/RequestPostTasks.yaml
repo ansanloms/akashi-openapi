@@ -1,0 +1,14 @@
+type: object
+description: タスク作成更新のリクエスト。
+required:
+  - token
+  - tasks
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  tasks:
+    type: array
+    description: 作成、または更新するタスクの配列。
+    items:
+      $ref: ./TaskInput.yaml

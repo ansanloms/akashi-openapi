@@ -1,0 +1,16 @@
+type: object
+description: 処理対象となった従業員。
+properties:
+  staff_id:
+    type: integer
+    description: 従業員 ID。
+  staff_code:
+    type:
+      - string
+      - "null"
+    description: 従業員番号。
+  email:
+    type:
+      - string
+      - "null"
+    description: メールアドレス。

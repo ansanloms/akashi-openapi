@@ -1,0 +1,103 @@
+get:
+  operationId: getProjects
+  summary: プロジェクト取得 (一覧)。
+  tags:
+    - projects
+  description:
+    $ref: ./descriptions/getProjects.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: query
+      name: start_date
+      required: false
+      description: プロジェクト開始日。yyyymmdd 形式の日付。
+      schema:
+        type: string
+      example: "20190801"
+    - in: query
+      name: end_date
+      required: false
+      description: プロジェクト終了日。yyyymmdd 形式の日付。
+      schema:
+        type: string
+      example: "20190831"
+    - in: query
+      name: page
+      required: false
+      description: 取得する際のページ位置 (初期値 0)。1 ページで取得できるのは 50 件まで。
+      schema:
+        type: integer
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseGetProjects.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseGetProjects.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml
+post:
+  operationId: postProjects
+  summary: プロジェクト作成更新。
+  tags:
+    - projects
+  description:
+    $ref: ./descriptions/postProjects.md
+  security: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+  requestBody:
+    description: 作成、または更新するプロジェクトの情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestPostProjects.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestPostProjects.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponsePostProjects.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponsePostProjects.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

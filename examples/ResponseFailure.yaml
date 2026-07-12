@@ -1,0 +1,4 @@
+success: false
+errors:
+  - code: ERR300402
+    message: 組織が存在しません。

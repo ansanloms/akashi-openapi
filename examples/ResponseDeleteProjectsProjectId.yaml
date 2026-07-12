@@ -1,0 +1,6 @@
+success: true
+response:
+  project_id: 100
+  name: サンプルテスト
+  short_name: サンプル
+  project_code: sample

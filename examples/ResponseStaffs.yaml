@@ -1,0 +1,7 @@
+success: true
+response:
+  login_company_code: test001
+  staffs:
+    - staff_id: 51
+      staff_code: i001
+      email: null

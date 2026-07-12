@@ -1,0 +1,20 @@
+type: object
+description: 工数削除のリクエスト。
+required:
+  - token
+  - date
+  - project_id
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  date:
+    type: string
+    description: 削除対象の日付。
+    example: "20190803"
+  project_id:
+    type: integer
+    description: プロジェクト ID。
+  task_id:
+    type: integer
+    description: タスク ID。指定無しなら全タスク工数を削除する。

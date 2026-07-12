@@ -1,0 +1,23 @@
+type: object
+description: 参加プロジェクト。
+properties:
+  project_id:
+    type: integer
+    description: プロジェクト ID。
+  start_date:
+    type:
+      - string
+      - "null"
+    description: プロジェクト開始日。
+    example: 2019-08-01
+  end_date:
+    type:
+      - string
+      - "null"
+    description: プロジェクト終了日。
+    example: 2019-08-31
+  tasks:
+    type: array
+    description: プロジェクトのタスク ID の配列。
+    items:
+      type: integer

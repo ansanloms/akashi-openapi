@@ -1,0 +1,21 @@
+type: object
+description: 打刻データ。
+properties:
+  stamped_at:
+    type: string
+    description: 打刻日時。
+    example: 2015/10/22 09:01:00
+  type:
+    type: integer
+    description: 打刻種別。
+  local_time:
+    type: string
+    description: 打刻機のローカル打刻時刻。
+    example: 2015/10/22 09:00:34
+  timezone:
+    type: string
+    description: 打刻機のタイムゾーン。
+    example: "+9.0"
+  attributes:
+    $ref: ./StampAttributes.yaml
+    description: 実績参照結果。

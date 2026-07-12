@@ -1,0 +1,101 @@
+get:
+  operationId: getTasks
+  summary: タスク取得 (一覧)。
+  tags:
+    - tasks
+  description:
+    $ref: ./descriptions/getTasks.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: project_id
+      required: true
+      description: プロジェクト ID。
+      schema:
+        type: integer
+    - in: query
+      name: page
+      required: false
+      description: 取得する際のページ位置 (初期値 0)。1 ページで取得できるのは 50 件まで。
+      schema:
+        type: integer
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseTasks.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseTasks.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml
+post:
+  operationId: postTasks
+  summary: タスク作成更新。
+  tags:
+    - tasks
+  description:
+    $ref: ./descriptions/postTasks.md
+  security: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: project_id
+      required: true
+      description: タスクを作成・更新するプロジェクトの ID。
+      schema:
+        type: integer
+  requestBody:
+    description: 作成、または更新するタスクの情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestPostTasks.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestPostTasks.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseTasks.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseTasks.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

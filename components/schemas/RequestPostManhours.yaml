@@ -1,0 +1,54 @@
+type: object
+description: 工数作成更新のリクエスト。
+required:
+  - token
+  - manhours
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  manhours:
+    type: array
+    description: 作成、または更新する工数の配列。
+    items:
+      type: object
+      description: 従業員毎の工数。
+      required:
+        - staff_id
+        - dates
+      properties:
+        staff_id:
+          type: integer
+          description: 従業員 ID。
+        dates:
+          type: array
+          description: 従業員の日付毎の工数の配列。
+          items:
+            type: object
+            description: 日付毎の工数。
+            required:
+              - date
+              - projects
+            properties:
+              date:
+                type: string
+                description: 日付。yyyy/mm/dd 形式。
+                example: 2019/08/03
+              projects:
+                type: array
+                description: 日付のプロジェクト毎の工数の配列。
+                items:
+                  type: object
+                  description: プロジェクト毎の工数。
+                  required:
+                    - project_id
+                    - daily_hour_items
+                  properties:
+                    project_id:
+                      type: integer
+                      description: プロジェクト ID。
+                    daily_hour_items:
+                      type: array
+                      description: プロジェクトのタスク毎の工数の配列。
+                      items:
+                        $ref: ./ManhourDailyHourItem.yaml

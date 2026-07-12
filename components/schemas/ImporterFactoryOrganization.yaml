@@ -1,0 +1,34 @@
+type: object
+description: 異動日を指定した異動の内容。従業員番号かメールアドレスのいずれかが必須。
+required:
+  - organization_change_date
+  - employment_category
+properties:
+  staff_code:
+    type: string
+    description: 従業員番号。従業員番号かメールアドレスのいずれかが必須。
+  staff_email:
+    type: string
+    description: メールアドレス。従業員番号かメールアドレスのいずれかが必須。
+  organization_change_date:
+    type: string
+    description: 異動日。yyyy/mm/dd 形式の日付。
+    example: 2023/02/01
+  is_delete_change_history_after_change_date:
+    type: string
+    description: 異動日以降の異動を削除する。Yes/No、または空欄。空欄や列がない場合は No とみなす。
+  new_organization_path:
+    type: string
+    description: 異動先所属組織。
+  new_organization_code:
+    type: string
+    description: 異動先所属組織コード。
+  sub_organization_path:
+    type: string
+    description: サブ組織。複数指定する場合は末尾に数字が必要。例）sub_organization_path2。
+  sub_organization_code:
+    type: string
+    description: サブ組織コード。複数指定する場合は末尾に数字が必要。例）sub_organization_code2。
+  employment_category:
+    type: string
+    description: 雇用区分。

@@ -1,0 +1,10 @@
+token: 0e77ecf9-feab-485a-8ce4-6427f9d3531d
+permissions:
+  - staff_code: s001
+    manager_permission_name: 一般管理者
+    manage_organization_path: 組織１
+    manage_subordinate_organizations_immed_path: 下位組織を管理対象にしない
+    manage_organization_code: org002
+    manage_subordinate_organizations_immed_code: サブ組織所属を除く＋直下組織管理者を直接管理する
+    managed_staff_code1: s002
+    managed_staff_code2: s003

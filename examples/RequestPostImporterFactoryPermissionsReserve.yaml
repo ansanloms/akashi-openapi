@@ -1,0 +1,10 @@
+token: 0e77ecf9-feab-485a-8ce4-6427f9d3531d
+permissions_reserve:
+  - staff_code: s001
+    manager_permission_reservation_date: 2023/2/3
+    reservation_manager_permission_name: 管理権限－編集
+    manage_organization_reservation_registration_or_cancel: 登録
+    reservation_manage_organization_path: 組織1
+    manage_subordinate_organizations: 下位組織を管理対象にしない
+    manage_organization_reservation_date: 2023/2/3
+    manage_organization_reservation_add_or_delete: 追加

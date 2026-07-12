@@ -1,0 +1,25 @@
+type: object
+description: タスク取得 (一覧)、およびタスク作成更新のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      count:
+        type: integer
+        description: タスクの件数。
+      tasks:
+        type: array
+        description: タスクの配列。
+        items:
+          $ref: ./Task.yaml
+  errors:
+    type: array
+    description: 失敗の原因となったエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

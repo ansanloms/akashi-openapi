@@ -1,0 +1,34 @@
+type: object
+description: 作成、または更新するプロジェクト。
+required:
+  - name_ja
+properties:
+  project_id:
+    type: integer
+    description: プロジェクト ID。指定無しの場合は新規作成する。
+  name_ja:
+    type: string
+    description: プロジェクト名称。重複不可。
+  short_name_ja:
+    type: string
+    description: プロジェクト略称。
+  name_en:
+    type: string
+    description: プロジェクト英語名称。重複不可。
+  short_name_en:
+    type: string
+    description: プロジェクト英語略称。
+  project_code:
+    type: string
+    description: プロジェクトコード。重複不可。
+  remarks:
+    type: string
+    description: 備考。
+  start_date:
+    type: string
+    description: プロジェクト開始日。yyyy/mm/dd 形式の日付。
+    example: 2019/08/01
+  end_date:
+    type: string
+    description: プロジェクト終了日。yyyy/mm/dd 形式の日付。
+    example: 2019/08/31

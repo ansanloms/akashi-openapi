@@ -1,0 +1,39 @@
+type: object
+description: 管理権限設定の指定と管理先の指定の予約内容。従業員番号かメールアドレスのいずれかが必須。
+properties:
+  staff_code:
+    type: string
+    description: 従業員番号。従業員番号かメールアドレスのいずれかが必須。
+  staff_email:
+    type: string
+    description: メールアドレス。従業員番号かメールアドレスのいずれかが必須。
+  reservation_manager_permission_name:
+    type: string
+    description: 予約付与権限。予約付与権限を登録する場合は必須。
+  manager_permission_reservation_date:
+    type: string
+    description: 付与権限予約日。予約付与権限を登録する場合は必須。yyyy/mm/dd 形式の日付。
+    example: 2023/02/03
+  manage_organization_reservation_registration_or_cancel:
+    type: string
+    description: >-
+      登録/取消。管理先予約設定する場合は必須。
+      新たに予約を追加する場合は「登録」、既に登録済みの予約を削除する場合は「取消」を指定する。
+  reservation_manage_organization_path:
+    type: string
+    description: 予約管理先組織。管理先予約設定する場合、予約管理先組織コードを入力していなければ必須。
+  reservation_manage_organization_code:
+    type: string
+    description: 予約管理先組織コード。管理先予約設定する場合、予約管理先組織を入力していなければ必須。
+  manage_subordinate_organizations:
+    type: string
+    description: >-
+      下位組織の管理。管理先予約設定する場合は必須。
+      指定できる値は「下位組織を管理対象にしない」「下位組織を直接管理対象とする」「サブ組織所属を除く＋直下組織管理者を直接管理する」のいずれか。
+  manage_organization_reservation_date:
+    type: string
+    description: 管理先予約日。管理先予約設定する場合は必須。yyyy/mm/dd 形式の日付。
+    example: 2023/02/03
+  manage_organization_reservation_add_or_delete:
+    type: string
+    description: 追加/削除。管理先予約設定する場合は必須。

@@ -1,0 +1,14 @@
+type: object
+description: 従業員新規登録・更新のリクエスト。
+required:
+  - token
+  - staffs
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  staffs:
+    type: array
+    description: 新規登録、または更新する従業員の配列。
+    items:
+      $ref: ./StaffInput.yaml

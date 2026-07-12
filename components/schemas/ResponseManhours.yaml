@@ -1,0 +1,22 @@
+type: object
+description: 工数取得、および工数作成更新のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      manhours:
+        type: array
+        description: 工数の配列。
+        items:
+          $ref: ./Manhour.yaml
+  errors:
+    type: array
+    description: 失敗の原因となったエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

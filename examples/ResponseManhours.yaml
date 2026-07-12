@@ -1,0 +1,18 @@
+success: true
+response:
+  manhours:
+    - staff_id: 200
+      dates:
+        - date: 2019-08-01
+          projects:
+            - project_id: 100
+              closed_at: null
+              fixed_at: null
+              daily_hour_items:
+                - task_id: 150
+                  minute: 60
+              daily_comment_items:
+                - task_id: 150
+                  comment: 工数のコメントです。
+          staff_comment: 従業員のコメントです。
+          admin_comment: 管理者のコメントです。

@@ -1,0 +1,9 @@
+token: xxxxxxxxxxxxxxxx
+assign:
+  - staff_id: 200
+    owner: true
+  - staff_id: 201
+    owner: false
+unassign:
+  - 202
+  - 203

@@ -1,0 +1,27 @@
+type: object
+description: 打刻のリクエスト。
+required:
+  - token
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  type:
+    $ref: ./EnumStampType.yaml
+    description: 打刻種別。省略された場合、打刻履歴を元に出勤または退勤の打刻種別が決定する。
+  stampedAt:
+    type: string
+    description: >-
+      クライアントでの打刻日時。YYYY/MM/DD HH:MM:SS 形式。
+      実際の打刻はマネーフォワード クラウド勤怠 Plus の打刻サーバー側の時刻となる。
+    example: 2017/03/14 08:57:23
+  timezone:
+    type: string
+    description: クライアントのタイムゾーンを +09:00 の形の文字列で指定する。
+    example: "+09:00"
+  telework:
+    type: integer
+    description: >-
+      テレワーク状態を ON にするかを指定する。出勤打刻が成功した場合のみ有効となる。
+      1 を指定すると、マイページの「テレワークを開始する」と同様に、テレワーク中状態となる。
+      テレワーク機能が有効な企業でのみ利用できる。

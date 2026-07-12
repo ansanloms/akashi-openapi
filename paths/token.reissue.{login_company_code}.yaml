@@ -1,0 +1,46 @@
+post:
+  operationId: postTokenReissue
+  summary: アクセストークン再発行。
+  tags:
+    - token
+  description:
+    $ref: ./descriptions/postTokenReissue.md
+  security: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: ログイン企業 ID。
+      schema:
+        type: string
+  requestBody:
+    description: 再発行の情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestPostTokenReissue.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestPostTokenReissue.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponsePostTokenReissue.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponsePostTokenReissue.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

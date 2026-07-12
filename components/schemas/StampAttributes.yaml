@@ -1,0 +1,29 @@
+type: object
+description: 実績参照結果。
+properties:
+  method:
+    type: integer
+    description: 打刻方法。
+  org_id:
+    type: integer
+    description: 組織 ID。
+  workplace_id:
+    type:
+      - integer
+      - "null"
+    description: 勤務地 ID。
+  latitude:
+    type:
+      - number
+      - "null"
+    format: float
+    description: 緯度。
+  longitude:
+    type:
+      - number
+      - "null"
+    format: float
+    description: 経度。
+  ip:
+    type: string
+    description: 打刻機の IP アドレス。

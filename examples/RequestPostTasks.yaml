@@ -1,0 +1,9 @@
+token: xxxxxxxxxxxxxxxx
+tasks:
+  - name_ja: サンプルタスク
+    name_en: Sample Task
+    code: sample_task
+    index: "1"
+    estimated_hour: 60
+    estimated_amount: 10000
+    is_finished: false

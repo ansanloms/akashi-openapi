@@ -1,0 +1,10 @@
+token: xxxxxxxxxxxxxxxx
+projects:
+  - name_ja: サンプルテスト
+    short_name_ja: サンプル
+    name_en: Sample Test
+    short_name_en: Sample
+    project_code: sample
+    remarks: サンプルです。
+    start_date: "20190801"
+    end_date: "20190831"

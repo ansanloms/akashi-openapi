@@ -1,0 +1,42 @@
+type: object
+description: プロジェクト。
+properties:
+  project_id:
+    type: integer
+    description: プロジェクト ID。
+  name:
+    type: string
+    description: プロジェクト名称。
+  short_name:
+    type:
+      - string
+      - "null"
+    description: プロジェクト略称。
+  project_code:
+    type:
+      - string
+      - "null"
+    description: プロジェクトコード。
+  remarks:
+    type:
+      - string
+      - "null"
+    description: 備考。
+  start_date:
+    type:
+      - string
+      - "null"
+    description: プロジェクト開始日。
+    example: 2019-08-01
+  end_date:
+    type:
+      - string
+      - "null"
+    description: プロジェクト終了日。
+    example: 2019-08-31
+  sync_punch:
+    type: boolean
+    description: 打刻同期フラグ。
+  all_staffs_target:
+    type: boolean
+    description: 全従業員選択フラグ。

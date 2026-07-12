@@ -1,0 +1,9 @@
+type: object
+description: 失敗の原因となったエラーについてのエラーメッセージ。
+properties:
+  code:
+    type: string
+    description: エラーコード。
+  message:
+    type: string
+    description: エラーメッセージ。

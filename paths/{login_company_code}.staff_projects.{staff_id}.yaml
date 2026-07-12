@@ -1,0 +1,55 @@
+get:
+  operationId: getStaffProjectsStaffId
+  summary: 参加プロジェクト取得 (指定)。
+  tags:
+    - projects
+  description:
+    $ref: ./descriptions/getStaffProjectsStaffId.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: staff_id
+      required: true
+      description: 従業員 ID。
+      schema:
+        type: integer
+    - in: query
+      name: start_date
+      required: false
+      description: プロジェクト開始日。未指定なら開始日は実行日の月初となる。
+      schema:
+        type: string
+    - in: query
+      name: end_date
+      required: false
+      description: プロジェクト終了日。未指定なら終了日は実行日の月末となる。
+      schema:
+        type: string
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseGetStaffProjectsStaffId.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseGetStaffProjectsStaffId.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

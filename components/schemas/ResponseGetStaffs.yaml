@@ -1,0 +1,31 @@
+type: object
+description: 従業員取得のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      login_company_code:
+        type: string
+        description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      Count:
+        type: integer
+        description: 取得された従業員数。
+      TotalCount:
+        type: integer
+        description: 取得できる従業員数。
+      staffs:
+        type: array
+        description: 取得した従業員情報の配列。
+        items:
+          $ref: ./Staff.yaml
+  errors:
+    type: array
+    description: 失敗の原因となったエラーについてのエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

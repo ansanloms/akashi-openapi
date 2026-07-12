@@ -1,0 +1,32 @@
+type: object
+description: 勤務処理取得のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  results:
+    type: array
+    description: 処理結果の配列。
+    items:
+      type: object
+      description: 従業員・日付ごとの勤務処理。
+      properties:
+        staff_id:
+          type: string
+          description: 従業員 ID。
+        date:
+          type: string
+          description: 日付。
+          example: 2026-01-01
+        working_statuses:
+          type: array
+          description: 勤務処理の配列。
+          items:
+            type: string
+  errors:
+    type: array
+    description: エラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

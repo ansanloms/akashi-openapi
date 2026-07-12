@@ -1,0 +1,30 @@
+type: object
+description: 勤務処理取得のリクエスト。
+required:
+  - token
+  - search
+properties:
+  login_company_code:
+    type: string
+    description: 企業のログイン企業 ID。
+  token:
+    type: string
+    description: アクセストークン。
+  search:
+    type: array
+    description: 勤務処理取得リスト。最大 1,000 件まで指定可能。
+    maxItems: 1000
+    items:
+      type: object
+      description: 勤務処理の取得対象。
+      required:
+        - staff_id
+        - date
+      properties:
+        staff_id:
+          type: string
+          description: 勤務処理を取得する従業員 ID。
+        date:
+          type: string
+          description: 取得対象の日付。YYYY-MM-DD 形式。
+          example: 2026-01-01

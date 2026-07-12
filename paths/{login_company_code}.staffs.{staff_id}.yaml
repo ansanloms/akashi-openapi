@@ -1,0 +1,43 @@
+get:
+  operationId: getStaffsStaffId
+  summary: 従業員取得 (従業員 ID 指定)。
+  tags:
+    - staffs
+  description:
+    $ref: ./descriptions/getStaffsStaffId.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: staff_id
+      required: true
+      description: 取得対象の従業員 ID。従業員番号ではない。
+      schema:
+        type: integer
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseGetStaffs.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseGetStaffs.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

@@ -1,0 +1,14 @@
+type: object
+description: 個別就業設定のリクエスト。
+required:
+  - token
+  - working_condition_settings
+properties:
+  token:
+    type: string
+    description: アクセストークン。
+  working_condition_settings:
+    type: array
+    description: 設定する個別就業設定の配列。
+    items:
+      $ref: ./WorkingConditionSetting.yaml

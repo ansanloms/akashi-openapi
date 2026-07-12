@@ -1,0 +1,11 @@
+type: object
+description: 従業員毎の工数。
+properties:
+  staff_id:
+    type: integer
+    description: 従業員 ID。
+  dates:
+    type: array
+    description: 従業員の日付毎の工数の配列。
+    items:
+      $ref: ./ManhourDate.yaml

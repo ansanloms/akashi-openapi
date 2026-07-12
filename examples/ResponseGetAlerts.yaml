@@ -1,0 +1,15 @@
+success: true
+response:
+  login_company_code: sample001
+  staff_id: 123
+  count: 3
+  alerts:
+    - month: 2017/03/01
+      date: 2017/04/15
+      alert_type: 1
+    - month: 2017/04/01
+      date: 2017/04/16
+      alert_type: 2
+    - month: 2017/04/01
+      date: 2017/04/16
+      alert_type: 6

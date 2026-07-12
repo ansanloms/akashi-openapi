@@ -1,0 +1,9 @@
+type: object
+description: 表示する打刻ボタン。
+properties:
+  punchType:
+    type: integer
+    description: 打刻種別。
+  displayName:
+    type: string
+    description: 表示名。

@@ -1,0 +1,25 @@
+type: object
+description: 打刻情報取得 (複数従業員) のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      login_company_code:
+        type: string
+        description: ログイン企業 ID。
+      multiple_stamps:
+        type: array
+        description: 従業員ごとの打刻情報の配列。
+        items:
+          $ref: ./MultipleStamp.yaml
+  errors:
+    type: array
+    description: 失敗の原因となったエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

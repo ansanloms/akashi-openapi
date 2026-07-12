@@ -1,0 +1,11 @@
+success: true
+results:
+  - staff_id: "1"
+    date: 2026-01-01
+    working_statuses:
+      - 欠勤
+  - staff_id: "14"
+    date: 2025-12-02
+    working_statuses:
+      - 出張
+errors: []

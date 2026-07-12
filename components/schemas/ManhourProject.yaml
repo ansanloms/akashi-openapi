@@ -1,0 +1,26 @@
+type: object
+description: プロジェクト毎の工数。
+properties:
+  project_id:
+    type: integer
+    description: プロジェクト ID。
+  closed_at:
+    type:
+      - string
+      - "null"
+    description: 締め日時。
+  fixed_at:
+    type:
+      - string
+      - "null"
+    description: 確定日時。
+  daily_hour_items:
+    type: array
+    description: プロジェクトのタスク毎の工数の配列。
+    items:
+      $ref: ./ManhourDailyHourItem.yaml
+  daily_comment_items:
+    type: array
+    description: プロジェクトのタスク毎のコメントの配列。
+    items:
+      $ref: ./ManhourDailyCommentItem.yaml

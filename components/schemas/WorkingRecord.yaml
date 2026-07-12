@@ -1,0 +1,58 @@
+type: object
+description: 勤務実績。
+properties:
+  date:
+    type: string
+    description: yyyy/mm/dd 形式の日付。
+    example: 2018/09/03
+  working_day_category:
+    type: integer
+    description: "労働区分。0 : 労働日、1 : 所定休日、2 : 法定休日。"
+    enum:
+      - 0
+      - 1
+      - 2
+  start_time:
+    type:
+      - string
+      - "null"
+    description: 実績開始時刻。
+    example: 2018/09/03 09:00:00
+  end_time:
+    type:
+      - string
+      - "null"
+    description: 実績終了時刻。
+    example: 2018/09/03 22:00:00
+  rounded_start_time:
+    type:
+      - string
+      - "null"
+    description: 丸め実績開始時刻。
+    example: 2018/09/03 09:00:00
+  rounded_end_time:
+    type:
+      - string
+      - "null"
+    description: 丸め実績終了時刻。
+    example: 2018/09/03 22:00:00
+  attendance_punch_time:
+    type:
+      - string
+      - "null"
+    description: 出勤打刻時刻。
+  leaving_punch_time:
+    type:
+      - string
+      - "null"
+    description: 退勤打刻時刻。
+  actual_working_hours_no_rounding:
+    type:
+      - integer
+      - "null"
+    description: 実働時間 (まるめなし) の分単位の値。
+  break_time_results:
+    type: array
+    description: 休憩実績の配列。
+    items:
+      $ref: ./BreakTimeResult.yaml

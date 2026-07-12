@@ -1,0 +1,22 @@
+type: object
+description: 日付毎の工数。
+properties:
+  date:
+    type: string
+    description: 日付。
+    example: 2019-08-01
+  projects:
+    type: array
+    description: 日付のプロジェクト毎の工数の配列。
+    items:
+      $ref: ./ManhourProject.yaml
+  staff_comment:
+    type:
+      - string
+      - "null"
+    description: 従業員のコメント。
+  admin_comment:
+    type:
+      - string
+      - "null"
+    description: 管理者のコメント。

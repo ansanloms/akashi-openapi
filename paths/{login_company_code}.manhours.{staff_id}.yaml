@@ -1,0 +1,109 @@
+get:
+  operationId: getManhoursStaffId
+  summary: 工数取得 (指定)。
+  tags:
+    - manhours
+  description:
+    $ref: ./descriptions/getManhoursStaffId.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: staff_id
+      required: true
+      description: 従業員 ID。
+      schema:
+        type: integer
+    - in: query
+      name: start_date
+      required: false
+      description: 工数取得期間の開始日時。指定無しなら実行月の月初日を選択する。
+      schema:
+        type: string
+      example: "20190801"
+    - in: query
+      name: end_date
+      required: false
+      description: 工数取得期間の終了日時。指定無しなら実行月の月末日を選択する。
+      schema:
+        type: string
+      example: "20190831"
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseManhours.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseManhours.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml
+delete:
+  operationId: deleteManhoursStaffId
+  summary: 工数削除。
+  tags:
+    - manhours
+  description:
+    $ref: ./descriptions/deleteManhoursStaffId.md
+  security: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: staff_id
+      required: true
+      description: 従業員 ID。
+      schema:
+        type: integer
+  requestBody:
+    description: 削除する工数の情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestDeleteManhoursStaffId.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestDeleteManhoursStaffId.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseDeleteManhoursStaffId.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseDeleteManhoursStaffId.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

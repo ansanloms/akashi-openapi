@@ -1,0 +1,18 @@
+success: true
+response:
+  - staff_id: 1
+    working_records:
+      - date: 2018/09/03
+        working_day_category: 0
+        start_time: 2018/09/03 09:00:00
+        end_time: 2018/09/03 22:00:00
+        rounded_start_time: 2018/09/03 09:00:00
+        rounded_end_time: 2018/09/03 22:00:00
+        attendance_punch_time: null
+        leaving_punch_time: null
+        actual_working_hours_no_rounding: 480
+        break_time_results:
+          - result_break_time_start_time: 2018/09/03 12:00:00
+            result_break_time_end_time: 2018/09/03 13:00:00
+            rounded_break_time_start_time: 2018/09/03 12:00:00
+            rounded_break_time_end_time: 2018/09/03 13:00:00

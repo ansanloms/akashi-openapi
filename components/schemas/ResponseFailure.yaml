@@ -1,0 +1,13 @@
+type: object
+description: 処理失敗時の共通レスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。失敗の場合は false。
+  errors:
+    type: array
+    description: 失敗の原因となったエラーについてのエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

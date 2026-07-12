@@ -1,0 +1,27 @@
+type: object
+description: プロジェクト従業員取得、およびプロジェクト従業員追加解除のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      staff_ids:
+        type: array
+        description: プロジェクトの従業員の ID 配列。
+        items:
+          type: integer
+      owner_staff_ids:
+        type: array
+        description: プロジェクトオーナーの従業員の ID 配列。
+        items:
+          type: integer
+  errors:
+    type: array
+    description: 失敗の原因となったエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

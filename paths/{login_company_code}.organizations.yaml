@@ -1,0 +1,98 @@
+post:
+  operationId: postOrganizations
+  summary: 組織作成。
+  tags:
+    - organizations
+  description:
+    $ref: ./descriptions/postOrganizations.md
+  security: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      schema:
+        type: string
+  requestBody:
+    description: 生成する組織の情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestPostOrganizations.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestPostOrganizations.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseOrganizations.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseOrganizations.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml
+get:
+  operationId: getOrganizations
+  summary: 組織取得。
+  tags:
+    - organizations
+  description:
+    $ref: ./descriptions/getOrganizations.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      schema:
+        type: string
+    - in: query
+      name: includesParents
+      required: true
+      description: 直系親取得有無。直系の親組織も取得対象と含める場合は 1、含めない場合は 0。
+      schema:
+        type: integer
+        enum:
+          - 0
+          - 1
+    - in: query
+      name: orgId
+      required: false
+      description: 組織 ID。指定された場合、直系親取得有無に関わらず、その組織の情報のみ取得する。
+      schema:
+        type: integer
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseOrganizations.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseOrganizations.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

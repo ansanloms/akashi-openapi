@@ -1,0 +1,19 @@
+type: object
+description: 休憩実績。
+properties:
+  result_break_time_start_time:
+    type: string
+    description: 休憩開始時刻。
+    example: 2018/09/03 12:00:00
+  result_break_time_end_time:
+    type: string
+    description: 休憩終了時刻。
+    example: 2018/09/03 13:00:00
+  rounded_break_time_start_time:
+    type: string
+    description: 丸め休憩開始時刻。
+    example: 2018/09/03 12:00:00
+  rounded_break_time_end_time:
+    type: string
+    description: 丸め休憩終了時刻。
+    example: 2018/09/03 13:00:00

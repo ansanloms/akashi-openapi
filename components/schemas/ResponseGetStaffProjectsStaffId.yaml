@@ -1,0 +1,22 @@
+type: object
+description: 参加プロジェクト取得 (指定) のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      projects:
+        type: array
+        description: 参加プロジェクトオブジェクトの配列。
+        items:
+          $ref: ./StaffProject.yaml
+  errors:
+    type: array
+    description: 失敗の原因となったエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

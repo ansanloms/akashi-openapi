@@ -1,0 +1,76 @@
+get:
+  operationId: getWorkingRecords
+  summary: 勤務実績取得 (複数従業員)。
+  tags:
+    - workingRecords
+  description:
+    $ref: ./descriptions/getWorkingRecords.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: query
+      name: start_date
+      required: true
+      description: 実績取得期間の開始日時。yyyymmdd の形式で指定する。
+      schema:
+        type: string
+      example: "20180903"
+    - in: query
+      name: end_date
+      required: false
+      description: 実績取得期間の終了日時。yyyymmdd の形式で指定する。期間は最大 31 日である。
+      schema:
+        type: string
+      example: "20180930"
+    - in: query
+      name: staff_ids
+      required: true
+      description: >-
+        取得対象の従業員 ID (従業員番号ではない) をコンマ区切りで並べたもの。
+        一度に指定できるのは 50 ID まで。
+      schema:
+        type: string
+      example: 1,2,3,4
+    - in: query
+      name: include_break_results
+      required: false
+      description: >-
+        休憩実績を取得するかどうか。
+        1 を指定した場合、取得する勤務実績に休憩実績を含める。この場合、end_date は指定できない。
+      schema:
+        type: integer
+    - in: query
+      name: include_actual_working_hours_no_rounding
+      required: false
+      description: >-
+        実働時間 (まるめなし) を取得するかどうか。
+        1 を指定した場合、取得する勤務実績に実働時間 (まるめなし) を含める。
+      schema:
+        type: integer
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseGetWorkingRecords.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseGetWorkingRecords.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

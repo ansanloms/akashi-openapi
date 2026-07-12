@@ -1,0 +1,24 @@
+success: true
+response:
+  count: 2
+  organizations:
+    - organizationId: 1
+      name: 第一事業本部
+      code: "001"
+      label: ""
+      parentId: 0
+      displayPunchTypes:
+        - punchType: 1
+          displayName: 出社
+        - punchType: 2
+          displayName: 退社
+    - organizationId: 2
+      name: 営業部
+      code: "0011"
+      label: ""
+      parentId: 1
+      displayPunchTypes:
+        - punchType: 11
+          displayName: 出社
+        - punchType: 12
+          displayName: 退社

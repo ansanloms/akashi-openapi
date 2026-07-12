@@ -1,0 +1,30 @@
+type: object
+description: タスク。
+properties:
+  task_id:
+    type: integer
+    description: タスク ID。
+  name:
+    type: string
+    description: タスク名称。
+  code:
+    type:
+      - string
+      - "null"
+    description: タスクコード。
+  index:
+    type: integer
+    description: 表示順。
+  estimated_hour:
+    type:
+      - integer
+      - "null"
+    description: 想定時間 (分)。
+  estimated_amount:
+    type:
+      - integer
+      - "null"
+    description: 想定金額。
+  is_finished:
+    type: boolean
+    description: 終了フラグ。

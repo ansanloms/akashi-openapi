@@ -1,37 +1,218 @@
 openapi: 3.1.0
 info:
-  version: 0.0.1
-  title: OpenAPI Example
+  version: 0.1.0
+  title: AKASHI (マネーフォワード クラウド勤怠Plus) 公開API
   description:
     $ref: ./README.md
 servers:
-  - url: https://api.example.org
+  - url: https://atnd.ak4.jp/api/cooperation
     description: Production Server
+  - url: https://atnd-awj.ak4.jp/api/cooperation
+    description: Production Server (awj)
 paths:
-  /users:
-    $ref: ./paths/users.yaml
-  /users/{id}:
-    $ref: ./paths/users.{id}.yaml
+  /token/reissue/{login_company_code}:
+    $ref: ./paths/token.reissue.{login_company_code}.yaml
+  /working_statuses/search:
+    $ref: ./paths/working_statuses.search.yaml
+  /working_statuses/update:
+    $ref: ./paths/working_statuses.update.yaml
+  /{login_company_code}/alerts:
+    $ref: ./paths/{login_company_code}.alerts.yaml
+  /{login_company_code}/importer_factory/organizations:
+    $ref: ./paths/{login_company_code}.importer_factory.organizations.yaml
+  /{login_company_code}/importer_factory/permissions:
+    $ref: ./paths/{login_company_code}.importer_factory.permissions.yaml
+  /{login_company_code}/importer_factory/permissions_reserve:
+    $ref: ./paths/{login_company_code}.importer_factory.permissions_reserve.yaml
+  /{login_company_code}/manhours:
+    $ref: ./paths/{login_company_code}.manhours.yaml
+  /{login_company_code}/manhours/{staff_id}:
+    $ref: ./paths/{login_company_code}.manhours.{staff_id}.yaml
+  /{login_company_code}/multiple_stamps:
+    $ref: ./paths/{login_company_code}.multiple_stamps.yaml
+  /{login_company_code}/organizations:
+    $ref: ./paths/{login_company_code}.organizations.yaml
+  /{login_company_code}/project_staffs/{project_id}:
+    $ref: ./paths/{login_company_code}.project_staffs.{project_id}.yaml
+  /{login_company_code}/projects:
+    $ref: ./paths/{login_company_code}.projects.yaml
+  /{login_company_code}/projects/{project_id}:
+    $ref: ./paths/{login_company_code}.projects.{project_id}.yaml
+  /{login_company_code}/staff/{staff_id}:
+    $ref: ./paths/{login_company_code}.staff.{staff_id}.yaml
+  /{login_company_code}/staff_projects/{staff_id}:
+    $ref: ./paths/{login_company_code}.staff_projects.{staff_id}.yaml
+  /{login_company_code}/staffs:
+    $ref: ./paths/{login_company_code}.staffs.yaml
+  /{login_company_code}/staffs/{staff_id}:
+    $ref: ./paths/{login_company_code}.staffs.{staff_id}.yaml
+  /{login_company_code}/stamps:
+    $ref: ./paths/{login_company_code}.stamps.yaml
+  /{login_company_code}/stamps/{staff_id}:
+    $ref: ./paths/{login_company_code}.stamps.{staff_id}.yaml
+  /{login_company_code}/working_condition_settings:
+    $ref: ./paths/{login_company_code}.working_condition_settings.yaml
+  /{login_company_code}/working_records:
+    $ref: ./paths/{login_company_code}.working_records.yaml
+  /{login_company_code}/{project_id}/tasks:
+    $ref: ./paths/{login_company_code}.{project_id}.tasks.yaml
+  /{login_company_code}/{project_id}/tasks/{task_id}:
+    $ref: ./paths/{login_company_code}.{project_id}.tasks.{task_id}.yaml
 components:
   schemas:
-    User:
-      $ref: ./components/schemas/User.yaml
-    EnumStatus:
-      $ref: ./components/schemas/EnumStatus.yaml
-    RequestPostUsers:
-      $ref: ./components/schemas/RequestPostUsers.yaml
-    RequestPutUserId:
-      $ref: ./components/schemas/RequestPutUserId.yaml
-    ResponseError:
-      $ref: ./components/schemas/ResponseError.yaml
-    ResponseGetUsers:
-      $ref: ./components/schemas/ResponseGetUsers.yaml
-    ResponseGetUsersId:
-      $ref: ./components/schemas/ResponseGetUsersId.yaml
+    Alert:
+      $ref: ./components/schemas/Alert.yaml
+    BreakTimeResult:
+      $ref: ./components/schemas/BreakTimeResult.yaml
+    DisplayPunchType:
+      $ref: ./components/schemas/DisplayPunchType.yaml
+    EmploymentCategory:
+      $ref: ./components/schemas/EmploymentCategory.yaml
+    Error:
+      $ref: ./components/schemas/Error.yaml
+    ImporterFactoryOrganization:
+      $ref: ./components/schemas/ImporterFactoryOrganization.yaml
+    ImporterFactoryPermission:
+      $ref: ./components/schemas/ImporterFactoryPermission.yaml
+    ImporterFactoryPermissionReserve:
+      $ref: ./components/schemas/ImporterFactoryPermissionReserve.yaml
+    Manhour:
+      $ref: ./components/schemas/Manhour.yaml
+    ManhourDailyCommentItem:
+      $ref: ./components/schemas/ManhourDailyCommentItem.yaml
+    ManhourDailyHourItem:
+      $ref: ./components/schemas/ManhourDailyHourItem.yaml
+    ManhourDate:
+      $ref: ./components/schemas/ManhourDate.yaml
+    ManhourProject:
+      $ref: ./components/schemas/ManhourProject.yaml
+    MultipleStamp:
+      $ref: ./components/schemas/MultipleStamp.yaml
+    Organization:
+      $ref: ./components/schemas/Organization.yaml
+    OrganizationSummary:
+      $ref: ./components/schemas/OrganizationSummary.yaml
+    PermissionGroup:
+      $ref: ./components/schemas/PermissionGroup.yaml
+    Project:
+      $ref: ./components/schemas/Project.yaml
+    ProjectInput:
+      $ref: ./components/schemas/ProjectInput.yaml
+    Staff:
+      $ref: ./components/schemas/Staff.yaml
+    StaffInput:
+      $ref: ./components/schemas/StaffInput.yaml
+    StaffProject:
+      $ref: ./components/schemas/StaffProject.yaml
+    StaffResult:
+      $ref: ./components/schemas/StaffResult.yaml
+    StaffWorkingRecord:
+      $ref: ./components/schemas/StaffWorkingRecord.yaml
+    Stamp:
+      $ref: ./components/schemas/Stamp.yaml
+    StampAttributes:
+      $ref: ./components/schemas/StampAttributes.yaml
+    Task:
+      $ref: ./components/schemas/Task.yaml
+    TaskInput:
+      $ref: ./components/schemas/TaskInput.yaml
+    WorkingConditionSetting:
+      $ref: ./components/schemas/WorkingConditionSetting.yaml
+    WorkingRecord:
+      $ref: ./components/schemas/WorkingRecord.yaml
+    EnumAlertType:
+      $ref: ./components/schemas/EnumAlertType.yaml
+    EnumStampType:
+      $ref: ./components/schemas/EnumStampType.yaml
+    RequestDeleteManhoursStaffId:
+      $ref: ./components/schemas/RequestDeleteManhoursStaffId.yaml
+    RequestDeleteProjectsProjectId:
+      $ref: ./components/schemas/RequestDeleteProjectsProjectId.yaml
+    RequestDeleteStaffStaffId:
+      $ref: ./components/schemas/RequestDeleteStaffStaffId.yaml
+    RequestDeleteTasksTaskId:
+      $ref: ./components/schemas/RequestDeleteTasksTaskId.yaml
+    RequestPatchStaffs:
+      $ref: ./components/schemas/RequestPatchStaffs.yaml
+    RequestPatchWorkingConditionSettings:
+      $ref: ./components/schemas/RequestPatchWorkingConditionSettings.yaml
+    RequestPostImporterFactoryOrganizations:
+      $ref: ./components/schemas/RequestPostImporterFactoryOrganizations.yaml
+    RequestPostImporterFactoryPermissions:
+      $ref: ./components/schemas/RequestPostImporterFactoryPermissions.yaml
+    RequestPostImporterFactoryPermissionsReserve:
+      $ref: ./components/schemas/RequestPostImporterFactoryPermissionsReserve.yaml
+    RequestPostManhours:
+      $ref: ./components/schemas/RequestPostManhours.yaml
+    RequestPostOrganizations:
+      $ref: ./components/schemas/RequestPostOrganizations.yaml
+    RequestPostProjects:
+      $ref: ./components/schemas/RequestPostProjects.yaml
+    RequestPostProjectStaffsProjectId:
+      $ref: ./components/schemas/RequestPostProjectStaffsProjectId.yaml
+    RequestPostStamps:
+      $ref: ./components/schemas/RequestPostStamps.yaml
+    RequestPostTasks:
+      $ref: ./components/schemas/RequestPostTasks.yaml
+    RequestPostTokenReissue:
+      $ref: ./components/schemas/RequestPostTokenReissue.yaml
+    RequestPostWorkingStatusesSearch:
+      $ref: ./components/schemas/RequestPostWorkingStatusesSearch.yaml
+    RequestPostWorkingStatusesUpdate:
+      $ref: ./components/schemas/RequestPostWorkingStatusesUpdate.yaml
+    ResponseDeleteManhoursStaffId:
+      $ref: ./components/schemas/ResponseDeleteManhoursStaffId.yaml
+    ResponseDeleteProjectsProjectId:
+      $ref: ./components/schemas/ResponseDeleteProjectsProjectId.yaml
+    ResponseDeleteStaffStaffId:
+      $ref: ./components/schemas/ResponseDeleteStaffStaffId.yaml
+    ResponseDeleteTasksTaskId:
+      $ref: ./components/schemas/ResponseDeleteTasksTaskId.yaml
+    ResponseFailure:
+      $ref: ./components/schemas/ResponseFailure.yaml
+    ResponseGetAlerts:
+      $ref: ./components/schemas/ResponseGetAlerts.yaml
+    ResponseGetMultipleStamps:
+      $ref: ./components/schemas/ResponseGetMultipleStamps.yaml
+    ResponseGetProjects:
+      $ref: ./components/schemas/ResponseGetProjects.yaml
+    ResponseGetProjectsProjectId:
+      $ref: ./components/schemas/ResponseGetProjectsProjectId.yaml
+    ResponseGetStaffProjectsStaffId:
+      $ref: ./components/schemas/ResponseGetStaffProjectsStaffId.yaml
+    ResponseGetStaffs:
+      $ref: ./components/schemas/ResponseGetStaffs.yaml
+    ResponseGetStamps:
+      $ref: ./components/schemas/ResponseGetStamps.yaml
+    ResponseGetTasksTaskId:
+      $ref: ./components/schemas/ResponseGetTasksTaskId.yaml
+    ResponseGetWorkingRecords:
+      $ref: ./components/schemas/ResponseGetWorkingRecords.yaml
+    ResponseManhours:
+      $ref: ./components/schemas/ResponseManhours.yaml
+    ResponseOrganizations:
+      $ref: ./components/schemas/ResponseOrganizations.yaml
+    ResponsePatchStaffs:
+      $ref: ./components/schemas/ResponsePatchStaffs.yaml
+    ResponsePostProjects:
+      $ref: ./components/schemas/ResponsePostProjects.yaml
+    ResponsePostStamps:
+      $ref: ./components/schemas/ResponsePostStamps.yaml
+    ResponsePostTokenReissue:
+      $ref: ./components/schemas/ResponsePostTokenReissue.yaml
+    ResponsePostWorkingStatusesSearch:
+      $ref: ./components/schemas/ResponsePostWorkingStatusesSearch.yaml
+    ResponsePostWorkingStatusesUpdate:
+      $ref: ./components/schemas/ResponsePostWorkingStatusesUpdate.yaml
+    ResponseProjectStaffs:
+      $ref: ./components/schemas/ResponseProjectStaffs.yaml
+    ResponseStaffs:
+      $ref: ./components/schemas/ResponseStaffs.yaml
+    ResponseTasks:
+      $ref: ./components/schemas/ResponseTasks.yaml
   securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-security:
-  - bearerAuth: []
+    tokenQuery:
+      type: apiKey
+      in: query
+      name: token
+      description: マイページから発行したアクセストークン。有効期限は 1 ヶ月と 1 日である。

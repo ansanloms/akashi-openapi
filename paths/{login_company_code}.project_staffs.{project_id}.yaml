@@ -1,0 +1,95 @@
+get:
+  operationId: getProjectStaffsProjectId
+  summary: プロジェクト従業員取得 (指定)。
+  tags:
+    - projects
+  description:
+    $ref: ./descriptions/getProjectStaffsProjectId.md
+  security:
+    - tokenQuery: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: project_id
+      required: true
+      description: プロジェクト ID。
+      schema:
+        type: integer
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseProjectStaffs.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseProjectStaffs.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml
+post:
+  operationId: postProjectStaffsProjectId
+  summary: プロジェクト従業員追加解除。
+  tags:
+    - projects
+  description:
+    $ref: ./descriptions/postProjectStaffsProjectId.md
+  security: []
+  parameters:
+    - in: path
+      name: login_company_code
+      required: true
+      description: 企業のログイン企業 ID。
+      schema:
+        type: string
+    - in: path
+      name: project_id
+      required: true
+      description: プロジェクト ID。
+      schema:
+        type: integer
+  requestBody:
+    description: 追加、または解除する従業員の情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestPostProjectStaffsProjectId.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestPostProjectStaffsProjectId.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseProjectStaffs.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponseProjectStaffs.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

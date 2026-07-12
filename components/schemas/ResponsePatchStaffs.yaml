@@ -1,0 +1,62 @@
+type: object
+description: 従業員新規登録・更新のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      login_company_code:
+        type: string
+        description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      staffs:
+        type: array
+        description: 従業員の配列。
+        items:
+          type: object
+          description: 新規登録、または更新された従業員。
+          properties:
+            staff_id:
+              type: integer
+              description: 従業員 ID。
+            staff_code:
+              type:
+                - string
+                - "null"
+              description: 従業員番号。
+            email:
+              type:
+                - string
+                - "null"
+              description: メールアドレス。
+            organization_id:
+              type: integer
+              description: 組織の ID。
+            employment_category_id:
+              type:
+                - integer
+                - "null"
+              description: 雇用区分の ID。
+  errors:
+    type: array
+    description: エラーメッセージの配列。
+    items:
+      type: object
+      description: エラーメッセージ。
+      properties:
+        code:
+          type: string
+          description: エラーコード。
+        staff_id:
+          type: string
+          description: 従業員 ID。従業員更新の場合のみ。
+        name:
+          type: string
+          description: リクエストの姓 + 名。
+        message:
+          type: string
+          description: エラーメッセージ。

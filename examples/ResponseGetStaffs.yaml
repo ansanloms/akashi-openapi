@@ -1,0 +1,33 @@
+success: true
+response:
+  login_company_code: sample001
+  Count: 1
+  TotalCount: 1
+  staffs:
+    - staffId: 456
+      email: taro.kodama@example.com
+      lastName: 児玉
+      firstName: 太郎
+      lastNameKana: コダマ
+      firstNameKana: タロウ
+      organization:
+        organizationId: 1
+        name: 営業部
+      subgroups:
+        - organizationId: 2
+          name: 開発部
+      employmentCategory:
+        employmentCategoryId: 1
+        name: 正社員
+      tag: null
+      staffNum: "2015000012"
+      idmNum: null
+      cardTypeId: null
+      remarks: 備考欄の記述
+      permissionGroup:
+        permissionGroupId: 456
+        permissionType: 2
+        name: 一般管理者
+      managedOrganizations:
+        - organizationId: 456
+          name: 総務部

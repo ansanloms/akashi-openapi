@@ -1,0 +1,30 @@
+type: object
+description: 作成、または更新するタスク。
+required:
+  - name_ja
+  - name_en
+properties:
+  task_id:
+    type: integer
+    description: タスク ID。指定無しの場合は新規作成する。
+  name_ja:
+    type: string
+    description: タスク名称。重複不可。
+  name_en:
+    type: string
+    description: タスク英語名称。重複不可。
+  code:
+    type: string
+    description: タスクコード。重複不可。
+  index:
+    type: string
+    description: 表示順。
+  estimated_hour:
+    type: integer
+    description: 想定時間。
+  estimated_amount:
+    type: integer
+    description: 想定金額。
+  is_finished:
+    type: boolean
+    description: 終了フラグ。

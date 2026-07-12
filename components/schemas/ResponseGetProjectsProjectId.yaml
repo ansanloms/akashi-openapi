@@ -1,0 +1,16 @@
+type: object
+description: プロジェクト取得 (プロジェクト ID 指定) のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    $ref: ./Project.yaml
+    description: 取得されたプロジェクト。
+  errors:
+    type: array
+    description: 失敗の原因となったエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

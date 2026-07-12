@@ -1,0 +1,14 @@
+success: true
+response:
+  login_company_code: com123
+  staffs:
+    - staff_id: 123
+      staff_code: s001
+      email: sample@example.com
+      organization_id: 1
+      employment_category_id: 1
+errors:
+  - code: ERR300402
+    staff_id: "1"
+    name: 山田太郎
+    message: 組織が存在しません。

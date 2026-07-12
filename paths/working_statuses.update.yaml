@@ -1,0 +1,39 @@
+post:
+  operationId: postWorkingStatusesUpdate
+  summary: 勤務処理更新。
+  tags:
+    - workingStatuses
+  description:
+    $ref: ./descriptions/postWorkingStatusesUpdate.md
+  security: []
+  requestBody:
+    description: 勤務処理の更新対象の情報。
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RequestPostWorkingStatusesUpdate.yaml
+        examples:
+          normal:
+            value:
+              $ref: ../examples/RequestPostWorkingStatusesUpdate.yaml
+  responses:
+    200:
+      description: 処理成功時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponsePostWorkingStatusesUpdate.yaml
+          examples:
+            succeeded:
+              value:
+                $ref: ../examples/ResponsePostWorkingStatusesUpdate.yaml
+    default:
+      description: 処理失敗時。
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ResponseFailure.yaml
+          examples:
+            processingFailed:
+              value:
+                $ref: ../examples/ResponseFailure.yaml

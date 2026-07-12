@@ -1,0 +1,9 @@
+type: object
+description: タスク毎のコメント。
+properties:
+  task_id:
+    type: integer
+    description: タスク ID。
+  comment:
+    type: string
+    description: コメント。

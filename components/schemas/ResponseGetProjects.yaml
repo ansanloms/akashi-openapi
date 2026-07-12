@@ -1,0 +1,25 @@
+type: object
+description: プロジェクト取得 (一覧) のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      count:
+        type: integer
+        description: 取得プロジェクトの件数。
+      projects:
+        type: array
+        description: 取得されたプロジェクトの配列。
+        items:
+          $ref: ./Project.yaml
+  errors:
+    type: array
+    description: 失敗の原因となったエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

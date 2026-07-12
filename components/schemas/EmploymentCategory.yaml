@@ -1,0 +1,11 @@
+type: object
+description: 雇用区分。
+properties:
+  employmentCategoryId:
+    type:
+      - integer
+      - "null"
+    description: 雇用区分 ID。雇用区分が「従業員」の場合は null。
+  name:
+    type: string
+    description: 雇用区分名称。雇用区分が「従業員」の場合は「従業員」。

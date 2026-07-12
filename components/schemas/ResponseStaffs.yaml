@@ -1,0 +1,46 @@
+type: object
+description: 個別就業設定、異動、権限指定系 API 共通のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      login_company_code:
+        type: string
+        description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+      staffs:
+        type: array
+        description: 従業員の配列。
+        items:
+          $ref: ./StaffResult.yaml
+  errors:
+    type: array
+    description: エラーメッセージの配列。
+    items:
+      type: object
+      description: エラーメッセージ。
+      properties:
+        code:
+          type: string
+          description: エラーコード。
+        target:
+          type: string
+          description: 対象の従業員 ID、またはメールアドレス。
+        staff_code:
+          type:
+            - string
+            - "null"
+          description: 従業員番号。
+        email:
+          type:
+            - string
+            - "null"
+          description: メールアドレス。
+        message:
+          type: string
+          description: エラーメッセージ。

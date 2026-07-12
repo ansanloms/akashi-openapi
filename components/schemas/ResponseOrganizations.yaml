@@ -1,0 +1,25 @@
+type: object
+description: 組織作成、および組織取得のレスポンス。
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+  response:
+    type: object
+    description: 処理結果のオブジェクト。
+    properties:
+      count:
+        type: integer
+        description: 組織の件数。
+      organizations:
+        type: array
+        description: 組織の配列。
+        items:
+          $ref: ./Organization.yaml
+  errors:
+    type: array
+    description: 失敗の原因となったエラーについてのエラーメッセージの配列。
+    items:
+      $ref: ./Error.yaml

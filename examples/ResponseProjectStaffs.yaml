@@ -1,0 +1,10 @@
+success: true
+response:
+  staff_ids:
+    - 200
+    - 300
+    - 400
+    - 500
+  owner_staff_ids:
+    - 200
+    - 300
