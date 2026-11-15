@@ -1,10 +1,10 @@
 get:
-  operationId: getStaffsStaffId
+  operationId: getLoginCompanyCodeStaffsStaffId
   summary: 従業員取得 (従業員 ID 指定)。
   tags:
     - staffs
   description:
-    $ref: ./descriptions/getStaffsStaffId.md
+    $ref: ./descriptions/getLoginCompanyCodeStaffsStaffId.md
   security:
     - tokenQuery: []
   parameters:
@@ -30,7 +30,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseGetStaffs.yaml
+                $ref: ../examples/ResponseGetStaffs/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -40,4 +40,4 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

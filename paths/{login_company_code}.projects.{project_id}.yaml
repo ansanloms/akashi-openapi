@@ -1,10 +1,10 @@
 get:
-  operationId: getProjectsProjectId
+  operationId: getLoginCompanyCodeProjectsProjectId
   summary: プロジェクト取得 (プロジェクト ID 指定)。
   tags:
     - projects
   description:
-    $ref: ./descriptions/getProjectsProjectId.md
+    $ref: ./descriptions/getLoginCompanyCodeProjectsProjectId.md
   security:
     - tokenQuery: []
   parameters:
@@ -30,7 +30,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseGetProjectsProjectId.yaml
+                $ref: ../examples/ResponseGetProjectsProjectId/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -40,14 +40,14 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml
 delete:
-  operationId: deleteProjectsProjectId
+  operationId: deleteLoginCompanyCodeProjectsProjectId
   summary: プロジェクト削除。
   tags:
     - projects
   description:
-    $ref: ./descriptions/deleteProjectsProjectId.md
+    $ref: ./descriptions/deleteLoginCompanyCodeProjectsProjectId.md
   security: []
   parameters:
     - in: path
@@ -71,7 +71,7 @@ delete:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestDeleteProjectsProjectId.yaml
+              $ref: ../examples/RequestDeleteProjectsProjectId/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -82,7 +82,7 @@ delete:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseDeleteProjectsProjectId.yaml
+                $ref: ../examples/ResponseDeleteProjectsProjectId/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -92,4 +92,4 @@ delete:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

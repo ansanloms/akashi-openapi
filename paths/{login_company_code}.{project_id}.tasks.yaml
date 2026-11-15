@@ -1,10 +1,10 @@
 get:
-  operationId: getTasks
+  operationId: getLoginCompanyCodeProjectIdTasks
   summary: タスク取得 (一覧)。
   tags:
     - tasks
   description:
-    $ref: ./descriptions/getTasks.md
+    $ref: ./descriptions/getLoginCompanyCodeProjectIdTasks.md
   security:
     - tokenQuery: []
   parameters:
@@ -36,7 +36,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseTasks.yaml
+                $ref: ../examples/ResponseTasks/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -46,14 +46,14 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml
 post:
-  operationId: postTasks
+  operationId: postLoginCompanyCodeProjectIdTasks
   summary: タスク作成更新。
   tags:
     - tasks
   description:
-    $ref: ./descriptions/postTasks.md
+    $ref: ./descriptions/postLoginCompanyCodeProjectIdTasks.md
   security: []
   parameters:
     - in: path
@@ -77,7 +77,7 @@ post:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestPostTasks.yaml
+              $ref: ../examples/RequestPostTasks/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -88,7 +88,7 @@ post:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseTasks.yaml
+                $ref: ../examples/ResponseTasks/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -98,4 +98,4 @@ post:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

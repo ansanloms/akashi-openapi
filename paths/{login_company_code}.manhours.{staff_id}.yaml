@@ -1,10 +1,10 @@
 get:
-  operationId: getManhoursStaffId
+  operationId: getLoginCompanyCodeManhoursStaffId
   summary: 工数取得 (指定)。
   tags:
     - manhours
   description:
-    $ref: ./descriptions/getManhoursStaffId.md
+    $ref: ./descriptions/getLoginCompanyCodeManhoursStaffId.md
   security:
     - tokenQuery: []
   parameters:
@@ -44,7 +44,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseManhours.yaml
+                $ref: ../examples/ResponseManhours/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -54,14 +54,14 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml
 delete:
-  operationId: deleteManhoursStaffId
+  operationId: deleteLoginCompanyCodeManhoursStaffId
   summary: 工数削除。
   tags:
     - manhours
   description:
-    $ref: ./descriptions/deleteManhoursStaffId.md
+    $ref: ./descriptions/deleteLoginCompanyCodeManhoursStaffId.md
   security: []
   parameters:
     - in: path
@@ -85,7 +85,7 @@ delete:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestDeleteManhoursStaffId.yaml
+              $ref: ../examples/RequestDeleteManhoursStaffId/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -96,7 +96,7 @@ delete:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseDeleteManhoursStaffId.yaml
+                $ref: ../examples/ResponseDeleteManhoursStaffId/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -106,4 +106,4 @@ delete:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

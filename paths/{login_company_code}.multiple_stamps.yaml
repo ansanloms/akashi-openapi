@@ -1,10 +1,10 @@
 get:
-  operationId: getMultipleStamps
+  operationId: getLoginCompanyCodeMultipleStamps
   summary: 打刻情報取得 (複数従業員)。
   tags:
     - stamps
   description:
-    $ref: ./descriptions/getMultipleStamps.md
+    $ref: ./descriptions/getLoginCompanyCodeMultipleStamps.md
   security:
     - tokenQuery: []
   parameters:
@@ -48,7 +48,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseGetMultipleStamps.yaml
+                $ref: ../examples/ResponseGetMultipleStamps/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -58,4 +58,4 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

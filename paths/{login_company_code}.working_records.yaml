@@ -1,10 +1,10 @@
 get:
-  operationId: getWorkingRecords
+  operationId: getLoginCompanyCodeWorkingRecords
   summary: 勤務実績取得 (複数従業員)。
   tags:
     - workingRecords
   description:
-    $ref: ./descriptions/getWorkingRecords.md
+    $ref: ./descriptions/getLoginCompanyCodeWorkingRecords.md
   security:
     - tokenQuery: []
   parameters:
@@ -63,7 +63,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseGetWorkingRecords.yaml
+                $ref: ../examples/ResponseGetWorkingRecords/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -73,4 +73,4 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

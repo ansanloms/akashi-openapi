@@ -1,10 +1,10 @@
 post:
-  operationId: postOrganizations
+  operationId: postLoginCompanyCodeOrganizations
   summary: 組織作成。
   tags:
     - organizations
   description:
-    $ref: ./descriptions/postOrganizations.md
+    $ref: ./descriptions/postLoginCompanyCodeOrganizations.md
   security: []
   parameters:
     - in: path
@@ -22,7 +22,7 @@ post:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestPostOrganizations.yaml
+              $ref: ../examples/RequestPostOrganizations/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -33,7 +33,7 @@ post:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseOrganizations.yaml
+                $ref: ../examples/ResponseOrganizations/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -43,14 +43,14 @@ post:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml
 get:
-  operationId: getOrganizations
+  operationId: getLoginCompanyCodeOrganizations
   summary: 組織取得。
   tags:
     - organizations
   description:
-    $ref: ./descriptions/getOrganizations.md
+    $ref: ./descriptions/getLoginCompanyCodeOrganizations.md
   security:
     - tokenQuery: []
   parameters:
@@ -85,7 +85,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseOrganizations.yaml
+                $ref: ../examples/ResponseOrganizations/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -95,4 +95,4 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

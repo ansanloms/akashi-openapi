@@ -1,10 +1,10 @@
 get:
-  operationId: getStampsStaffId
+  operationId: getLoginCompanyCodeStampsStaffId
   summary: 打刻情報取得 (従業員 ID 指定)。
   tags:
     - stamps
   description:
-    $ref: ./descriptions/getStampsStaffId.md
+    $ref: ./descriptions/getLoginCompanyCodeStampsStaffId.md
   security:
     - tokenQuery: []
   parameters:
@@ -47,7 +47,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseGetStamps.yaml
+                $ref: ../examples/ResponseGetStamps/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -57,4 +57,4 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml
