@@ -1,10 +1,10 @@
 get:
-  operationId: getProjects
+  operationId: getLoginCompanyCodeProjects
   summary: プロジェクト取得 (一覧)。
   tags:
     - projects
   description:
-    $ref: ./descriptions/getProjects.md
+    $ref: ./descriptions/getLoginCompanyCodeProjects.md
   security:
     - tokenQuery: []
   parameters:
@@ -44,7 +44,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseGetProjects.yaml
+                $ref: ../examples/ResponseGetProjects/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -54,14 +54,14 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml
 post:
-  operationId: postProjects
+  operationId: postLoginCompanyCodeProjects
   summary: プロジェクト作成更新。
   tags:
     - projects
   description:
-    $ref: ./descriptions/postProjects.md
+    $ref: ./descriptions/postLoginCompanyCodeProjects.md
   security: []
   parameters:
     - in: path
@@ -79,7 +79,7 @@ post:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestPostProjects.yaml
+              $ref: ../examples/RequestPostProjects/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -90,7 +90,7 @@ post:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponsePostProjects.yaml
+                $ref: ../examples/ResponsePostProjects/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -100,4 +100,4 @@ post:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

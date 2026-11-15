@@ -1,10 +1,10 @@
 patch:
-  operationId: patchWorkingConditionSettings
+  operationId: patchLoginCompanyCodeWorkingConditionSettings
   summary: 個別就業設定。
   tags:
     - workingConditionSettings
   description:
-    $ref: ./descriptions/patchWorkingConditionSettings.md
+    $ref: ./descriptions/patchLoginCompanyCodeWorkingConditionSettings.md
   security: []
   parameters:
     - in: path
@@ -22,7 +22,7 @@ patch:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestPatchWorkingConditionSettings.yaml
+              $ref: ../examples/RequestPatchWorkingConditionSettings/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -33,7 +33,7 @@ patch:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseStaffs.yaml
+                $ref: ../examples/ResponseStaffs/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -43,4 +43,4 @@ patch:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

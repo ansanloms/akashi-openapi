@@ -1,10 +1,10 @@
 post:
-  operationId: postTokenReissue
+  operationId: postTokenReissueLoginCompanyCode
   summary: アクセストークン再発行。
   tags:
     - token
   description:
-    $ref: ./descriptions/postTokenReissue.md
+    $ref: ./descriptions/postTokenReissueLoginCompanyCode.md
   security: []
   parameters:
     - in: path
@@ -22,7 +22,7 @@ post:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestPostTokenReissue.yaml
+              $ref: ../examples/RequestPostTokenReissue/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -33,7 +33,7 @@ post:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponsePostTokenReissue.yaml
+                $ref: ../examples/ResponsePostTokenReissue/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -43,4 +43,4 @@ post:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

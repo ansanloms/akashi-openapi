@@ -1,10 +1,10 @@
 post:
-  operationId: postImporterFactoryPermissions
+  operationId: postLoginCompanyCodeImporterFactoryPermissions
   summary: 権限と管理先指定。
   tags:
     - importerFactory
   description:
-    $ref: ./descriptions/postImporterFactoryPermissions.md
+    $ref: ./descriptions/postLoginCompanyCodeImporterFactoryPermissions.md
   security: []
   parameters:
     - in: path
@@ -22,7 +22,7 @@ post:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestPostImporterFactoryPermissions.yaml
+              $ref: ../examples/RequestPostImporterFactoryPermissions/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -33,7 +33,7 @@ post:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseStaffs.yaml
+                $ref: ../examples/ResponseStaffs/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -43,4 +43,4 @@ post:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

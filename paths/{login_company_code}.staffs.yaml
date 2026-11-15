@@ -1,10 +1,10 @@
 patch:
-  operationId: patchStaffs
+  operationId: patchLoginCompanyCodeStaffs
   summary: 従業員新規登録・更新。
   tags:
     - staffs
   description:
-    $ref: ./descriptions/patchStaffs.md
+    $ref: ./descriptions/patchLoginCompanyCodeStaffs.md
   security: []
   parameters:
     - in: path
@@ -22,7 +22,7 @@ patch:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestPatchStaffs.yaml
+              $ref: ../examples/RequestPatchStaffs/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -33,7 +33,7 @@ patch:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponsePatchStaffs.yaml
+                $ref: ../examples/ResponsePatchStaffs/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -43,14 +43,14 @@ patch:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml
 get:
-  operationId: getStaffs
+  operationId: getLoginCompanyCodeStaffs
   summary: 従業員取得。
   tags:
     - staffs
   description:
-    $ref: ./descriptions/getStaffs.md
+    $ref: ./descriptions/getLoginCompanyCodeStaffs.md
   security:
     - tokenQuery: []
   parameters:
@@ -85,7 +85,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseGetStaffs.yaml
+                $ref: ../examples/ResponseGetStaffs/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -95,4 +95,4 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

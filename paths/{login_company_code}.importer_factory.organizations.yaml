@@ -1,10 +1,10 @@
 post:
-  operationId: postImporterFactoryOrganizations
+  operationId: postLoginCompanyCodeImporterFactoryOrganizations
   summary: 異動日を指定した異動。
   tags:
     - importerFactory
   description:
-    $ref: ./descriptions/postImporterFactoryOrganizations.md
+    $ref: ./descriptions/postLoginCompanyCodeImporterFactoryOrganizations.md
   security: []
   parameters:
     - in: path
@@ -22,7 +22,7 @@ post:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestPostImporterFactoryOrganizations.yaml
+              $ref: ../examples/RequestPostImporterFactoryOrganizations/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -33,7 +33,7 @@ post:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseStaffs.yaml
+                $ref: ../examples/ResponseStaffs/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -43,4 +43,4 @@ post:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

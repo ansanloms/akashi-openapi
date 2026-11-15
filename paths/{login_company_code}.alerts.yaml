@@ -1,10 +1,10 @@
 get:
-  operationId: getAlerts
+  operationId: getLoginCompanyCodeAlerts
   summary: アラート情報取得。
   tags:
     - alerts
   description:
-    $ref: ./descriptions/getAlerts.md
+    $ref: ./descriptions/getLoginCompanyCodeAlerts.md
   security:
     - tokenQuery: []
   parameters:
@@ -24,7 +24,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseGetAlerts.yaml
+                $ref: ../examples/ResponseGetAlerts/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -34,4 +34,4 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

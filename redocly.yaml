@@ -2,10 +2,10 @@ extends:
   - recommended-strict
 
 apis:
-  example:
+  akashi-openapi:
     root: ./api.yaml
 plugins:
-  - "./redocly/plugins/index.ts"
+  - "@ansanloms/redocly-plugins"
 rules:
   info-license: off
   # AKASHI 公開 API はタスク系のみ /{企業ID}/{project_id}/tasks の形であり、
@@ -14,5 +14,12 @@ rules:
   no-invalid-media-type-examples: off
   operation-2xx-response: off
   operation-4xx-response: off
+  ansanloms/operation-id-naming: error
+  ansanloms/description-file-naming: error
+  ansanloms/examples-layout: error
+  ansanloms/no-unreferenced-files:
+    severity: error
+    # examples は対象にしない。example の value 内の $ref は参照として辿られず、誤検出になるため。
+    dirs: [paths, components]
 preprocessors:
   ansanloms/inline-examples: on

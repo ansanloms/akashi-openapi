@@ -15,7 +15,7 @@ post:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestPostWorkingStatusesSearch.yaml
+              $ref: ../examples/RequestPostWorkingStatusesSearch/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -26,7 +26,7 @@ post:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponsePostWorkingStatusesSearch.yaml
+                $ref: ../examples/ResponsePostWorkingStatusesSearch/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -36,4 +36,4 @@ post:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

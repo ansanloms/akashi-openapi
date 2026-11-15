@@ -1,10 +1,10 @@
 delete:
-  operationId: deleteStaffStaffId
+  operationId: deleteLoginCompanyCodeStaffStaffId
   summary: 従業員退職/削除。
   tags:
     - staffs
   description:
-    $ref: ./descriptions/deleteStaffStaffId.md
+    $ref: ./descriptions/deleteLoginCompanyCodeStaffStaffId.md
   security: []
   parameters:
     - in: path
@@ -28,7 +28,7 @@ delete:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestDeleteStaffStaffId.yaml
+              $ref: ../examples/RequestDeleteStaffStaffId/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -39,7 +39,7 @@ delete:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseDeleteStaffStaffId.yaml
+                $ref: ../examples/ResponseDeleteStaffStaffId/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -49,4 +49,4 @@ delete:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

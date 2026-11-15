@@ -1,10 +1,10 @@
 post:
-  operationId: postStamps
+  operationId: postLoginCompanyCodeStamps
   summary: 打刻実行。
   tags:
     - stamps
   description:
-    $ref: ./descriptions/postStamps.md
+    $ref: ./descriptions/postLoginCompanyCodeStamps.md
   security: []
   parameters:
     - in: path
@@ -22,7 +22,7 @@ post:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestPostStamps.yaml
+              $ref: ../examples/RequestPostStamps/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -33,7 +33,7 @@ post:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponsePostStamps.yaml
+                $ref: ../examples/ResponsePostStamps/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -43,14 +43,14 @@ post:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml
 get:
-  operationId: getStamps
+  operationId: getLoginCompanyCodeStamps
   summary: 打刻情報取得。
   tags:
     - stamps
   description:
-    $ref: ./descriptions/getStamps.md
+    $ref: ./descriptions/getLoginCompanyCodeStamps.md
   security:
     - tokenQuery: []
   parameters:
@@ -87,7 +87,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseGetStamps.yaml
+                $ref: ../examples/ResponseGetStamps/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -97,4 +97,4 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml

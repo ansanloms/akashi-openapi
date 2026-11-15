@@ -1,10 +1,10 @@
 get:
-  operationId: getProjectStaffsProjectId
+  operationId: getLoginCompanyCodeProjectStaffsProjectId
   summary: プロジェクト従業員取得 (指定)。
   tags:
     - projects
   description:
-    $ref: ./descriptions/getProjectStaffsProjectId.md
+    $ref: ./descriptions/getLoginCompanyCodeProjectStaffsProjectId.md
   security:
     - tokenQuery: []
   parameters:
@@ -30,7 +30,7 @@ get:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseProjectStaffs.yaml
+                $ref: ../examples/ResponseProjectStaffs/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -40,14 +40,14 @@ get:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml
 post:
-  operationId: postProjectStaffsProjectId
+  operationId: postLoginCompanyCodeProjectStaffsProjectId
   summary: プロジェクト従業員追加解除。
   tags:
     - projects
   description:
-    $ref: ./descriptions/postProjectStaffsProjectId.md
+    $ref: ./descriptions/postLoginCompanyCodeProjectStaffsProjectId.md
   security: []
   parameters:
     - in: path
@@ -71,7 +71,7 @@ post:
         examples:
           normal:
             value:
-              $ref: ../examples/RequestPostProjectStaffsProjectId.yaml
+              $ref: ../examples/RequestPostProjectStaffsProjectId/default.yaml
   responses:
     200:
       description: 処理成功時。
@@ -82,7 +82,7 @@ post:
           examples:
             succeeded:
               value:
-                $ref: ../examples/ResponseProjectStaffs.yaml
+                $ref: ../examples/ResponseProjectStaffs/default.yaml
     default:
       description: 処理失敗時。
       content:
@@ -92,4 +92,4 @@ post:
           examples:
             processingFailed:
               value:
-                $ref: ../examples/ResponseFailure.yaml
+                $ref: ../examples/ResponseFailure/default.yaml
