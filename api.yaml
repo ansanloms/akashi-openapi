@@ -122,8 +122,14 @@ components:
       $ref: ./components/schemas/WorkingRecord.yaml
     EnumAlertType:
       $ref: ./components/schemas/EnumAlertType.yaml
+    EnumIncludesParents:
+      $ref: ./components/schemas/EnumIncludesParents.yaml
+    EnumPermissionType:
+      $ref: ./components/schemas/EnumPermissionType.yaml
     EnumStampType:
       $ref: ./components/schemas/EnumStampType.yaml
+    EnumWorkingDayCategory:
+      $ref: ./components/schemas/EnumWorkingDayCategory.yaml
     RequestDeleteManhoursStaffId:
       $ref: ./components/schemas/RequestDeleteManhoursStaffId.yaml
     RequestDeleteProjectsProjectId:
@@ -146,10 +152,10 @@ components:
       $ref: ./components/schemas/RequestPostManhours.yaml
     RequestPostOrganizations:
       $ref: ./components/schemas/RequestPostOrganizations.yaml
-    RequestPostProjects:
-      $ref: ./components/schemas/RequestPostProjects.yaml
     RequestPostProjectStaffsProjectId:
       $ref: ./components/schemas/RequestPostProjectStaffsProjectId.yaml
+    RequestPostProjects:
+      $ref: ./components/schemas/RequestPostProjects.yaml
     RequestPostStamps:
       $ref: ./components/schemas/RequestPostStamps.yaml
     RequestPostTasks:
