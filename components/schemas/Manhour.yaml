@@ -1,5 +1,6 @@
 type: object
-description: 従業員毎の工数。
+description:
+  $ref: "./descriptions/Manhour.md"
 properties:
   staff_id:
     type: integer

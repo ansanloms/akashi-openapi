@@ -1,5 +1,6 @@
 type: object
-description: 権限グループ。
+description:
+  $ref: "./descriptions/PermissionGroup.md"
 properties:
   permissionGroupId:
     type: integer

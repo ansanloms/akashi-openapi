@@ -1,5 +1,6 @@
 type: object
-description: 勤務処理取得のレスポンス。
+description:
+  $ref: "./descriptions/ResponsePostWorkingStatusesSearch.md"
 required:
   - success
 properties:

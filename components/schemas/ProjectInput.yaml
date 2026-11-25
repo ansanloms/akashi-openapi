@@ -1,5 +1,6 @@
 type: object
-description: 作成、または更新するプロジェクト。
+description:
+  $ref: "./descriptions/ProjectInput.md"
 required:
   - name_ja
 properties:

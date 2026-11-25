@@ -1,5 +1,6 @@
 type: object
-description: 工数取得、および工数作成更新のレスポンス。
+description:
+  $ref: "./descriptions/ResponseManhours.md"
 required:
   - success
 properties:

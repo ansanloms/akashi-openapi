@@ -1,5 +1,6 @@
 type: object
-description: 勤務処理取得のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostWorkingStatusesSearch.md"
 required:
   - token
   - search

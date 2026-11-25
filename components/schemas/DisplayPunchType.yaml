@@ -1,5 +1,6 @@
 type: object
-description: 表示する打刻ボタン。
+description:
+  $ref: "./descriptions/DisplayPunchType.md"
 properties:
   punchType:
     type: integer

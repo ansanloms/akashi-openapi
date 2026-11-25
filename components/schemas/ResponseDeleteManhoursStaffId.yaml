@@ -1,5 +1,6 @@
 type: object
-description: 工数削除のレスポンス。
+description:
+  $ref: "./descriptions/ResponseDeleteManhoursStaffId.md"
 required:
   - success
 properties:

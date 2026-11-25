@@ -1,5 +1,6 @@
 type: object
-description: プロジェクト従業員取得、およびプロジェクト従業員追加解除のレスポンス。
+description:
+  $ref: "./descriptions/ResponseProjectStaffs.md"
 required:
   - success
 properties:

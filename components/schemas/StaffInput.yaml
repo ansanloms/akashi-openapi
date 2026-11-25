@@ -1,5 +1,6 @@
 type: object
-description: 新規登録、または更新する従業員。
+description:
+  $ref: "./descriptions/StaffInput.md"
 required:
   - last_name
   - first_name

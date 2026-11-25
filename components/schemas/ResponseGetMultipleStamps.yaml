@@ -1,5 +1,6 @@
 type: object
-description: 打刻情報取得 (複数従業員) のレスポンス。
+description:
+  $ref: "./descriptions/ResponseGetMultipleStamps.md"
 required:
   - success
 properties:

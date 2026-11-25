@@ -1,5 +1,6 @@
 type: object
-description: 日付毎の工数。
+description:
+  $ref: "./descriptions/ManhourDate.md"
 properties:
   date:
     type: string

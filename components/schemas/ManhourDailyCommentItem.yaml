@@ -1,5 +1,6 @@
 type: object
-description: タスク毎のコメント。
+description:
+  $ref: "./descriptions/ManhourDailyCommentItem.md"
 properties:
   task_id:
     type: integer

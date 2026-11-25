@@ -1,5 +1,6 @@
 type: object
-description: 失敗の原因となったエラーについてのエラーメッセージ。
+description:
+  $ref: "./descriptions/Error.md"
 properties:
   code:
     type: string

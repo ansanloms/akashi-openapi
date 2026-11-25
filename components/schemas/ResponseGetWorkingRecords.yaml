@@ -1,5 +1,6 @@
 type: object
-description: 勤務実績取得 (複数従業員) のレスポンス。
+description:
+  $ref: "./descriptions/ResponseGetWorkingRecords.md"
 required:
   - success
 properties:

@@ -1,5 +1,6 @@
 type: object
-description: 管理権限設定の指定と管理先の指定の予約内容。従業員番号かメールアドレスのいずれかが必須。
+description:
+  $ref: "./descriptions/ImporterFactoryPermissionReserve.md"
 properties:
   staff_code:
     type: string

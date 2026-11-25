@@ -1,5 +1,6 @@
 type: object
-description: プロジェクト削除のレスポンス。
+description:
+  $ref: "./descriptions/ResponseDeleteProjectsProjectId.md"
 required:
   - success
 properties:

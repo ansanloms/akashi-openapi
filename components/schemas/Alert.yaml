@@ -1,5 +1,6 @@
 type: object
-description: アラート。
+description:
+  $ref: "./descriptions/Alert.md"
 properties:
   month:
     type: string

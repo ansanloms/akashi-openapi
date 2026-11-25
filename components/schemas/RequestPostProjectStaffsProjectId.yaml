@@ -1,5 +1,6 @@
 type: object
-description: プロジェクト従業員追加解除のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostProjectStaffsProjectId.md"
 required:
   - token
 properties:

@@ -1,5 +1,6 @@
 type: object
-description: 打刻データ。
+description:
+  $ref: "./descriptions/Stamp.md"
 properties:
   stamped_at:
     type: string

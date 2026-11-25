@@ -1,5 +1,6 @@
 type: object
-description: 勤務実績。
+description:
+  $ref: "./descriptions/WorkingRecord.md"
 properties:
   date:
     type: string

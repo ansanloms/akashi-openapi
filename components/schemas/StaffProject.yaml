@@ -1,5 +1,6 @@
 type: object
-description: 参加プロジェクト。
+description:
+  $ref: "./descriptions/StaffProject.md"
 properties:
   project_id:
     type: integer

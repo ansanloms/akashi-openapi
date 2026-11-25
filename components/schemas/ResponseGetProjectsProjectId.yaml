@@ -1,5 +1,6 @@
 type: object
-description: プロジェクト取得 (プロジェクト ID 指定) のレスポンス。
+description:
+  $ref: "./descriptions/ResponseGetProjectsProjectId.md"
 required:
   - success
 properties:

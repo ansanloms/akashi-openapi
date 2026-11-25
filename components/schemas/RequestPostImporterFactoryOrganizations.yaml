@@ -1,5 +1,6 @@
 type: object
-description: 異動日を指定した異動のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostImporterFactoryOrganizations.md"
 required:
   - token
   - organizations

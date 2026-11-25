@@ -1,5 +1,6 @@
 type: object
-description: 従業員ごとの勤務実績情報。
+description:
+  $ref: "./descriptions/StaffWorkingRecord.md"
 properties:
   staff_id:
     type: integer

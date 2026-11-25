@@ -1,5 +1,6 @@
 type: object
-description: タスク削除のレスポンス。
+description:
+  $ref: "./descriptions/ResponseDeleteTasksTaskId.md"
 required:
   - success
 properties:

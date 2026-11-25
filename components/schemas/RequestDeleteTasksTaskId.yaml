@@ -1,5 +1,6 @@
 type: object
-description: タスク削除のリクエスト。
+description:
+  $ref: "./descriptions/RequestDeleteTasksTaskId.md"
 required:
   - token
 properties:

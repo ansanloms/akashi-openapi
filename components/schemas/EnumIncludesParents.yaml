@@ -1,5 +1,6 @@
 type: integer
-description: 直系親取得有無。直系の親組織も取得対象と含める場合は 1、含めない場合は 0。
+description:
+  $ref: "./descriptions/EnumIncludesParents.md"
 enum:
   - 0
   - 1

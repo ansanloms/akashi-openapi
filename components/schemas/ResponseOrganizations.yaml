@@ -1,5 +1,6 @@
 type: object
-description: 組織作成、および組織取得のレスポンス。
+description:
+  $ref: "./descriptions/ResponseOrganizations.md"
 required:
   - success
 properties:

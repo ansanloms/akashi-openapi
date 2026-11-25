@@ -1,5 +1,6 @@
 type: object
-description: タスク取得 (タスク ID 指定) のレスポンス。
+description:
+  $ref: "./descriptions/ResponseGetTasksTaskId.md"
 required:
   - success
 properties:

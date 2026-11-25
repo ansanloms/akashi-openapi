@@ -1,5 +1,6 @@
 type: object
-description: アクセストークン再発行のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostTokenReissue.md"
 required:
   - token
 properties:

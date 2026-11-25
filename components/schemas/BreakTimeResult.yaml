@@ -1,5 +1,6 @@
 type: object
-description: 休憩実績。
+description:
+  $ref: "./descriptions/BreakTimeResult.md"
 properties:
   result_break_time_start_time:
     type: string

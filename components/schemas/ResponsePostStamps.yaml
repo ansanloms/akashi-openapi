@@ -1,5 +1,6 @@
 type: object
-description: 打刻のレスポンス。
+description:
+  $ref: "./descriptions/ResponsePostStamps.md"
 required:
   - success
 properties:
