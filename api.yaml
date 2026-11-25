@@ -1,0 +1,4908 @@
+openapi: 3.2.1
+info:
+  version: 0.1.0
+  title: AKASHI (マネーフォワード クラウド勤怠Plus) 公開API
+  description: |
+    # akashi-openapi
+
+    AKASHI (マネーフォワード クラウド勤怠 Plus) 公開 API の OpenAPI 定義。
+
+    [公開 API 仕様](https://akashi.zendesk.com/hc/ja/articles/115000475854) を元に作成している。
+
+    ## 基本的な使い方
+
+    エンドポイントにアクセストークンを付加のうえリクエストを送信することで、各 API に応じた機能を利用できる。
+    エンドポイントのドメインはログイン後 URL のドメインを確認して指定する。
+
+    ## 認証
+
+    - GET 系の API はクエリパラメータ `token` にアクセストークンを指定する。
+    - POST/PATCH/DELETE 系の API はリクエストボディの `token` プロパティにアクセストークンを指定する。
+
+    アクセストークンはマイページから発行する。有効期限は 1 ヶ月と 1 日である。
+    再発行はマイページ、またはアクセストークン再発行 API を利用する。
+
+    ## 共通仕様
+
+    - 各 API はアクセストークンに紐づいた従業員の権限によって実行が許可、または却下される。
+    - 処理成否のレスポンスは JSON とし、成功時は `success` が true となり `response` に処理結果が格納される。
+    - 失敗時は `success` が false となり `errors` にエラーメッセージの配列が格納される。
+    - 値が無い場合のレスポンスは String/Integer/Object が null、Array が空配列となる。Boolean は必ず true/false が設定される。
+servers:
+  - url: https://atnd.ak4.jp/api/cooperation
+    description: Production Server
+  - url: https://atnd-awj.ak4.jp/api/cooperation
+    description: Production Server (awj)
+paths:
+  /token/reissue/{login_company_code}:
+    post:
+      operationId: postTokenReissueLoginCompanyCode
+      summary: アクセストークン再発行。
+      tags:
+        - token
+      description: |
+        トークンにて認証した従業員のアクセストークンを再発行する。
+
+        再発行時に有効期限切れのトークンが存在する場合、自動的に削除される。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: ログイン企業 ID。
+          schema:
+            type: string
+      requestBody:
+        description: 再発行の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostTokenReissue'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePostTokenReissue'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: sample001
+                      staff_id: 123
+                      agency_manager_id: 45
+                      token: xxxxxxxxxxxxxxxxxxxxxxxx
+                      expired_at: 2017/10/09 00:00:00
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /working_statuses/search:
+    post:
+      operationId: postWorkingStatusesSearch
+      summary: 勤務処理取得。
+      tags:
+        - workingStatuses
+      description: |
+        管理下の従業員の勤務処理を取得する。
+
+        勤務処理取得リストは最大 1,000 件まで指定できる。
+      security: []
+      requestBody:
+        description: 勤務処理の取得対象の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostWorkingStatusesSearch'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  search:
+                    - staff_id: '1'
+                      date: '2026-01-01'
+                    - staff_id: '14'
+                      date: '2025-12-02'
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePostWorkingStatusesSearch'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    results:
+                      - staff_id: '1'
+                        date: '2026-01-01'
+                        working_statuses:
+                          - 欠勤
+                      - staff_id: '14'
+                        date: '2025-12-02'
+                        working_statuses:
+                          - 出張
+                    errors: []
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /working_statuses/update:
+    post:
+      operationId: postWorkingStatusesUpdate
+      summary: 勤務処理更新。
+      tags:
+        - workingStatuses
+      description: |
+        管理下の従業員の勤務処理を更新する。
+
+        勤務処理更新リストは最大 1,000 件まで指定できる。カスタム勤務処理リストに登録済みのラベルのみ指定できる。
+      security: []
+      requestBody:
+        description: 勤務処理の更新対象の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostWorkingStatusesUpdate'
+            examples:
+              normal:
+                value:
+                  token: 1962f066-7024-4a00-bde9-1cb35f2309c1
+                  update:
+                    - staff_id: '1'
+                      date: '2026-02-02'
+                      working_statuses:
+                        - 直帰
+                        - 早退
+                      replace: true
+                    - staff_id: '1'
+                      date: '2026-02-03'
+                      working_statuses: []
+                      replace: true
+                    - staff_id: '1'
+                      date: '2026-02-04'
+                      working_statuses:
+                        - 遅刻
+                      replace: false
+                      if_not:
+                        - テレワーク
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePostWorkingStatusesUpdate'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    errors: null
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/alerts:
+    get:
+      operationId: getLoginCompanyCodeAlerts
+      summary: アラート情報取得。
+      tags:
+        - alerts
+      description: |
+        トークンにて認証した従業員のアラート情報を取得する。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGetAlerts'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: sample001
+                      staff_id: 123
+                      count: 3
+                      alerts:
+                        - month: 2017/03/01
+                          date: 2017/04/15
+                          alert_type: 1
+                        - month: 2017/04/01
+                          date: 2017/04/16
+                          alert_type: 2
+                        - month: 2017/04/01
+                          date: 2017/04/16
+                          alert_type: 6
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/importer_factory/organizations:
+    post:
+      operationId: postLoginCompanyCodeImporterFactoryOrganizations
+      summary: 異動日を指定した異動。
+      tags:
+        - importerFactory
+      description: |
+        異動日を指定して従業員の組織/雇用区分を異動させる。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+      requestBody:
+        description: 異動の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostImporterFactoryOrganizations'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  organizations:
+                    - staff_code: s001
+                      organization_change_date: 2023/2/1
+                      is_delete_change_history_after_change_date: 'YES'
+                      new_organization_path: 組織A
+                      employment_category: 正社員
+                      sub_organization_code: org002
+                    - staff_email: s002@example.com
+                      organization_change_date: 2023/2/2
+                      is_delete_change_history_after_change_date: 'NO'
+                      employment_category: 正社員
+                      new_organization_code: org002
+                      sub_organization_path: 組織A
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseStaffs'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: test001
+                      staffs:
+                        - staff_id: 51
+                          staff_code: i001
+                          email: null
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/importer_factory/permissions:
+    post:
+      operationId: postLoginCompanyCodeImporterFactoryPermissions
+      summary: 権限と管理先指定。
+      tags:
+        - importerFactory
+      description: |
+        管理権限設定と管理先を指定する。
+
+        管理対象従業員番号は `managed_staff_code1` や `managed_staff_code2` など、末尾に数字を付けることで複数指定できる。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+      requestBody:
+        description: 管理権限設定の指定と管理先の指定の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostImporterFactoryPermissions'
+            examples:
+              normal:
+                value:
+                  token: 0e77ecf9-feab-485a-8ce4-6427f9d3531d
+                  permissions:
+                    - staff_code: s001
+                      manager_permission_name: 一般管理者
+                      manage_organization_path: 組織１
+                      manage_subordinate_organizations_immed_path: 下位組織を管理対象にしない
+                      manage_organization_code: org002
+                      manage_subordinate_organizations_immed_code: サブ組織所属を除く＋直下組織管理者を直接管理する
+                      managed_staff_code1: s002
+                      managed_staff_code2: s003
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseStaffs'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: test001
+                      staffs:
+                        - staff_id: 51
+                          staff_code: i001
+                          email: null
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/importer_factory/permissions_reserve:
+    post:
+      operationId: postLoginCompanyCodeImporterFactoryPermissionsReserve
+      summary: 権限と管理先予約。
+      tags:
+        - importerFactory
+      description: |
+        管理権限設定の指定と管理先の指定を予約する。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+      requestBody:
+        description: 管理権限設定の指定と管理先の指定の予約の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostImporterFactoryPermissionsReserve'
+            examples:
+              normal:
+                value:
+                  token: 0e77ecf9-feab-485a-8ce4-6427f9d3531d
+                  permissions_reserve:
+                    - staff_code: s001
+                      manager_permission_reservation_date: 2023/2/3
+                      reservation_manager_permission_name: 管理権限－編集
+                      manage_organization_reservation_registration_or_cancel: 登録
+                      reservation_manage_organization_path: 組織1
+                      manage_subordinate_organizations: 下位組織を管理対象にしない
+                      manage_organization_reservation_date: 2023/2/3
+                      manage_organization_reservation_add_or_delete: 追加
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseStaffs'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: test001
+                      staffs:
+                        - staff_id: 51
+                          staff_code: i001
+                          email: null
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/manhours:
+    get:
+      operationId: getLoginCompanyCodeManhours
+      summary: 工数取得 (一覧)。
+      tags:
+        - manhours
+      description: |
+        工数実績の情報取得を一覧で行う。
+
+        開始日時、終了日時が指定無しなら実行月の月初日から月末日を選択する。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: query
+          name: start_date
+          required: false
+          description: 工数取得期間の開始日時。指定無しなら実行月の月初日を選択する。
+          schema:
+            type: string
+          example: '20190801'
+        - in: query
+          name: end_date
+          required: false
+          description: 工数取得期間の終了日時。指定無しなら実行月の月末日を選択する。
+          schema:
+            type: string
+          example: '20190831'
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseManhours'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      manhours:
+                        - staff_id: 200
+                          dates:
+                            - date: '2019-08-01'
+                              projects:
+                                - project_id: 100
+                                  closed_at: null
+                                  fixed_at: null
+                                  daily_hour_items:
+                                    - task_id: 150
+                                      minute: 60
+                                  daily_comment_items:
+                                    - task_id: 150
+                                      comment: 工数のコメントです。
+                              staff_comment: 従業員のコメントです。
+                              admin_comment: 管理者のコメントです。
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+    post:
+      operationId: postLoginCompanyCodeManhours
+      summary: 工数作成更新。
+      tags:
+        - manhours
+      description: |
+        工数実績を作成、または更新する。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+      requestBody:
+        description: 作成、または更新する工数の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostManhours'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  manhours:
+                    - staff_id: 200
+                      dates:
+                        - date: 2019/08/03
+                          projects:
+                            - project_id: 100
+                              daily_hour_items:
+                                - task_id: 150
+                                  minute: 60
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseManhours'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      manhours:
+                        - staff_id: 200
+                          dates:
+                            - date: '2019-08-01'
+                              projects:
+                                - project_id: 100
+                                  closed_at: null
+                                  fixed_at: null
+                                  daily_hour_items:
+                                    - task_id: 150
+                                      minute: 60
+                                  daily_comment_items:
+                                    - task_id: 150
+                                      comment: 工数のコメントです。
+                              staff_comment: 従業員のコメントです。
+                              admin_comment: 管理者のコメントです。
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/manhours/{staff_id}:
+    get:
+      operationId: getLoginCompanyCodeManhoursStaffId
+      summary: 工数取得 (指定)。
+      tags:
+        - manhours
+      description: |
+        工数実績の情報取得を従業員を指定して行う。
+
+        開始日時、終了日時が指定無しなら実行月の月初日から月末日を選択する。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: staff_id
+          required: true
+          description: 従業員 ID。
+          schema:
+            type: integer
+        - in: query
+          name: start_date
+          required: false
+          description: 工数取得期間の開始日時。指定無しなら実行月の月初日を選択する。
+          schema:
+            type: string
+          example: '20190801'
+        - in: query
+          name: end_date
+          required: false
+          description: 工数取得期間の終了日時。指定無しなら実行月の月末日を選択する。
+          schema:
+            type: string
+          example: '20190831'
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseManhours'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      manhours:
+                        - staff_id: 200
+                          dates:
+                            - date: '2019-08-01'
+                              projects:
+                                - project_id: 100
+                                  closed_at: null
+                                  fixed_at: null
+                                  daily_hour_items:
+                                    - task_id: 150
+                                      minute: 60
+                                  daily_comment_items:
+                                    - task_id: 150
+                                      comment: 工数のコメントです。
+                              staff_comment: 従業員のコメントです。
+                              admin_comment: 管理者のコメントです。
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+    delete:
+      operationId: deleteLoginCompanyCodeManhoursStaffId
+      summary: 工数削除。
+      tags:
+        - manhours
+      description: |
+        工数実績を削除する。
+
+        `task_id` が指定無しなら全タスク工数を削除する。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: staff_id
+          required: true
+          description: 従業員 ID。
+          schema:
+            type: integer
+      requestBody:
+        description: 削除する工数の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestDeleteManhoursStaffId'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  date: '20190803'
+                  project_id: 100
+                  task_id: 150
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDeleteManhoursStaffId'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      staff_id: 200
+                      date: '2019-08-03'
+                      project_id: 100
+                      daily_hour_items:
+                        - task_id: 150
+                          minute: 60
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/multiple_stamps:
+    get:
+      operationId: getLoginCompanyCodeMultipleStamps
+      summary: 打刻情報取得 (複数従業員)。
+      tags:
+        - stamps
+      description: |
+        管理下の複数人の従業員の特定期間の打刻情報を取得する。
+
+        開始日時、終了日時で指定できる最長期間は 1 日まで。また 1 回のリクエストで取得できる打刻は 1,000 件まで。従業員 ID は最大 50 人まで指定できる。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: query
+          name: start_date
+          required: true
+          description: 打刻取得期間の開始日時。yyyymmddHHMMSS の形式で指定する。
+          schema:
+            type: string
+          example: '20170501000000'
+        - in: query
+          name: end_date
+          required: true
+          description: 打刻取得期間の終了日時。yyyymmddHHMMSS の形式で指定する。 開始日時、終了日時で指定できる最長期間は 1 日まで。 また 1 回のリクエストで取得できる打刻は 1,000 件まで。
+          schema:
+            type: string
+          example: '20170502000000'
+        - in: query
+          name: staff_ids
+          required: true
+          description: 取得対象の従業員 ID (従業員番号ではない) をコンマ区切りで並べたもの。最大 50 人。
+          schema:
+            type: string
+          example: 1,2,3,4
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGetMultipleStamps'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: R20180404
+                      multiple_stamps:
+                        - staff_id: 1
+                          count: 1
+                          stamps:
+                            - stamped_at: 2018/10/16 09:58:08
+                              type: 11
+                              local_time: 2018/10/16 09:58:10
+                              timezone: '+9.00'
+                              attributes:
+                                method: 3
+                                org_id: 1
+                                workplace_id: null
+                                latitude: null
+                                longitude: null
+                                ip: 192.168.56.1
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/organizations:
+    post:
+      operationId: postLoginCompanyCodeOrganizations
+      summary: 組織作成。
+      tags:
+        - organizations
+      description: |
+        組織情報を新規作成する。組織の更新はできない。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+          schema:
+            type: string
+      requestBody:
+        description: 生成する組織の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostOrganizations'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  organizations:
+                    - name: 第一事業本部
+                      code: '001'
+                      parent_organization: ''
+                    - name: 営業部
+                      code: '0011'
+                      parent_organization: 第一事業本部
+                    - name: 一課
+                      code: '00111'
+                      parent_organization: 第一事業本部/営業部
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOrganizations'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      count: 2
+                      organizations:
+                        - organizationId: 1
+                          name: 第一事業本部
+                          code: '001'
+                          label: ''
+                          parentId: 0
+                          displayPunchTypes:
+                            - punchType: 1
+                              displayName: 出社
+                            - punchType: 2
+                              displayName: 退社
+                        - organizationId: 2
+                          name: 営業部
+                          code: '0011'
+                          label: ''
+                          parentId: 1
+                          displayPunchTypes:
+                            - punchType: 11
+                              displayName: 出社
+                            - punchType: 12
+                              displayName: 退社
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+    get:
+      operationId: getLoginCompanyCodeOrganizations
+      summary: 組織取得。
+      tags:
+        - organizations
+      description: |
+        組織の一覧を取得する。
+
+        直系親取得有無が「有」で指定されている場合は、指定された組織と、その組織の親 (企業まで辿る)・子孫となる組織の一覧を取得する。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+          schema:
+            type: string
+        - in: query
+          name: includesParents
+          required: true
+          description: 直系親取得有無。直系の親組織も取得対象と含める場合は 1、含めない場合は 0。
+          schema:
+            $ref: '#/components/schemas/EnumIncludesParents'
+        - in: query
+          name: orgId
+          required: false
+          description: 組織 ID。指定された場合、直系親取得有無に関わらず、その組織の情報のみ取得する。
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOrganizations'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      count: 2
+                      organizations:
+                        - organizationId: 1
+                          name: 第一事業本部
+                          code: '001'
+                          label: ''
+                          parentId: 0
+                          displayPunchTypes:
+                            - punchType: 1
+                              displayName: 出社
+                            - punchType: 2
+                              displayName: 退社
+                        - organizationId: 2
+                          name: 営業部
+                          code: '0011'
+                          label: ''
+                          parentId: 1
+                          displayPunchTypes:
+                            - punchType: 11
+                              displayName: 出社
+                            - punchType: 12
+                              displayName: 退社
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/project_staffs/{project_id}:
+    get:
+      operationId: getLoginCompanyCodeProjectStaffsProjectId
+      summary: プロジェクト従業員取得 (指定)。
+      tags:
+        - projects
+      description: |
+        プロジェクト単位で参加している従業員を取得する。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: project_id
+          required: true
+          description: プロジェクト ID。
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseProjectStaffs'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      staff_ids:
+                        - 200
+                        - 300
+                        - 400
+                        - 500
+                      owner_staff_ids:
+                        - 200
+                        - 300
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+    post:
+      operationId: postLoginCompanyCodeProjectStaffsProjectId
+      summary: プロジェクト従業員追加解除。
+      tags:
+        - projects
+      description: |
+        プロジェクトへ従業員を追加、または解除する。
+
+        なお、公開 API 仕様の記載ではメソッドが GET となっているが、リクエスト例に基づき POST として定義している。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: project_id
+          required: true
+          description: プロジェクト ID。
+          schema:
+            type: integer
+      requestBody:
+        description: 追加、または解除する従業員の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostProjectStaffsProjectId'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  assign:
+                    - staff_id: 200
+                      owner: true
+                    - staff_id: 201
+                      owner: false
+                  unassign:
+                    - 202
+                    - 203
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseProjectStaffs'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      staff_ids:
+                        - 200
+                        - 300
+                        - 400
+                        - 500
+                      owner_staff_ids:
+                        - 200
+                        - 300
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/projects:
+    get:
+      operationId: getLoginCompanyCodeProjects
+      summary: プロジェクト取得 (一覧)。
+      tags:
+        - projects
+      description: |
+        プロジェクト情報の取得を一覧で行う。
+
+        1 ページで取得できるのは 50 件まで。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: query
+          name: start_date
+          required: false
+          description: プロジェクト開始日。yyyymmdd 形式の日付。
+          schema:
+            type: string
+          example: '20190801'
+        - in: query
+          name: end_date
+          required: false
+          description: プロジェクト終了日。yyyymmdd 形式の日付。
+          schema:
+            type: string
+          example: '20190831'
+        - in: query
+          name: page
+          required: false
+          description: 取得する際のページ位置 (初期値 0)。1 ページで取得できるのは 50 件まで。
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGetProjects'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      count: 1
+                      projects:
+                        - project_id: 100
+                          name: サンプルテスト
+                          short_name: サンプル
+                          project_code: sample
+                          remarks: サンプルです。
+                          start_date: '2019-08-01'
+                          end_date: '2019-08-31'
+                          sync_punch: false
+                          all_staffs_target: false
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+    post:
+      operationId: postLoginCompanyCodeProjects
+      summary: プロジェクト作成更新。
+      tags:
+        - projects
+      description: |
+        プロジェクトを作成、または更新する。
+
+        `project_id` が指定無しの場合は新規作成する。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+      requestBody:
+        description: 作成、または更新するプロジェクトの情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostProjects'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  projects:
+                    - name_ja: サンプルテスト
+                      short_name_ja: サンプル
+                      name_en: Sample Test
+                      short_name_en: Sample
+                      project_code: sample
+                      remarks: サンプルです。
+                      start_date: '20190801'
+                      end_date: '20190831'
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePostProjects'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      count: 1
+                      projects:
+                        - project_id: 100
+                          name_ja: サンプルテスト
+                          short_name_ja: サンプル
+                          project_code: sample
+                          remarks: サンプルです。
+                          start_date: '2019-08-01'
+                          end_date: '2019-08-31'
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/projects/{project_id}:
+    get:
+      operationId: getLoginCompanyCodeProjectsProjectId
+      summary: プロジェクト取得 (プロジェクト ID 指定)。
+      tags:
+        - projects
+      description: |
+        プロジェクト情報の取得をプロジェクトを指定して行う。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: project_id
+          required: true
+          description: プロジェクト ID。
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGetProjectsProjectId'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      project_id: 100
+                      name: サンプルテスト
+                      short_name: サンプル
+                      project_code: sample
+                      remarks: サンプルです。
+                      start_date: '2019-08-01'
+                      end_date: '2019-08-31'
+                      sync_punch: false
+                      all_staffs_target: false
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+    delete:
+      operationId: deleteLoginCompanyCodeProjectsProjectId
+      summary: プロジェクト削除。
+      tags:
+        - projects
+      description: |
+        プロジェクトを削除する。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: project_id
+          required: true
+          description: プロジェクト ID。
+          schema:
+            type: integer
+      requestBody:
+        description: 削除の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestDeleteProjectsProjectId'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDeleteProjectsProjectId'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      project_id: 100
+                      name: サンプルテスト
+                      short_name: サンプル
+                      project_code: sample
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/staff/{staff_id}:
+    delete:
+      operationId: deleteLoginCompanyCodeStaffStaffId
+      summary: 従業員退職/削除。
+      tags:
+        - staffs
+      description: |
+        従業員を退職、または削除する。
+
+        退職日 (`retirement_date`) が指定されている場合は退職処理、未指定の場合は削除処理となる。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: staff_id
+          required: true
+          description: マネーフォワード クラウド勤怠 Plus の従業員 ID。
+          schema:
+            type: integer
+      requestBody:
+        description: 退職、または削除の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestDeleteStaffStaffId'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  retirement_date: 2017/03/31
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDeleteStaffStaffId'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: sample001
+                      staff_id: 123
+                      staff_code: s001
+                      email: sample@example.com
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/staff_projects/{staff_id}:
+    get:
+      operationId: getLoginCompanyCodeStaffProjectsStaffId
+      summary: 参加プロジェクト取得 (指定)。
+      tags:
+        - projects
+      description: |
+        従業員単位で参加しているプロジェクトを取得する。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: staff_id
+          required: true
+          description: 従業員 ID。
+          schema:
+            type: integer
+        - in: query
+          name: start_date
+          required: false
+          description: プロジェクト開始日。未指定なら開始日は実行日の月初となる。
+          schema:
+            type: string
+        - in: query
+          name: end_date
+          required: false
+          description: プロジェクト終了日。未指定なら終了日は実行日の月末となる。
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGetStaffProjectsStaffId'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      projects:
+                        - project_id: 100
+                          start_date: '2019-08-01'
+                          end_date: '2019-08-31'
+                          tasks:
+                            - 150
+                            - 250
+                            - 350
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/staffs:
+    patch:
+      operationId: patchLoginCompanyCodeStaffs
+      summary: 従業員新規登録・更新。
+      tags:
+        - staffs
+      description: |
+        従業員の新規登録、または情報を更新する。
+
+        `staff_id` が指定されている場合は更新、未指定の場合は新規登録する。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+          schema:
+            type: string
+      requestBody:
+        description: 新規登録、または更新する従業員の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPatchStaffs'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  staffs:
+                    - staff_id: 1
+                      last_name: 山田
+                      first_name: 太郎
+                      organization: 企業
+                    - last_name: 佐藤
+                      first_name: 花子
+                      organization: 営業部/営業1課
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePatchStaffs'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: com123
+                      staffs:
+                        - staff_id: 123
+                          staff_code: s001
+                          email: sample@example.com
+                          organization_id: 1
+                          employment_category_id: 1
+                    errors:
+                      - code: ERR300402
+                        staff_id: '1'
+                        name: 山田太郎
+                        message: 組織が存在しません。
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+    get:
+      operationId: getLoginCompanyCodeStaffs
+      summary: 従業員取得。
+      tags:
+        - staffs
+      description: |
+        トークンに該当する従業員、及び管理下の従業員の情報を取得する。
+
+        1 ページに取得できるのは 20 人分まで。レスポンスに記載される `TotalCount` を参考に 0 から始まるページを指定する。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+          schema:
+            type: string
+        - in: query
+          name: target
+          required: false
+          description: 取得する従業員のトークン。
+          schema:
+            type: string
+        - in: query
+          name: page
+          required: false
+          description: 管理下にある従業員をすべて取得する場合のページ位置。 1 ページに取得できるのは 20 人分まで。 レスポンスに記載される TotalCount を参考に 0 から始まるページを指定する。
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGetStaffs'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: sample001
+                      Count: 1
+                      TotalCount: 1
+                      staffs:
+                        - staffId: 456
+                          email: taro.kodama@example.com
+                          lastName: 児玉
+                          firstName: 太郎
+                          lastNameKana: コダマ
+                          firstNameKana: タロウ
+                          organization:
+                            organizationId: 1
+                            name: 営業部
+                          subgroups:
+                            - organizationId: 2
+                              name: 開発部
+                          employmentCategory:
+                            employmentCategoryId: 1
+                            name: 正社員
+                          tag: null
+                          staffNum: '2015000012'
+                          idmNum: null
+                          cardTypeId: null
+                          remarks: 備考欄の記述
+                          permissionGroup:
+                            permissionGroupId: 456
+                            permissionType: 2
+                            name: 一般管理者
+                          managedOrganizations:
+                            - organizationId: 456
+                              name: 総務部
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/staffs/{staff_id}:
+    get:
+      operationId: getLoginCompanyCodeStaffsStaffId
+      summary: 従業員取得 (従業員 ID 指定)。
+      tags:
+        - staffs
+      description: |
+        従業員 ID を指定して、特定の従業員情報を取得する。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: staff_id
+          required: true
+          description: 取得対象の従業員 ID。従業員番号ではない。
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGetStaffs'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: sample001
+                      Count: 1
+                      TotalCount: 1
+                      staffs:
+                        - staffId: 456
+                          email: taro.kodama@example.com
+                          lastName: 児玉
+                          firstName: 太郎
+                          lastNameKana: コダマ
+                          firstNameKana: タロウ
+                          organization:
+                            organizationId: 1
+                            name: 営業部
+                          subgroups:
+                            - organizationId: 2
+                              name: 開発部
+                          employmentCategory:
+                            employmentCategoryId: 1
+                            name: 正社員
+                          tag: null
+                          staffNum: '2015000012'
+                          idmNum: null
+                          cardTypeId: null
+                          remarks: 備考欄の記述
+                          permissionGroup:
+                            permissionGroupId: 456
+                            permissionType: 2
+                            name: 一般管理者
+                          managedOrganizations:
+                            - organizationId: 456
+                              name: 総務部
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/stamps:
+    post:
+      operationId: postLoginCompanyCodeStamps
+      summary: 打刻実行。
+      tags:
+        - stamps
+      description: |
+        トークンに紐づいた従業員の打刻処理を行う。
+
+        実際の打刻はマネーフォワード クラウド勤怠 Plus の打刻サーバー側の時刻となる。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+          schema:
+            type: string
+      requestBody:
+        description: 打刻の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostStamps'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  type: 11
+                  stampedAt: 2017/03/14 08:57:23
+                  timezone: '+09:00'
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePostStamps'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: sample001
+                      staff_id: 123
+                      type: 11
+                      stampedAt: 2017/03/14 08:57:00
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+    get:
+      operationId: getLoginCompanyCodeStamps
+      summary: 打刻情報取得。
+      tags:
+        - stamps
+      description: |
+        自身の特定期間の打刻情報を取得する。
+
+        開始日時、終了日時で指定できる最長期間は 6 ヶ月まで。また 1 回のリクエストで取得できる打刻は 1,000 件まで。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: query
+          name: start_date
+          required: true
+          description: 打刻取得期間の開始日時。yyyymmddHHMMSS の形式で指定する。
+          schema:
+            type: string
+          example: '20170501000000'
+        - in: query
+          name: end_date
+          required: true
+          description: 打刻取得期間の終了日時。yyyymmddHHMMSS の形式で指定する。 開始日時、終了日時で指定できる最長期間は 6 ヶ月まで。 また 1 回のリクエストで取得できる打刻は 1,000 件まで。
+          schema:
+            type: string
+          example: '20170531000000'
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGetStamps'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: sample001
+                      staff_id: 123
+                      count: 2
+                      stamps:
+                        - stamped_at: 2015/10/22 09:01:00
+                          type: 11
+                          local_time: 2015/10/22 09:00:34
+                          timezone: '+9.0'
+                          attributes:
+                            org_id: 12
+                            workplace_id: 1
+                            ip: 192.168.1.234
+                        - stamped_at: 2015/10/22 18:01:00
+                          type: 12
+                          local_time: 2015/10/22 18:00:34
+                          timezone: '+9.0'
+                          attributes:
+                            org_id: 12
+                            workplace_id: 1
+                            ip: 192.168.1.234
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/stamps/{staff_id}:
+    get:
+      operationId: getLoginCompanyCodeStampsStaffId
+      summary: 打刻情報取得 (従業員 ID 指定)。
+      tags:
+        - stamps
+      description: |
+        従業員 ID を指定して、管理下の特定の従業員の特定期間の打刻情報を取得する。
+
+        開始日時、終了日時で指定できる最長期間は 6 ヶ月まで。また 1 回のリクエストで取得できる打刻は 1,000 件まで。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: staff_id
+          required: true
+          description: 取得対象の従業員 ID。従業員番号ではない。
+          schema:
+            type: integer
+        - in: query
+          name: start_date
+          required: true
+          description: 打刻取得期間の開始日時。yyyymmddHHMMSS の形式で指定する。
+          schema:
+            type: string
+          example: '20170501000000'
+        - in: query
+          name: end_date
+          required: true
+          description: 打刻取得期間の終了日時。yyyymmddHHMMSS の形式で指定する。 開始日時、終了日時で指定できる最長期間は 6 ヶ月まで。 また 1 回のリクエストで取得できる打刻は 1,000 件まで。
+          schema:
+            type: string
+          example: '20170531000000'
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGetStamps'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: sample001
+                      staff_id: 123
+                      count: 2
+                      stamps:
+                        - stamped_at: 2015/10/22 09:01:00
+                          type: 11
+                          local_time: 2015/10/22 09:00:34
+                          timezone: '+9.0'
+                          attributes:
+                            org_id: 12
+                            workplace_id: 1
+                            ip: 192.168.1.234
+                        - stamped_at: 2015/10/22 18:01:00
+                          type: 12
+                          local_time: 2015/10/22 18:00:34
+                          timezone: '+9.0'
+                          attributes:
+                            org_id: 12
+                            workplace_id: 1
+                            ip: 192.168.1.234
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/working_condition_settings:
+    patch:
+      operationId: patchLoginCompanyCodeWorkingConditionSettings
+      summary: 個別就業設定。
+      tags:
+        - workingConditionSettings
+      description: |
+        従業員の個別就業設定を更新する。
+
+        パラメータの詳細は公開 API 仕様の添付「個別就業設定パラメータ」を参照。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+      requestBody:
+        description: 設定する個別就業設定の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPatchWorkingConditionSettings'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  working_condition_settings:
+                    - staff_code: s001
+                      effective_date: 2023/02/02
+                      recount_method: 実績基準
+                      working_category: 普通労働制
+                      fixed_working_time: '08:30'
+                      weekly_working_days: 予定時刻設定の労働日数を用いる
+                      rest_period: 利用しない
+                      handling_of_leaving_punch: 当日の退勤打刻として扱う
+                      holiday_working_minutes_type: 予定時刻に合わせる
+                      morning_holiday_working_minutes: '04:10'
+                      afternoon_holiday_working_minutes: '04:20'
+                      calculation_of_time_over_the_reference_time: 基準時刻を越えた時間を算出しない
+                      early_or_late_judgement_time_with_half_holiday: 利用しない
+                      outside_workplace_type: 予定時刻に合わせる
+                      behavior_of_directly_punch: 予定内の直行/直帰打刻は予定の時刻が実績時刻に入る
+                      use_fixed_overtime: 'OFF'
+                      overtime_basis: 所定時間外
+                      use_cut_overtime_to_start_time: 'OFF'
+                      use_cut_overtime_to_end_time: 'OFF'
+                      display_alert_shift_create: 利用する
+                      standard_working_hours: 実働時間
+                      allowed_minus: 許容する
+                      time_frame_aggregation_flg: 'OFF'
+                      time_frame_aggregation_agreement: 未同意
+                      night_work_limited: 制限しない
+                      work_interval: 制限しない
+                      limited_weekly_28hours: 制限しない
+                      max_continuous_working_days_per_month: '6'
+                      max_working_minutes_per_month: 187:00/170:00/187:00/178:30/187:00/178:30/187:00/187:00/178:30/187:00/178:30/187:00
+                      monthly_scheduled_holidays: 5/5/5/5/5/5/5/5/5/5/5/5
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseStaffs'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      login_company_code: test001
+                      staffs:
+                        - staff_id: 51
+                          staff_code: i001
+                          email: null
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/working_records:
+    get:
+      operationId: getLoginCompanyCodeWorkingRecords
+      summary: 勤務実績取得 (複数従業員)。
+      tags:
+        - workingRecords
+      description: |
+        自身、及び管理下の複数人の従業員の特定期間の勤務実績情報を取得する。
+
+        期間は最大 31 日である。従業員 ID は一度に 50 ID まで指定できる。
+        `include_break_results` に 1 を指定した場合、取得する勤務実績に休憩実績を含める。この場合、`end_date` は指定できない。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: query
+          name: start_date
+          required: true
+          description: 実績取得期間の開始日時。yyyymmdd の形式で指定する。
+          schema:
+            type: string
+          example: '20180903'
+        - in: query
+          name: end_date
+          required: false
+          description: 実績取得期間の終了日時。yyyymmdd の形式で指定する。期間は最大 31 日である。
+          schema:
+            type: string
+          example: '20180930'
+        - in: query
+          name: staff_ids
+          required: true
+          description: 取得対象の従業員 ID (従業員番号ではない) をコンマ区切りで並べたもの。 一度に指定できるのは 50 ID まで。
+          schema:
+            type: string
+          example: 1,2,3,4
+        - in: query
+          name: include_break_results
+          required: false
+          description: 休憩実績を取得するかどうか。 1 を指定した場合、取得する勤務実績に休憩実績を含める。この場合、end_date は指定できない。
+          schema:
+            type: integer
+        - in: query
+          name: include_actual_working_hours_no_rounding
+          required: false
+          description: 実働時間 (まるめなし) を取得するかどうか。 1 を指定した場合、取得する勤務実績に実働時間 (まるめなし) を含める。
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGetWorkingRecords'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      - staff_id: 1
+                        working_records:
+                          - date: 2018/09/03
+                            working_day_category: 0
+                            start_time: 2018/09/03 09:00:00
+                            end_time: 2018/09/03 22:00:00
+                            rounded_start_time: 2018/09/03 09:00:00
+                            rounded_end_time: 2018/09/03 22:00:00
+                            attendance_punch_time: null
+                            leaving_punch_time: null
+                            actual_working_hours_no_rounding: 480
+                            break_time_results:
+                              - result_break_time_start_time: 2018/09/03 12:00:00
+                                result_break_time_end_time: 2018/09/03 13:00:00
+                                rounded_break_time_start_time: 2018/09/03 12:00:00
+                                rounded_break_time_end_time: 2018/09/03 13:00:00
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/{project_id}/tasks:
+    get:
+      operationId: getLoginCompanyCodeProjectIdTasks
+      summary: タスク取得 (一覧)。
+      tags:
+        - tasks
+      description: |
+        タスク情報の取得を一覧で行う。
+
+        1 ページで取得できるのは 50 件まで。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: project_id
+          required: true
+          description: プロジェクト ID。
+          schema:
+            type: integer
+        - in: query
+          name: page
+          required: false
+          description: 取得する際のページ位置 (初期値 0)。1 ページで取得できるのは 50 件まで。
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseTasks'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      count: 1
+                      tasks:
+                        - task_id: 150
+                          name: サンプルタスク
+                          code: sample_task
+                          index: 1
+                          estimated_hour: 60
+                          estimated_amount: 10000
+                          is_finished: false
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+    post:
+      operationId: postLoginCompanyCodeProjectIdTasks
+      summary: タスク作成更新。
+      tags:
+        - tasks
+      description: |
+        タスクを作成、または更新する。
+
+        `task_id` が指定無しの場合は新規作成する。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: project_id
+          required: true
+          description: タスクを作成・更新するプロジェクトの ID。
+          schema:
+            type: integer
+      requestBody:
+        description: 作成、または更新するタスクの情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestPostTasks'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+                  tasks:
+                    - name_ja: サンプルタスク
+                      name_en: Sample Task
+                      code: sample_task
+                      index: '1'
+                      estimated_hour: 60
+                      estimated_amount: 10000
+                      is_finished: false
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseTasks'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      count: 1
+                      tasks:
+                        - task_id: 150
+                          name: サンプルタスク
+                          code: sample_task
+                          index: 1
+                          estimated_hour: 60
+                          estimated_amount: 10000
+                          is_finished: false
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+  /{login_company_code}/{project_id}/tasks/{task_id}:
+    get:
+      operationId: getLoginCompanyCodeProjectIdTasksTaskId
+      summary: タスク取得 (タスク ID 指定)。
+      tags:
+        - tasks
+      description: |
+        タスク情報の取得をタスクを指定して行う。
+      security:
+        - tokenQuery: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: project_id
+          required: true
+          description: プロジェクト ID。
+          schema:
+            type: integer
+        - in: path
+          name: task_id
+          required: true
+          description: タスク ID。
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGetTasksTaskId'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      task_id: 150
+                      name: サンプルタスク
+                      code: sample_task
+                      index: 1
+                      estimated_hour: 60
+                      estimated_amount: 10000
+                      is_finished: false
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+    delete:
+      operationId: deleteLoginCompanyCodeProjectIdTasksTaskId
+      summary: タスク削除。
+      tags:
+        - tasks
+      description: |
+        タスクを削除する。
+      security: []
+      parameters:
+        - in: path
+          name: login_company_code
+          required: true
+          description: 企業のログイン企業 ID。
+          schema:
+            type: string
+        - in: path
+          name: project_id
+          required: true
+          description: プロジェクト ID。
+          schema:
+            type: integer
+        - in: path
+          name: task_id
+          required: true
+          description: タスク ID。
+          schema:
+            type: integer
+      requestBody:
+        description: 削除の情報。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestDeleteTasksTaskId'
+            examples:
+              normal:
+                value:
+                  token: xxxxxxxxxxxxxxxx
+      responses:
+        '200':
+          description: 処理成功時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDeleteTasksTaskId'
+              examples:
+                succeeded:
+                  value:
+                    success: true
+                    response:
+                      task_id: 150
+                      name: サンプルタスク
+                      code: sample_task
+        default:
+          description: 処理失敗時。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+              examples:
+                processingFailed:
+                  value:
+                    success: false
+                    errors:
+                      - code: ERR300402
+                        message: 組織が存在しません。
+components:
+  schemas:
+    Alert:
+      type: object
+      description: |
+        アラート。
+      properties:
+        month:
+          type: string
+          description: アラートの発生した月度。
+          example: 2017/03/01
+        date:
+          type: string
+          description: アラートの発生した日付。
+          example: 2017/04/15
+        alert_type:
+          $ref: '#/components/schemas/EnumAlertType'
+          description: アラート種別。
+    BreakTimeResult:
+      type: object
+      description: |
+        休憩実績。
+      properties:
+        result_break_time_start_time:
+          type: string
+          description: 休憩開始時刻。
+          example: 2018/09/03 12:00:00
+        result_break_time_end_time:
+          type: string
+          description: 休憩終了時刻。
+          example: 2018/09/03 13:00:00
+        rounded_break_time_start_time:
+          type: string
+          description: 丸め休憩開始時刻。
+          example: 2018/09/03 12:00:00
+        rounded_break_time_end_time:
+          type: string
+          description: 丸め休憩終了時刻。
+          example: 2018/09/03 13:00:00
+    DisplayPunchType:
+      type: object
+      description: |
+        表示する打刻ボタン。
+      properties:
+        punchType:
+          type: integer
+          description: 打刻種別。
+        displayName:
+          type: string
+          description: 表示名。
+    EmploymentCategory:
+      type: object
+      description: |
+        雇用区分。
+      properties:
+        employmentCategoryId:
+          type:
+            - integer
+            - 'null'
+          description: 雇用区分 ID。雇用区分が「従業員」の場合は null。
+        name:
+          type: string
+          description: 雇用区分名称。雇用区分が「従業員」の場合は「従業員」。
+    Error:
+      type: object
+      description: |
+        失敗の原因となったエラーについてのエラーメッセージ。
+      properties:
+        code:
+          type: string
+          description: エラーコード。
+        message:
+          type: string
+          description: エラーメッセージ。
+    ImporterFactoryOrganization:
+      type: object
+      description: |
+        異動日を指定した異動の内容。従業員番号かメールアドレスのいずれかが必須。
+      required:
+        - organization_change_date
+        - employment_category
+      properties:
+        staff_code:
+          type: string
+          description: 従業員番号。従業員番号かメールアドレスのいずれかが必須。
+        staff_email:
+          type: string
+          description: メールアドレス。従業員番号かメールアドレスのいずれかが必須。
+        organization_change_date:
+          type: string
+          description: 異動日。yyyy/mm/dd 形式の日付。
+          example: 2023/02/01
+        is_delete_change_history_after_change_date:
+          type: string
+          description: 異動日以降の異動を削除する。Yes/No、または空欄。空欄や列がない場合は No とみなす。
+        new_organization_path:
+          type: string
+          description: 異動先所属組織。
+        new_organization_code:
+          type: string
+          description: 異動先所属組織コード。
+        sub_organization_path:
+          type: string
+          description: サブ組織。複数指定する場合は末尾に数字が必要。例）sub_organization_path2。
+        sub_organization_code:
+          type: string
+          description: サブ組織コード。複数指定する場合は末尾に数字が必要。例）sub_organization_code2。
+        employment_category:
+          type: string
+          description: 雇用区分。
+    ImporterFactoryPermission:
+      type: object
+      description: |
+        管理権限設定の指定と管理先の指定の内容。従業員番号かメールアドレスのいずれかが必須。
+      required:
+        - manager_permission_name
+      properties:
+        staff_code:
+          type: string
+          description: 従業員番号。従業員番号かメールアドレスのいずれかが必須。
+        staff_email:
+          type: string
+          description: メールアドレス。従業員番号かメールアドレスのいずれかが必須。
+        manager_permission_name:
+          type: string
+          description: 管理権限名称。
+        manage_organization_path:
+          type: string
+          description: 管理先組織パス。管理先組織パスか管理先組織コードのいずれかが必須。
+        manage_organization_code:
+          type: string
+          description: 管理先組織コード。管理先組織パスか管理先組織コードのいずれかが必須。
+        manage_subordinate_organizations_immed_path:
+          type: string
+          description: 下位組織の管理 (即時反映・パス)。 指定できる値は「下位組織を管理対象にしない」「下位組織を直接管理対象とする」「サブ組織所属を除く＋直下組織管理者を直接管理する」のいずれか。 未指定の場合は「下位組織を管理対象にしない」となる。
+        manage_subordinate_organizations_immed_code:
+          type: string
+          description: 下位組織の管理 (即時反映・コード)。 指定できる値は「下位組織を管理対象にしない」「下位組織を直接管理対象とする」「サブ組織所属を除く＋直下組織管理者を直接管理する」のいずれか。 未指定の場合は「下位組織を管理対象にしない」となる。
+      additionalProperties: true
+    ImporterFactoryPermissionReserve:
+      type: object
+      description: |
+        管理権限設定の指定と管理先の指定の予約内容。従業員番号かメールアドレスのいずれかが必須。
+      properties:
+        staff_code:
+          type: string
+          description: 従業員番号。従業員番号かメールアドレスのいずれかが必須。
+        staff_email:
+          type: string
+          description: メールアドレス。従業員番号かメールアドレスのいずれかが必須。
+        reservation_manager_permission_name:
+          type: string
+          description: 予約付与権限。予約付与権限を登録する場合は必須。
+        manager_permission_reservation_date:
+          type: string
+          description: 付与権限予約日。予約付与権限を登録する場合は必須。yyyy/mm/dd 形式の日付。
+          example: 2023/02/03
+        manage_organization_reservation_registration_or_cancel:
+          type: string
+          description: 登録/取消。管理先予約設定する場合は必須。 新たに予約を追加する場合は「登録」、既に登録済みの予約を削除する場合は「取消」を指定する。
+        reservation_manage_organization_path:
+          type: string
+          description: 予約管理先組織。管理先予約設定する場合、予約管理先組織コードを入力していなければ必須。
+        reservation_manage_organization_code:
+          type: string
+          description: 予約管理先組織コード。管理先予約設定する場合、予約管理先組織を入力していなければ必須。
+        manage_subordinate_organizations:
+          type: string
+          description: 下位組織の管理。管理先予約設定する場合は必須。 指定できる値は「下位組織を管理対象にしない」「下位組織を直接管理対象とする」「サブ組織所属を除く＋直下組織管理者を直接管理する」のいずれか。
+        manage_organization_reservation_date:
+          type: string
+          description: 管理先予約日。管理先予約設定する場合は必須。yyyy/mm/dd 形式の日付。
+          example: 2023/02/03
+        manage_organization_reservation_add_or_delete:
+          type: string
+          description: 追加/削除。管理先予約設定する場合は必須。
+    Manhour:
+      type: object
+      description: |
+        従業員毎の工数。
+      properties:
+        staff_id:
+          type: integer
+          description: 従業員 ID。
+        dates:
+          type: array
+          description: 従業員の日付毎の工数の配列。
+          items:
+            $ref: '#/components/schemas/ManhourDate'
+    ManhourDailyCommentItem:
+      type: object
+      description: |
+        タスク毎のコメント。
+      properties:
+        task_id:
+          type: integer
+          description: タスク ID。
+        comment:
+          type: string
+          description: コメント。
+    ManhourDailyHourItem:
+      type: object
+      description: |
+        タスク毎の工数。
+      properties:
+        task_id:
+          type: integer
+          description: タスク ID。
+        minute:
+          type: integer
+          description: 工数 (分)。
+    ManhourDate:
+      type: object
+      description: |
+        日付毎の工数。
+      properties:
+        date:
+          type: string
+          description: 日付。
+          example: '2019-08-01'
+        projects:
+          type: array
+          description: 日付のプロジェクト毎の工数の配列。
+          items:
+            $ref: '#/components/schemas/ManhourProject'
+        staff_comment:
+          type:
+            - string
+            - 'null'
+          description: 従業員のコメント。
+        admin_comment:
+          type:
+            - string
+            - 'null'
+          description: 管理者のコメント。
+    ManhourProject:
+      type: object
+      description: |
+        プロジェクト毎の工数。
+      properties:
+        project_id:
+          type: integer
+          description: プロジェクト ID。
+        closed_at:
+          type:
+            - string
+            - 'null'
+          description: 締め日時。
+        fixed_at:
+          type:
+            - string
+            - 'null'
+          description: 確定日時。
+        daily_hour_items:
+          type: array
+          description: プロジェクトのタスク毎の工数の配列。
+          items:
+            $ref: '#/components/schemas/ManhourDailyHourItem'
+        daily_comment_items:
+          type: array
+          description: プロジェクトのタスク毎のコメントの配列。
+          items:
+            $ref: '#/components/schemas/ManhourDailyCommentItem'
+    MultipleStamp:
+      type: object
+      description: |
+        従業員ごとの打刻情報。
+      properties:
+        staff_id:
+          type: integer
+          description: 取得した打刻に紐づく従業員の ID。
+        count:
+          type: integer
+          description: 従業員の打刻数。
+        stamps:
+          type: array
+          description: 打刻データの配列。
+          items:
+            $ref: '#/components/schemas/Stamp'
+    Organization:
+      type: object
+      description: |
+        組織。
+      properties:
+        organizationId:
+          type: integer
+          description: 組織の ID。
+        name:
+          type: string
+          description: 組織名。
+        code:
+          type:
+            - string
+            - 'null'
+          description: 組織コード。
+        label:
+          type:
+            - string
+            - 'null'
+          description: 組織のラベル。
+        parentId:
+          type:
+            - integer
+            - 'null'
+          description: 親の組織 ID。
+        displayPunchTypes:
+          type: array
+          description: 表示する打刻ボタンの配列。
+          items:
+            $ref: '#/components/schemas/DisplayPunchType'
+    OrganizationSummary:
+      type: object
+      description: |
+        組織の概要。
+      properties:
+        organizationId:
+          type: integer
+          description: 組織 ID。
+        name:
+          type: string
+          description: 組織名。
+    PermissionGroup:
+      type: object
+      description: |
+        権限グループ。
+      properties:
+        permissionGroupId:
+          type: integer
+          description: 権限グループ ID。
+        permissionType:
+          $ref: '#/components/schemas/EnumPermissionType'
+          description: '権限種別。1 : 企業管理者、2 : 一般管理者、3 : 従業員。'
+        name:
+          type: string
+          description: 権限グループ名。
+    Project:
+      type: object
+      description: |
+        プロジェクト。
+      properties:
+        project_id:
+          type: integer
+          description: プロジェクト ID。
+        name:
+          type: string
+          description: プロジェクト名称。
+        short_name:
+          type:
+            - string
+            - 'null'
+          description: プロジェクト略称。
+        project_code:
+          type:
+            - string
+            - 'null'
+          description: プロジェクトコード。
+        remarks:
+          type:
+            - string
+            - 'null'
+          description: 備考。
+        start_date:
+          type:
+            - string
+            - 'null'
+          description: プロジェクト開始日。
+          example: '2019-08-01'
+        end_date:
+          type:
+            - string
+            - 'null'
+          description: プロジェクト終了日。
+          example: '2019-08-31'
+        sync_punch:
+          type: boolean
+          description: 打刻同期フラグ。
+        all_staffs_target:
+          type: boolean
+          description: 全従業員選択フラグ。
+    ProjectInput:
+      type: object
+      description: |
+        作成、または更新するプロジェクト。
+      required:
+        - name_ja
+      properties:
+        project_id:
+          type: integer
+          description: プロジェクト ID。指定無しの場合は新規作成する。
+        name_ja:
+          type: string
+          description: プロジェクト名称。重複不可。
+        short_name_ja:
+          type: string
+          description: プロジェクト略称。
+        name_en:
+          type: string
+          description: プロジェクト英語名称。重複不可。
+        short_name_en:
+          type: string
+          description: プロジェクト英語略称。
+        project_code:
+          type: string
+          description: プロジェクトコード。重複不可。
+        remarks:
+          type: string
+          description: 備考。
+        start_date:
+          type: string
+          description: プロジェクト開始日。yyyy/mm/dd 形式の日付。
+          example: 2019/08/01
+        end_date:
+          type: string
+          description: プロジェクト終了日。yyyy/mm/dd 形式の日付。
+          example: 2019/08/31
+    Staff:
+      type: object
+      description: |
+        従業員。
+      properties:
+        staffId:
+          type: integer
+          description: 従業員 ID。
+        email:
+          type:
+            - string
+            - 'null'
+          description: メールアドレス。
+        lastName:
+          type: string
+          description: 姓。
+        firstName:
+          type: string
+          description: 名。
+        lastNameKana:
+          type:
+            - string
+            - 'null'
+          description: カナ (姓)。
+        firstNameKana:
+          type:
+            - string
+            - 'null'
+          description: カナ (名)。
+        organization:
+          $ref: '#/components/schemas/OrganizationSummary'
+          description: 組織 (メイン)。
+        subgroups:
+          type: array
+          description: 組織 (サブグループ) の配列。
+          items:
+            $ref: '#/components/schemas/OrganizationSummary'
+        employmentCategory:
+          $ref: '#/components/schemas/EmploymentCategory'
+          description: 雇用区分。
+        tag:
+          type:
+            - string
+            - 'null'
+          description: タグ。
+        staffNum:
+          type:
+            - string
+            - 'null'
+          description: 従業員番号。
+        idmNum:
+          type:
+            - string
+            - 'null'
+          description: IDm 番号。
+        cardTypeId:
+          type:
+            - integer
+            - 'null'
+          description: カード種別。
+        remarks:
+          type:
+            - string
+            - 'null'
+          description: 備考。
+        permissionGroup:
+          $ref: '#/components/schemas/PermissionGroup'
+          description: 権限グループ。
+        managedOrganizations:
+          type: array
+          description: 管理対象組織。指定されている組織のみで、配下の組織は含めない。
+          items:
+            $ref: '#/components/schemas/OrganizationSummary'
+    StaffInput:
+      type: object
+      description: |
+        新規登録、または更新する従業員。
+      required:
+        - last_name
+        - first_name
+      properties:
+        staff_id:
+          type: integer
+          description: マネーフォワード クラウド勤怠 Plus の従業員 ID。 指定されている場合は更新、未指定の場合は新規登録する。該当するデータがない場合はエラーとなる。
+        staff_code:
+          type: string
+          maxLength: 20
+          description: 従業員番号。重複不可。a〜z、A〜Z、0〜9、-、_ のみ。最大 20 文字。
+        last_name:
+          type: string
+          maxLength: 30
+          description: 姓。機種依存文字 (2) を含まない。最大 30 文字。
+        first_name:
+          type: string
+          maxLength: 30
+          description: 名。機種依存文字 (2) を含まない。最大 30 文字。
+        last_name_en:
+          type: string
+          maxLength: 30
+          description: 姓・英語。機種依存文字 (2) を含まない。最大 30 文字。
+        first_name_en:
+          type: string
+          maxLength: 30
+          description: 名・英語。機種依存文字 (2) を含まない。最大 30 文字。
+        last_name_kana:
+          type: string
+          maxLength: 30
+          description: 姓 (カナ)。全角カタカナと一部記号のみ。最大 30 文字。
+        first_name_kana:
+          type: string
+          maxLength: 30
+          description: 名 (カナ)。全角カタカナと一部記号のみ。最大 30 文字。
+        organization:
+          type: string
+          description: 登録済組織を最上位 (企業) の親組織から/区切りで記述する。従業員作成の場合は必須。 最上位組織に所属させる場合は「企業」のみを記述する。 最上位組織 (企業) よりも下位の組織に所属させる場合は、「企業」を除いたすべての親組織から当該組織まで/区切りで記述する。 該当するデータがない場合はエラーとなる。
+        employment_category:
+          type: string
+          description: 登録済雇用区分名称。該当するデータがない場合はエラーとなる。
+        idm_number:
+          type: string
+          minLength: 16
+          maxLength: 16
+          description: IDm 番号。重複不可。0〜9、a〜f、A〜F のみで 16 文字。
+        email:
+          type: string
+          description: メールアドレス。重複不可。メールアドレスとして有効な文字列。
+        tel:
+          type: string
+          maxLength: 13
+          description: 電話番号。0〜9 と - のみ。最大 13 文字。
+        sex:
+          type: string
+          description: 性別。男/女。
+        tag:
+          type: string
+          maxLength: 255
+          description: タグ。複数の場合はカンマ区切り。機種依存文字 (1) を含まない。最大 255 文字。
+        remarks:
+          type: string
+          maxLength: 5000
+          description: 備考。機種依存文字 (1) を含まない。最大 5,000 文字。
+        entry_date:
+          type: string
+          description: 入社日。YYYY/MM/DD 形式の日付。
+          example: 2017/04/01
+        use_start_date:
+          type: string
+          description: 利用開始日。YYYY/MM/DD 形式の日付。
+          example: 2017/04/01
+        paid_holiday_base_date:
+          type: string
+          description: 年休基準日。YYYY/MM/DD 形式の日付。
+          example: 2017/04/01
+        use_other_login_method:
+          type: boolean
+          description: 認証連携以外でログインしない。Boolean 型以外を指定した場合は true と判断される。
+    StaffProject:
+      type: object
+      description: |
+        参加プロジェクト。
+      properties:
+        project_id:
+          type: integer
+          description: プロジェクト ID。
+        start_date:
+          type:
+            - string
+            - 'null'
+          description: プロジェクト開始日。
+          example: '2019-08-01'
+        end_date:
+          type:
+            - string
+            - 'null'
+          description: プロジェクト終了日。
+          example: '2019-08-31'
+        tasks:
+          type: array
+          description: プロジェクトのタスク ID の配列。
+          items:
+            type: integer
+    StaffResult:
+      type: object
+      description: |
+        処理対象となった従業員。
+      properties:
+        staff_id:
+          type: integer
+          description: 従業員 ID。
+        staff_code:
+          type:
+            - string
+            - 'null'
+          description: 従業員番号。
+        email:
+          type:
+            - string
+            - 'null'
+          description: メールアドレス。
+    StaffWorkingRecord:
+      type: object
+      description: |
+        従業員ごとの勤務実績情報。
+      properties:
+        staff_id:
+          type: integer
+          description: 取得した勤務実績に紐づく従業員の ID。
+        working_records:
+          type: array
+          description: 実績データの配列。
+          items:
+            $ref: '#/components/schemas/WorkingRecord'
+    Stamp:
+      type: object
+      description: |
+        打刻データ。
+      properties:
+        stamped_at:
+          type: string
+          description: 打刻日時。
+          example: 2015/10/22 09:01:00
+        type:
+          type: integer
+          description: 打刻種別。
+        local_time:
+          type: string
+          description: 打刻機のローカル打刻時刻。
+          example: 2015/10/22 09:00:34
+        timezone:
+          type: string
+          description: 打刻機のタイムゾーン。
+          example: '+9.0'
+        attributes:
+          $ref: '#/components/schemas/StampAttributes'
+          description: 実績参照結果。
+    StampAttributes:
+      type: object
+      description: |
+        実績参照結果。
+      properties:
+        method:
+          type: integer
+          description: 打刻方法。
+        org_id:
+          type: integer
+          description: 組織 ID。
+        workplace_id:
+          type:
+            - integer
+            - 'null'
+          description: 勤務地 ID。
+        latitude:
+          type:
+            - number
+            - 'null'
+          format: float
+          description: 緯度。
+        longitude:
+          type:
+            - number
+            - 'null'
+          format: float
+          description: 経度。
+        ip:
+          type: string
+          description: 打刻機の IP アドレス。
+    Task:
+      type: object
+      description: |
+        タスク。
+      properties:
+        task_id:
+          type: integer
+          description: タスク ID。
+        name:
+          type: string
+          description: タスク名称。
+        code:
+          type:
+            - string
+            - 'null'
+          description: タスクコード。
+        index:
+          type: integer
+          description: 表示順。
+        estimated_hour:
+          type:
+            - integer
+            - 'null'
+          description: 想定時間 (分)。
+        estimated_amount:
+          type:
+            - integer
+            - 'null'
+          description: 想定金額。
+        is_finished:
+          type: boolean
+          description: 終了フラグ。
+    TaskInput:
+      type: object
+      description: |
+        作成、または更新するタスク。
+      required:
+        - name_ja
+        - name_en
+      properties:
+        task_id:
+          type: integer
+          description: タスク ID。指定無しの場合は新規作成する。
+        name_ja:
+          type: string
+          description: タスク名称。重複不可。
+        name_en:
+          type: string
+          description: タスク英語名称。重複不可。
+        code:
+          type: string
+          description: タスクコード。重複不可。
+        index:
+          type: string
+          description: 表示順。
+        estimated_hour:
+          type: integer
+          description: 想定時間。
+        estimated_amount:
+          type: integer
+          description: 想定金額。
+        is_finished:
+          type: boolean
+          description: 終了フラグ。
+    WorkingConditionSetting:
+      type: object
+      description: |
+        個別就業設定。従業員番号かメールアドレスのいずれかが必須。 パラメータの詳細は公開 API 仕様の添付「個別就業設定パラメータ」を参照。
+      required:
+        - working_category
+        - weekly_working_days
+        - rest_period
+        - handling_of_leaving_punch
+      properties:
+        staff_code:
+          type: string
+          description: 従業員番号。メールアドレスの記載がない場合は必須。
+        staff_email:
+          type: string
+          description: メールアドレス。従業員番号の記載がない場合は必須。
+        working_condition_template_name:
+          type: string
+          description: テンプレート名称。
+        effective_date:
+          type: string
+          description: 反映日。yyyy/mm/dd 形式の日付。未入力の場合は当日を補完する。
+          example: 2023/02/02
+        recount_method:
+          type: string
+          description: 再集計方法。打刻基準/実績基準/再集計しない。反映日が現在日以前の場合は必須。
+        working_category:
+          type: string
+          description: 労働区分。 普通労働制/フレックス/裁量労働制/管理監督者/1 ヶ月単位の変形労働時間/1 年単位の変形労働時間。
+        attendance_display_name:
+          type: string
+          description: 出勤簿表示名称。
+        variable_agreement_setting_name:
+          type: string
+          description: 1 年変形協定名称。1 年変形の場合は必須。
+        variable_scheduled_working_hours_type:
+          type: string
+          description: 月の所定労働時間。 月度毎・個別に設定する/週の所定労働時間による/日の所定労働時間の合計。 1 ヶ月単位の変形労働時間制の場合は必須。
+        variable_monthly_scheduled_working_hours:
+          type: string
+          description: 変形月所定労働時間。1〜12 月を HHH:MM の/区切りで指定する。 月の所定労働時間が「月度毎・個別に設定する」の場合は必須。
+        variable_scheduled_working_hours_time:
+          type: string
+          description: 週の所定労働時間。HH:MM 形式。月の所定労働時間が「週の所定労働時間による」の場合は必須。
+        weekly_legal_working_hours:
+          type: string
+          description: 週の法定労働時間。40 時間/44 時間。変形労働の場合は必須。
+        prescribed_working_hours_of_schedule_change:
+          type: string
+          description: 予定変更時の当日の所定労働時間。
+        wday_start:
+          type: string
+          description: 週の開始曜日。変形期間の開始に合わせる/就業マスターに従う。変形労働の場合は必須。
+        fixed_working_time:
+          type: string
+          description: 所定労働時間。H:MM 形式。フレックスは除く。
+        weekly_working_days:
+          type: string
+          description: 年休の付与に用いる週の労働日数。予定時刻設定の労働日数を用いる/1〜4/5 以上。
+        shift_setting_type:
+          type: string
+          description: シフト設定方法。毎月シフトを個別設定する/曜日毎に勤務時間を設定する。変形労働の場合は必須。
+        plan_start_and_end_time_sun:
+          type: string
+          description: 出勤・退勤時刻 (日曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (日曜) を入力する場合は必須。
+        plan_start_and_end_time_mon:
+          type: string
+          description: 出勤・退勤時刻 (月曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (月曜) を入力する場合は必須。
+        plan_start_and_end_time_tue:
+          type: string
+          description: 出勤・退勤時刻 (火曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (火曜) を入力する場合は必須。
+        plan_start_and_end_time_wed:
+          type: string
+          description: 出勤・退勤時刻 (水曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (水曜) を入力する場合は必須。
+        plan_start_and_end_time_thu:
+          type: string
+          description: 出勤・退勤時刻 (木曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (木曜) を入力する場合は必須。
+        plan_start_and_end_time_fri:
+          type: string
+          description: 出勤・退勤時刻 (金曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (金曜) を入力する場合は必須。
+        plan_start_and_end_time_sat:
+          type: string
+          description: 出勤・退勤時刻 (土曜)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (土曜) を入力する場合は必須。
+        plan_start_and_end_time_hol:
+          type: string
+          description: 出勤・退勤時刻 (祝日)。H:MM-H:MM、なし。フレックスは除く。休憩時刻 (祝日) を入力する場合は必須。
+        plan_break_start_and_end_time_sun:
+          type: string
+          description: 休憩時刻 (日曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+        plan_break_start_and_end_time_mon:
+          type: string
+          description: 休憩時刻 (月曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+        plan_break_start_and_end_time_tue:
+          type: string
+          description: 休憩時刻 (火曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+        plan_break_start_and_end_time_wed:
+          type: string
+          description: 休憩時刻 (水曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+        plan_break_start_and_end_time_thu:
+          type: string
+          description: 休憩時刻 (木曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+        plan_break_start_and_end_time_fri:
+          type: string
+          description: 休憩時刻 (金曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+        plan_break_start_and_end_time_sat:
+          type: string
+          description: 休憩時刻 (土曜)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+        plan_break_start_and_end_time_hol:
+          type: string
+          description: 休憩時刻 (祝日)。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックスは除く。
+        half_day_holiday:
+          type: string
+          description: 所定半休日の曜日。
+        rest_period:
+          type: string
+          description: 規定休憩。利用しない/従業員は表示のみ/従業員も修正可。
+        rest_period_time:
+          type: string
+          description: 規定休憩時刻。H:MM-H:MM-(白昼時間から先に休憩時間を引く/深夜時間から先に休憩時間を引く)。 複数の場合は/区切りで 1〜15 個。規定休憩が「利用しない」以外の場合は必須。
+        rest_period_volume_based_calculation:
+          type: string
+          description: 規定休憩の従量計算。ON/OFF。規定休憩が「従業員は表示のみ、従業員も修正可」の場合は必須。
+        rest_period_calculation:
+          type: string
+          description: 規定休憩の自動計算。ON/OFF。規定休憩が「従業員は表示のみ、従業員も修正可」の場合は必須。
+        rest_period_with_private_outing:
+          type: string
+          description: 規定休憩の計算時に私用外出を休憩時間とみなす。ON/OFF。規定休憩が「従業員は表示のみ、従業員も修正可」の場合は必須。
+        rest_period_calculation_with_working_hour_per_day:
+          type: string
+          description: 1 日の実働時間で規定休憩を計算する。ON/OFF。規定休憩が「従業員は表示のみ、従業員も修正可」の場合は必須。
+        fixed_holidays:
+          type: string
+          description: 所定休日。日〜土、祝、なし。複数の場合は/区切り。
+        legal_holidays:
+          type: string
+          description: 法定休日。日〜土、祝、なし。複数の場合は/区切り。
+        holiday_working_minutes_type:
+          type: string
+          description: 休暇時の労働時間。予定時刻に合わせる/換算時間に合わせる/標準労働時刻に合わせる。 管理監督者は除く。「標準労働時刻に合わせる」はフレックスの場合のみ入力可。
+        morning_holiday_working_minutes:
+          type: string
+          description: 休暇換算時間設定 (半日午前)。H:MM 形式。48 時間 ≦ 半日 (午前+午後)。管理監督者は除く。
+        afternoon_holiday_working_minutes:
+          type: string
+          description: 休暇換算時間設定 (半日午後)。H:MM 形式。48 時間 ≦ 半日 (午前+午後)。管理監督者は除く。
+        holiday_working_minutes_actual:
+          type: string
+          description: 休暇換算時間設定 (実労働加算)。ON/OFF。「換算時間に合わせる」場合に必須。管理監督者は除く。
+        holiday_working_minutes_for_all_day:
+          type: string
+          description: 休暇換算時間設定 (全日)。H:MM 形式。「換算時間に合わせる」場合に必須。管理監督者は除く。
+        half_holiday_usable_if_working_hours_exceed:
+          type: string
+          description: 実働時間 ≧ 所定労働時間になる場合の半休取得可否。取得できる/取得できない。
+        actual_working_hours_for_standard_working:
+          type: string
+          description: 半休取得制限における基準となる実働時間。実働時間/実働時間＋半休換算時間。実働時間に応じて半休の取得制限をする場合は必須。
+        hourly_holiday_usage_for_standard_working:
+          type: string
+          description: 実働時間と時間休換算時間の合計が、所定労働時間の 1 時間を超えない範囲での時間休の取得。 取得できる/取得できない。休暇時の労働時間が「所定労働時間に合わせる」の場合は必須。
+        limit_of_working_hours_compensatory_holidays:
+          type: string
+          description: 代休取得時の控除時間上限 (取得代休発生日実働時間の最大値)。H:MM 形式。 デフォルト値は 7:45。管理監督者は除く。
+        prescribed_working_hours:
+          type: string
+          description: 予定が空の場合に用いる所定労働時間。H:MM 形式。変形労働の場合は必須。
+        calculation_of_time_over_the_reference_time:
+          type: string
+          description: 基準時刻外の労働時間の算出。基準時刻を越えた時間を算出しない/基準時刻を越えた時間を算出する。 管理監督者は除く。
+        reference_start_time:
+          type: string
+          description: 基準開始時刻。H:MM 形式。「基準時刻を越えた時間を算出する」の場合は必須。管理監督者は除く。
+        reference_end_time:
+          type: string
+          description: 基準終了時刻。H:MM 形式。「基準時刻を越えた時間を算出する」の場合は必須。管理監督者は除く。
+        early_or_late_judgement_time_with_half_holiday:
+          type: string
+          description: 半休取得時の遅刻/早退判定時刻。利用する/利用しない。管理監督者は除く。
+        late_judgement_time_with_morning_off:
+          type: string
+          description: 午前半休時遅刻判定時刻。H:MM 形式。「利用する」の場合は必須。管理監督者は除く。
+        early_judgement_time_with_afternoon_off:
+          type: string
+          description: 午後半休時早退判定時刻。H:MM 形式。「利用する」の場合は必須。管理監督者は除く。
+        lateness_early_leave_grace:
+          type: string
+          description: 遅刻/早退判定の許容時間。H:MM 形式。
+        lateness_grace_period:
+          type: string
+          description: 遅刻許容時間。H:MM 形式。
+        early_leave_grace_period:
+          type: string
+          description: 早退許容時間。H:MM 形式。
+        outside_workplace_type:
+          type: string
+          description: 事業場外労働換算時間。予定時刻に合わせる/換算時間に合わせる。 管理監督者は除く。フレックスの時は「標準労働時刻に合わせる」となる。
+        outside_workplace_minutes_for_half_day:
+          type: string
+          description: 事業場外労働換算時間設定 (半日)。H:MM 形式。「換算時間に合わせる」場合に必須。管理監督者は除く。
+        outside_workplace_minutes_for_all_day:
+          type: string
+          description: 事業場外労働換算時間設定 (全日)。H:MM 形式。「換算時間に合わせる」場合に必須。管理監督者は除く。
+        behavior_of_directly_punch:
+          type: string
+          description: 直行直帰打刻時の動作設定。 予定内の直行/直帰打刻は予定の時刻が実績時刻に入る/予定内外に関わらず直行/直帰打刻は予定の時刻が実績時刻に入る。 管理監督者は除く。「予定時刻に合わせる」「標準労働時刻に合わせる」場合に必須。
+        use_fixed_overtime:
+          type: string
+          description: 固定残業時間。ON/OFF。管理監督者は除く。
+        fixed_overtime_minutes:
+          type: string
+          description: 固定残業時間設定。H:MM 形式。固定残業時間 ON の場合に必須。管理監督者は除く。
+        display_early_or_late_on_summaries:
+          type: string
+          description: 遅刻、早退時間集計表示。ON/OFF。裁量労働制のみ必須。普通労働制、フレックスは除く。
+        display_midnight_workings_on_summaries:
+          type: string
+          description: 深夜時間集計表示。ON/OFF。普通労働制、フレックスは除く。
+        overtime_basis:
+          type: string
+          description: 残業時間。所定時間外/予定時間超過。普通労働制のみ必須。
+        use_cut_overtime_to_start_time:
+          type: string
+          description: 残業時間丸め (予定出勤時刻に丸める)。ON/OFF。普通労働制のみ必須。
+        use_cut_overtime_to_end_time:
+          type: string
+          description: 残業時間丸め (予定退勤時刻に丸める)。ON/OFF。普通労働制のみ必須。
+        standard_prescribed_working_hours_for_overtime_shortage:
+          type: string
+          description: 超過・不足の基準となる所定労働時間を設定する。ON/OFF。
+        standard_working_hours_for_overtime:
+          type: string
+          description: 超過時間の基準となる所定労働時間。H:MM 形式。
+        standard_working_hours_for_shortage:
+          type: string
+          description: 不足時間の基準となる所定労働時間。H:MM 形式。
+        standard_time:
+          type: string
+          description: 標準労働時刻。H:MM-H:MM、なし。フレックスかつ休暇時の労働時間が「標準時刻に合わせる」の場合は必須。
+        flex_core_time:
+          type: string
+          description: コアタイム。H:MM-H:MM、なし。フレックスのみ。休憩時刻を入力する場合は必須。
+        flexible_time_start_time:
+          type: string
+          description: フレキシブルタイム開始時刻。H:MM、なし。00:00〜23:59。
+        flexible_time_end_time:
+          type: string
+          description: フレキシブルタイム終了時刻。H:MM、なし。フレキシブルタイム (開始時刻) + 48 時間以内。
+        flex_break_time:
+          type: string
+          description: 休憩時刻。H:MM-H:MM、なし。複数の場合は/区切りで 1〜15 個。フレックス以外は除く。
+        flex_standard_working_hours:
+          type: string
+          description: 基準となる労働時間。平日労働時間/平日フレキシブルタイム内時間。フレックスのみ必須。
+        settlement_type:
+          type: string
+          description: 清算時間。実労働日数/暦日数/実労働日数 (超過・不足の基準時間が異なる)。フレックスのみ必須。
+        settlement_multiplier_working_days:
+          type: string
+          description: 清算時間 (実労働日数-時間)。H:MM 形式。 実労働日数、または実労働日数 (超過・不足の基準時間が異なる) の場合に必須。フレックスのみ必須。
+        settlement_multiplier_add_standard_time:
+          type: string
+          description: 清算時間 (超過・不足の基準時間が異なる)。H:MM 形式。 実労働日数 (超過・不足の基準時間が異なる) の場合に必須。フレックスのみ必須。 超過時間の基準、不足時間の基準を/区切りで 2 個入力する。
+        settlement_multiplier_calendar_days:
+          type: string
+          description: 清算時間 (暦日数-時間)。H:MM 形式。暦日数の場合に必須。フレックスのみ必須。 28〜31 日分を/区切りで 5 個入力する。
+        is_expect_absence_and_unpaid_vacation:
+          type: string
+          description: 所定労働日数 (欠勤日・無給の休暇/休職日を除く) を用いる。ON/OFF。 実労働日数、または実労働日数 (超過・不足の基準時間が異なる) の場合に必須。フレックスのみ必須。
+        use_cut_overtime_to_standard_start_time:
+          type: string
+          description: 残業時間まるめ (開始時刻の標準労働時間にまるめる)。ON/OFF。フレックスのみ必須。
+        use_cut_overtime_to_standard_end_time:
+          type: string
+          description: 残業時間まるめ (終了時刻の標準労働時間にまるめる)。ON/OFF。フレックスのみ必須。
+        deemed_working_time:
+          type: string
+          description: みなし労働時間。H:MM 形式。裁量労働制のみ必須。
+        use_deemed_working_minutes_for_working_minutes_on_fixed_holiday:
+          type: string
+          description: 所定休日の労働時間もみなし労働時間を用いる。用いる/用いない。裁量労働制のみ必須。
+        display_overtimes_on_summaries:
+          type: string
+          description: 残業時間集計表示。ON/OFF。管理監督者のみ必須。
+        display_holiday_workings_on_summaries:
+          type: string
+          description: 休日出勤集計表示。ON/OFF。管理監督者のみ必須。
+        display_weekday_workings_on_summaries:
+          type: string
+          description: 平日出勤集計表示。ON/OFF。管理監督者のみ必須。
+        working_category_editable:
+          type: string
+          description: 労働日区分入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+        substituted_working_holiday_editable:
+          type: string
+          description: 振替休日/振替出勤入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+        overtimes_editable:
+          type: string
+          description: 早出/残業入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+        plan_times_editable:
+          type: string
+          description: 予定出勤/退勤/休憩/私用外出入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+        result_times_editable:
+          type: string
+          description: 実績出勤/退勤入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+        result_breaks_editable:
+          type: string
+          description: 実績休憩入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+        going_out_for_personal_purposes_editable:
+          type: string
+          description: 実績私用外出入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+        result_times_on_vacation_editable:
+          type: string
+          description: 全日休暇時の実績入力可否。入力可/入力不可。タイムレコーダープランの場合に入力値があっても無視する。
+        punch_on_vacation_enabled:
+          type: string
+          description: 全日休暇時の打刻可否。打刻可/打刻不可。タイムレコーダープランの場合に入力値があっても無視する。
+        ampm_holidays_usable:
+          type: string
+          description: 午前半休＋午後半休。取得可/取得不可。タイムレコーダープランの場合に入力値があっても無視する。
+        estimated_times_editable:
+          type: string
+          description: 見込勤務入力可否。入力可/入力不可/非表示。タイムレコーダープランの場合に入力値があっても無視する。
+        handling_of_leaving_punch:
+          type: string
+          description: 翌日の予定時刻を超えた退勤打刻の扱い。当日の退勤打刻として扱う/翌日の退勤打刻として扱う。
+        display_alert_shift_create:
+          type: string
+          description: シフト作成時のアラート表示。利用する/利用しない。プレミアムプラン以外の場合に入力値があっても無視する。
+        night_work_limited:
+          type: string
+          description: 深夜労働制限。制限する/制限しない。プレミアムプラン以外の場合に入力値があっても無視する。
+        night_work_limited_at:
+          type: string
+          description: 深夜労働制限期日。yyyy/mm/dd 形式の日付。深夜労働が「制限する」の場合は必須。 プレミアムプラン以外の場合に入力値があっても無視する。
+        work_interval:
+          type: string
+          description: 勤務間インターバル制限。制限する/制限しない。プレミアムプラン以外の場合に入力値があっても無視する。
+        work_interval_system:
+          type: string
+          description: 勤務間インターバル。HH:MM 形式。勤務間インターバル制限が「制限する」場合は必須。 プレミアムプラン以外の場合に入力値があっても無視する。
+        limited_weekly_28hours:
+          type: string
+          description: 週 28 時間労働制限。制限する/制限しない。シフト作成時のアラート表示が「利用する」の場合は必須。 プレミアムプラン以外の場合に入力値があっても無視する。
+        max_continuous_working_days_per_month:
+          type: string
+          description: 連続勤務制限日数。整数 (2〜99)。シフト作成時のアラート表示が「利用する」の場合は必須。 プレミアムプラン以外の場合に入力値があっても無視する。
+        max_working_minutes_per_month:
+          type: string
+          description: 月間労働時間。HH:MM (00:00〜99:00) を 1 月度から 12 月度までの順番に/区切りで指定する。 シフト作成時のアラート表示が「利用する」の場合は必須。 プレミアムプラン以外の場合に入力値があっても無視する。
+        monthly_scheduled_holidays:
+          type: string
+          description: 月間休日日数。整数 (0〜99) を 1 月度から 12 月度までの順番に/区切りで指定する。 シフト作成時のアラート表示が「利用する」の場合は必須。 プレミアムプラン以外の場合に入力値があっても無視する。
+        standard_working_hours:
+          type: string
+          description: 工数の基準となる労働時間。実働時間/総労働時間。プレミアムプラン以外の場合に入力値があっても無視する。
+        allowed_minus:
+          type: string
+          description: 労働時間以上の工数入力。許容する/許容しない。プレミアムプラン以外の場合に入力値があっても無視する。
+        hourly_wage:
+          type: integer
+          description: 賃率/時給。整数 (0〜99999)。プレミアムプラン以外の場合に入力値があっても無視する。
+        time_frame_aggregation_flg:
+          type: string
+          description: 時間帯別集計。ON/OFF。プレミアムプラン以外の場合に入力値があっても無視する。
+        time_frame_aggregation_agreement:
+          type: string
+          description: 規定休憩無視同意 (時間帯別集計)。同意済/未同意。プレミアムプラン以外の場合に入力値があっても無視する。
+        time_frame_aggregation_items:
+          type: string
+          description: 時間帯別集計項目。項目名|HH:MM-HH:MM (00:00〜72:00) 形式。複数の場合は/区切り。 プレミアムプラン以外の場合に入力値があっても無視する。
+    WorkingRecord:
+      type: object
+      description: |
+        勤務実績。
+      properties:
+        date:
+          type: string
+          description: yyyy/mm/dd 形式の日付。
+          example: 2018/09/03
+        working_day_category:
+          $ref: '#/components/schemas/EnumWorkingDayCategory'
+          description: '労働区分。0 : 労働日、1 : 所定休日、2 : 法定休日。'
+        start_time:
+          type:
+            - string
+            - 'null'
+          description: 実績開始時刻。
+          example: 2018/09/03 09:00:00
+        end_time:
+          type:
+            - string
+            - 'null'
+          description: 実績終了時刻。
+          example: 2018/09/03 22:00:00
+        rounded_start_time:
+          type:
+            - string
+            - 'null'
+          description: 丸め実績開始時刻。
+          example: 2018/09/03 09:00:00
+        rounded_end_time:
+          type:
+            - string
+            - 'null'
+          description: 丸め実績終了時刻。
+          example: 2018/09/03 22:00:00
+        attendance_punch_time:
+          type:
+            - string
+            - 'null'
+          description: 出勤打刻時刻。
+        leaving_punch_time:
+          type:
+            - string
+            - 'null'
+          description: 退勤打刻時刻。
+        actual_working_hours_no_rounding:
+          type:
+            - integer
+            - 'null'
+          description: 実働時間 (まるめなし) の分単位の値。
+        break_time_results:
+          type: array
+          description: 休憩実績の配列。
+          items:
+            $ref: '#/components/schemas/BreakTimeResult'
+    EnumAlertType:
+      type: integer
+      description: |
+        アラート種別。
+
+        - 1 : 打刻忘れ。
+        - 2 : 欠勤疑い。
+        - 3 : 休憩過小/超過。
+        - 4 : 早すぎる出勤 (予定-実績)。
+        - 5 : 遅すぎる退勤 (予定-実績)。
+        - 6 : 休日出勤。
+        - 7 : 遅刻。
+        - 8 : 早退。
+        - 9 : 残業時間閾値超え。
+        - 10 : 無断出勤。
+        - 11 : 深夜労働。
+        - 12 : 週次実働時間閾値超え。
+        - 13 : 36 協定。
+        - 14 : インターバル。
+        - 15 : 見込み時間外閾値超え (実績値)。
+        - 16 : 早入り。
+        - 17 : 居残り。
+        - 18 : 労働日見込み時間外閾値超え (入力値)。
+        - 19 : 見込み時間外閾値超え (入力値)。
+        - 20 : 早すぎる出勤 (IN-実績)。
+        - 21 : 遅すぎる退勤 (OUT-実績)。
+        - 22 : 工数未入力。
+        - 24 : 指示なし残業。
+        - 25 : 1 週 1 休日。
+        - 26 : 入力違反。
+        - 27 : フレキシブルタイム違反。
+        - 28 : 休憩時間不足。
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        - 20
+        - 21
+        - 22
+        - 24
+        - 25
+        - 26
+        - 27
+        - 28
+    EnumIncludesParents:
+      type: integer
+      description: |
+        直系親取得有無。直系の親組織も取得対象と含める場合は 1、含めない場合は 0。
+      enum:
+        - 0
+        - 1
+    EnumPermissionType:
+      type: integer
+      description: |
+        権限種別。1 : 企業管理者、2 : 一般管理者、3 : 従業員。
+      enum:
+        - 1
+        - 2
+        - 3
+    EnumStampType:
+      type: integer
+      description: |
+        打刻種別。 11 : 出勤、12 : 退勤、21 : 直行、22 : 直帰、31 : 休憩入、32 : 休憩戻。
+      enum:
+        - 11
+        - 12
+        - 21
+        - 22
+        - 31
+        - 32
+    EnumWorkingDayCategory:
+      type: integer
+      description: |
+        労働区分。0 : 労働日、1 : 所定休日、2 : 法定休日。
+      enum:
+        - 0
+        - 1
+        - 2
+    RequestDeleteManhoursStaffId:
+      type: object
+      description: |
+        工数削除のリクエスト。
+      required:
+        - token
+        - date
+        - project_id
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        date:
+          type: string
+          description: 削除対象の日付。
+          example: '20190803'
+        project_id:
+          type: integer
+          description: プロジェクト ID。
+        task_id:
+          type: integer
+          description: タスク ID。指定無しなら全タスク工数を削除する。
+    RequestDeleteProjectsProjectId:
+      type: object
+      description: |
+        プロジェクト削除のリクエスト。
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+    RequestDeleteStaffStaffId:
+      type: object
+      description: |
+        従業員退職/削除のリクエスト。
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        retirement_date:
+          type: string
+          description: 退職日。YYYY/MM/DD 形式の日付。 指定されている場合は退職処理、未指定の場合は削除処理となる。
+          example: 2017/03/31
+    RequestDeleteTasksTaskId:
+      type: object
+      description: |
+        タスク削除のリクエスト。
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+    RequestPatchStaffs:
+      type: object
+      description: |
+        従業員新規登録・更新のリクエスト。
+      required:
+        - token
+        - staffs
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        staffs:
+          type: array
+          description: 新規登録、または更新する従業員の配列。
+          items:
+            $ref: '#/components/schemas/StaffInput'
+    RequestPatchWorkingConditionSettings:
+      type: object
+      description: |
+        個別就業設定のリクエスト。
+      required:
+        - token
+        - working_condition_settings
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        working_condition_settings:
+          type: array
+          description: 設定する個別就業設定の配列。
+          items:
+            $ref: '#/components/schemas/WorkingConditionSetting'
+    RequestPostImporterFactoryOrganizations:
+      type: object
+      description: |
+        異動日を指定した異動のリクエスト。
+      required:
+        - token
+        - organizations
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        organizations:
+          type: array
+          description: 異動内容の配列。
+          items:
+            $ref: '#/components/schemas/ImporterFactoryOrganization'
+    RequestPostImporterFactoryPermissions:
+      type: object
+      description: |
+        権限と管理先指定のリクエスト。
+      required:
+        - token
+        - permissions
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        permissions:
+          type: array
+          description: 管理権限設定の指定と管理先の指定の配列。
+          items:
+            $ref: '#/components/schemas/ImporterFactoryPermission'
+    RequestPostImporterFactoryPermissionsReserve:
+      type: object
+      description: |
+        権限と管理先予約のリクエスト。
+      required:
+        - token
+        - permissions_reserve
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        permissions_reserve:
+          type: array
+          description: 管理権限設定の指定と管理先の指定の予約の配列。
+          items:
+            $ref: '#/components/schemas/ImporterFactoryPermissionReserve'
+    RequestPostManhours:
+      type: object
+      description: |
+        工数作成更新のリクエスト。
+      required:
+        - token
+        - manhours
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        manhours:
+          type: array
+          description: 作成、または更新する工数の配列。
+          items:
+            type: object
+            description: 従業員毎の工数。
+            required:
+              - staff_id
+              - dates
+            properties:
+              staff_id:
+                type: integer
+                description: 従業員 ID。
+              dates:
+                type: array
+                description: 従業員の日付毎の工数の配列。
+                items:
+                  type: object
+                  description: 日付毎の工数。
+                  required:
+                    - date
+                    - projects
+                  properties:
+                    date:
+                      type: string
+                      description: 日付。yyyy/mm/dd 形式。
+                      example: 2019/08/03
+                    projects:
+                      type: array
+                      description: 日付のプロジェクト毎の工数の配列。
+                      items:
+                        type: object
+                        description: プロジェクト毎の工数。
+                        required:
+                          - project_id
+                          - daily_hour_items
+                        properties:
+                          project_id:
+                            type: integer
+                            description: プロジェクト ID。
+                          daily_hour_items:
+                            type: array
+                            description: プロジェクトのタスク毎の工数の配列。
+                            items:
+                              $ref: '#/components/schemas/ManhourDailyHourItem'
+    RequestPostOrganizations:
+      type: object
+      description: |
+        組織作成のリクエスト。
+      required:
+        - token
+        - organizations
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        organizations:
+          type: array
+          description: 生成する組織を配列で指定する。
+          items:
+            type: object
+            description: 生成する組織。
+            required:
+              - name
+            properties:
+              name:
+                type: string
+                maxLength: 32
+                description: 組織の名称。UTF-8 かつ機種依存文字 (1) と/を含まない。最大 32 文字。
+              name_en:
+                type: string
+                maxLength: 64
+                description: 組織の名称 (英語)。UTF-8 かつ機種依存文字 (1) と/を含まない。最大 64 文字。
+              code:
+                type: string
+                maxLength: 32
+                description: 組織コード。a〜z、A〜Z、0〜9 と - のみ。最大 32 文字。
+              parent_organization:
+                type: string
+                description: 生成する組織が所属する親組織。最上位 (企業を含まない) の親組織から/区切りで記述する。 UTF-8 かつ機種依存文字 (1) を含まない。
+    RequestPostProjectStaffsProjectId:
+      type: object
+      description: |
+        プロジェクト従業員追加解除のリクエスト。
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        assign:
+          type: array
+          description: 追加、または更新する従業員の配列。
+          items:
+            type: object
+            description: 追加、または更新する従業員。
+            required:
+              - staff_id
+            properties:
+              staff_id:
+                type: integer
+                description: 従業員 ID。
+              owner:
+                type: boolean
+                description: true ならオーナーとして扱う。デフォルトは false。
+        unassign:
+          type: array
+          description: 解除する従業員 ID の配列。
+          items:
+            type: integer
+    RequestPostProjects:
+      type: object
+      description: |
+        プロジェクト作成更新のリクエスト。
+      required:
+        - token
+        - projects
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        projects:
+          type: array
+          description: 作成、または更新するプロジェクトの配列。
+          items:
+            $ref: '#/components/schemas/ProjectInput'
+    RequestPostStamps:
+      type: object
+      description: |
+        打刻のリクエスト。
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        type:
+          $ref: '#/components/schemas/EnumStampType'
+          description: 打刻種別。省略された場合、打刻履歴を元に出勤または退勤の打刻種別が決定する。
+        stampedAt:
+          type: string
+          description: クライアントでの打刻日時。YYYY/MM/DD HH:MM:SS 形式。 実際の打刻はマネーフォワード クラウド勤怠 Plus の打刻サーバー側の時刻となる。
+          example: 2017/03/14 08:57:23
+        timezone:
+          type: string
+          description: クライアントのタイムゾーンを +09:00 の形の文字列で指定する。
+          example: '+09:00'
+        telework:
+          type: integer
+          description: テレワーク状態を ON にするかを指定する。出勤打刻が成功した場合のみ有効となる。 1 を指定すると、マイページの「テレワークを開始する」と同様に、テレワーク中状態となる。 テレワーク機能が有効な企業でのみ利用できる。
+    RequestPostTasks:
+      type: object
+      description: |
+        タスク作成更新のリクエスト。
+      required:
+        - token
+        - tasks
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+        tasks:
+          type: array
+          description: 作成、または更新するタスクの配列。
+          items:
+            $ref: '#/components/schemas/TaskInput'
+    RequestPostTokenReissue:
+      type: object
+      description: |
+        アクセストークン再発行のリクエスト。
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: アクセストークン。
+    RequestPostWorkingStatusesSearch:
+      type: object
+      description: |
+        勤務処理取得のリクエスト。
+      required:
+        - token
+        - search
+      properties:
+        login_company_code:
+          type: string
+          description: 企業のログイン企業 ID。
+        token:
+          type: string
+          description: アクセストークン。
+        search:
+          type: array
+          description: 勤務処理取得リスト。最大 1,000 件まで指定可能。
+          maxItems: 1000
+          items:
+            type: object
+            description: 勤務処理の取得対象。
+            required:
+              - staff_id
+              - date
+            properties:
+              staff_id:
+                type: string
+                description: 勤務処理を取得する従業員 ID。
+              date:
+                type: string
+                description: 取得対象の日付。YYYY-MM-DD 形式。
+                example: '2026-01-01'
+    RequestPostWorkingStatusesUpdate:
+      type: object
+      description: |
+        勤務処理更新のリクエスト。
+      required:
+        - token
+        - update
+      properties:
+        login_company_code:
+          type: string
+          description: 企業のログイン企業 ID。
+        token:
+          type: string
+          description: アクセストークン。
+        update:
+          type: array
+          description: 勤務処理更新リスト。最大 1,000 件まで指定可能。
+          maxItems: 1000
+          items:
+            type: object
+            description: 勤務処理の更新対象。
+            required:
+              - staff_id
+              - date
+              - working_statuses
+              - replace
+            properties:
+              staff_id:
+                type: string
+                description: 勤務処理を更新する従業員 ID。
+              date:
+                type: string
+                description: 更新対象の日付。YYYY-MM-DD 形式。
+                example: '2026-02-02'
+              working_statuses:
+                type: array
+                description: 更新する勤務処理ラベルリスト。未指定の場合は空配列として扱う。 カスタム勤務処理リストに登録済みのラベルのみ指定可能。
+                items:
+                  type: string
+              replace:
+                type: boolean
+                description: 更新する方法を指定する項目。 true は既存の勤務処理を全て置き換える。false は既存の勤務処理に追加する。
+              if_not:
+                type: array
+                description: 排他制御用ラベルリスト。 既存の勤務処理に本リストのいずれかが含まれている場合、更新しない。
+                items:
+                  type: string
+    ResponseDeleteManhoursStaffId:
+      type: object
+      description: |
+        工数削除のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            staff_id:
+              type: integer
+              description: 従業員 ID。
+            date:
+              type: string
+              description: 日付。
+              example: '2019-08-03'
+            project_id:
+              type: integer
+              description: プロジェクト ID。
+            daily_hour_items:
+              type: array
+              description: プロジェクトのタスク毎の工数の配列。
+              items:
+                type: object
+                description: 削除された結果のタスク毎の工数。
+                properties:
+                  task_id:
+                    type: integer
+                    description: 削除された結果のタスク ID。
+                  minute:
+                    type: integer
+                    description: 削除された結果の工数 (分)。
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseDeleteProjectsProjectId:
+      type: object
+      description: |
+        プロジェクト削除のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 削除したプロジェクト。
+          properties:
+            project_id:
+              type: integer
+              description: プロジェクト ID。
+            name:
+              type: string
+              description: プロジェクト名称。
+            short_name:
+              type:
+                - string
+                - 'null'
+              description: プロジェクト略称。
+            project_code:
+              type:
+                - string
+                - 'null'
+              description: プロジェクトコード。
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseDeleteStaffStaffId:
+      type: object
+      description: |
+        従業員退職/削除のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            login_company_code:
+              type: string
+              description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+            staff_id:
+              type: integer
+              description: 従業員 ID。
+            staff_code:
+              type:
+                - string
+                - 'null'
+              description: 従業員番号。
+            email:
+              type:
+                - string
+                - 'null'
+              description: メールアドレス。
+        errors:
+          type: array
+          description: エラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseDeleteTasksTaskId:
+      type: object
+      description: |
+        タスク削除のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 削除したタスク。
+          properties:
+            task_id:
+              type: integer
+              description: タスク ID。
+            name:
+              type: string
+              description: タスク名称。
+            code:
+              type:
+                - string
+                - 'null'
+              description: タスクコード。
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseFailure:
+      type: object
+      description: |
+        処理失敗時の共通レスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。失敗の場合は false。
+        errors:
+          type: array
+          description: 失敗の原因となったエラーについてのエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseGetAlerts:
+      type: object
+      description: |
+        アラート情報取得のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            login_company_code:
+              type: string
+              description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+            staff_id:
+              type: integer
+              description: 従業員 ID。
+            count:
+              type: integer
+              description: 取得されたアラートの件数。
+            alerts:
+              type: array
+              description: 取得されたアラートの配列。
+              items:
+                $ref: '#/components/schemas/Alert'
+        errors:
+          type: array
+          description: 失敗の原因となったエラーについてのエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseGetMultipleStamps:
+      type: object
+      description: |
+        打刻情報取得 (複数従業員) のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            login_company_code:
+              type: string
+              description: ログイン企業 ID。
+            multiple_stamps:
+              type: array
+              description: 従業員ごとの打刻情報の配列。
+              items:
+                $ref: '#/components/schemas/MultipleStamp'
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseGetProjects:
+      type: object
+      description: |
+        プロジェクト取得 (一覧) のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            count:
+              type: integer
+              description: 取得プロジェクトの件数。
+            projects:
+              type: array
+              description: 取得されたプロジェクトの配列。
+              items:
+                $ref: '#/components/schemas/Project'
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseGetProjectsProjectId:
+      type: object
+      description: |
+        プロジェクト取得 (プロジェクト ID 指定) のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          $ref: '#/components/schemas/Project'
+          description: 取得されたプロジェクト。
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseGetStaffProjectsStaffId:
+      type: object
+      description: |
+        参加プロジェクト取得 (指定) のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            projects:
+              type: array
+              description: 参加プロジェクトオブジェクトの配列。
+              items:
+                $ref: '#/components/schemas/StaffProject'
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseGetStaffs:
+      type: object
+      description: |
+        従業員取得のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            login_company_code:
+              type: string
+              description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+            Count:
+              type: integer
+              description: 取得された従業員数。
+            TotalCount:
+              type: integer
+              description: 取得できる従業員数。
+            staffs:
+              type: array
+              description: 取得した従業員情報の配列。
+              items:
+                $ref: '#/components/schemas/Staff'
+        errors:
+          type: array
+          description: 失敗の原因となったエラーについてのエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseGetStamps:
+      type: object
+      description: |
+        打刻情報取得のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            login_company_code:
+              type: string
+              description: ログイン企業 ID。
+            staff_id:
+              type: integer
+              description: 従業員 ID。
+            count:
+              type: integer
+              description: 従業員の打刻数。
+            stamps:
+              type: array
+              description: 打刻データの配列。
+              items:
+                $ref: '#/components/schemas/Stamp'
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseGetTasksTaskId:
+      type: object
+      description: |
+        タスク取得 (タスク ID 指定) のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          $ref: '#/components/schemas/Task'
+          description: 取得されたタスク。
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseGetWorkingRecords:
+      type: object
+      description: |
+        勤務実績取得 (複数従業員) のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: array
+          description: 従業員ごとの勤務実績情報の配列。
+          items:
+            $ref: '#/components/schemas/StaffWorkingRecord'
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseManhours:
+      type: object
+      description: |
+        工数取得、および工数作成更新のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            manhours:
+              type: array
+              description: 工数の配列。
+              items:
+                $ref: '#/components/schemas/Manhour'
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseOrganizations:
+      type: object
+      description: |
+        組織作成、および組織取得のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            count:
+              type: integer
+              description: 組織の件数。
+            organizations:
+              type: array
+              description: 組織の配列。
+              items:
+                $ref: '#/components/schemas/Organization'
+        errors:
+          type: array
+          description: 失敗の原因となったエラーについてのエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponsePatchStaffs:
+      type: object
+      description: |
+        従業員新規登録・更新のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            login_company_code:
+              type: string
+              description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+            staffs:
+              type: array
+              description: 従業員の配列。
+              items:
+                type: object
+                description: 新規登録、または更新された従業員。
+                properties:
+                  staff_id:
+                    type: integer
+                    description: 従業員 ID。
+                  staff_code:
+                    type:
+                      - string
+                      - 'null'
+                    description: 従業員番号。
+                  email:
+                    type:
+                      - string
+                      - 'null'
+                    description: メールアドレス。
+                  organization_id:
+                    type: integer
+                    description: 組織の ID。
+                  employment_category_id:
+                    type:
+                      - integer
+                      - 'null'
+                    description: 雇用区分の ID。
+        errors:
+          type: array
+          description: エラーメッセージの配列。
+          items:
+            type: object
+            description: エラーメッセージ。
+            properties:
+              code:
+                type: string
+                description: エラーコード。
+              staff_id:
+                type: string
+                description: 従業員 ID。従業員更新の場合のみ。
+              name:
+                type: string
+                description: リクエストの姓 + 名。
+              message:
+                type: string
+                description: エラーメッセージ。
+    ResponsePostProjects:
+      type: object
+      description: |
+        プロジェクト作成更新のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            count:
+              type: integer
+              description: 作成更新プロジェクトの件数。
+            projects:
+              type: array
+              description: 作成更新されたプロジェクトの配列。
+              items:
+                type: object
+                description: 作成更新されたプロジェクト。
+                properties:
+                  project_id:
+                    type: integer
+                    description: プロジェクト ID。
+                  name_ja:
+                    type: string
+                    description: プロジェクト名称。
+                  short_name_ja:
+                    type:
+                      - string
+                      - 'null'
+                    description: プロジェクト略称。
+                  project_code:
+                    type:
+                      - string
+                      - 'null'
+                    description: プロジェクトコード。
+                  remarks:
+                    type:
+                      - string
+                      - 'null'
+                    description: 備考。
+                  start_date:
+                    type:
+                      - string
+                      - 'null'
+                    description: プロジェクト開始日。
+                    example: '2019-08-01'
+                  end_date:
+                    type:
+                      - string
+                      - 'null'
+                    description: プロジェクト終了日。
+                    example: '2019-08-31'
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponsePostStamps:
+      type: object
+      description: |
+        打刻のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            login_company_code:
+              type: string
+              description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+            staff_id:
+              type: integer
+              description: 従業員 ID。
+            type:
+              type: integer
+              description: 打刻種別。
+            stampedAt:
+              type: string
+              description: サーバー側での打刻日時。
+              example: 2017/03/14 08:57:00
+        errors:
+          type: array
+          description: エラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponsePostTokenReissue:
+      type: object
+      description: |
+        アクセストークン再発行のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            login_company_code:
+              type: string
+              description: ログイン企業 ID。
+            staff_id:
+              type: integer
+              description: 従業員 ID。
+            agency_manager_id:
+              type:
+                - integer
+                - 'null'
+              description: 代理管理者の ID。
+            token:
+              type: string
+              description: アクセストークン。
+            expired_at:
+              type: string
+              description: アクセストークンの有効期限。yyyy/mm/dd HH:MM:SS 形式。
+              example: 2017/10/09 00:00:00
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponsePostWorkingStatusesSearch:
+      type: object
+      description: |
+        勤務処理取得のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        results:
+          type: array
+          description: 処理結果の配列。
+          items:
+            type: object
+            description: 従業員・日付ごとの勤務処理。
+            properties:
+              staff_id:
+                type: string
+                description: 従業員 ID。
+              date:
+                type: string
+                description: 日付。
+                example: '2026-01-01'
+              working_statuses:
+                type: array
+                description: 勤務処理の配列。
+                items:
+                  type: string
+        errors:
+          type: array
+          description: エラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponsePostWorkingStatusesUpdate:
+      type: object
+      description: |
+        勤務処理更新のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。 成功の場合は true、一部成功の場合は true (errors あり)、失敗の場合は false。
+        errors:
+          type:
+            - array
+            - 'null'
+          description: エラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseProjectStaffs:
+      type: object
+      description: |
+        プロジェクト従業員取得、およびプロジェクト従業員追加解除のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            staff_ids:
+              type: array
+              description: プロジェクトの従業員の ID 配列。
+              items:
+                type: integer
+            owner_staff_ids:
+              type: array
+              description: プロジェクトオーナーの従業員の ID 配列。
+              items:
+                type: integer
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+    ResponseStaffs:
+      type: object
+      description: |
+        個別就業設定、異動、権限指定系 API 共通のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            login_company_code:
+              type: string
+              description: マネーフォワード クラウド勤怠 Plus 企業 ID。
+            staffs:
+              type: array
+              description: 従業員の配列。
+              items:
+                $ref: '#/components/schemas/StaffResult'
+        errors:
+          type: array
+          description: エラーメッセージの配列。
+          items:
+            type: object
+            description: エラーメッセージ。
+            properties:
+              code:
+                type: string
+                description: エラーコード。
+              target:
+                type: string
+                description: 対象の従業員 ID、またはメールアドレス。
+              staff_code:
+                type:
+                  - string
+                  - 'null'
+                description: 従業員番号。
+              email:
+                type:
+                  - string
+                  - 'null'
+                description: メールアドレス。
+              message:
+                type: string
+                description: エラーメッセージ。
+    ResponseTasks:
+      type: object
+      description: |
+        タスク取得 (一覧)、およびタスク作成更新のレスポンス。
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: 処理の成功失敗を示す。成功の場合は true、失敗の場合は false。
+        response:
+          type: object
+          description: 処理結果のオブジェクト。
+          properties:
+            count:
+              type: integer
+              description: タスクの件数。
+            tasks:
+              type: array
+              description: タスクの配列。
+              items:
+                $ref: '#/components/schemas/Task'
+        errors:
+          type: array
+          description: 失敗の原因となったエラーメッセージの配列。
+          items:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    tokenQuery:
+      type: apiKey
+      in: query
+      name: token
+      description: マイページから発行したアクセストークン。有効期限は 1 ヶ月と 1 日である。
