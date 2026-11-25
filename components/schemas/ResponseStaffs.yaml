@@ -1,5 +1,6 @@
 type: object
-description: 個別就業設定、異動、権限指定系 API 共通のレスポンス。
+description:
+  $ref: "./descriptions/ResponseStaffs.md"
 required:
   - success
 properties:

@@ -1,5 +1,6 @@
 type: object
-description: 従業員取得のレスポンス。
+description:
+  $ref: "./descriptions/ResponseGetStaffs.md"
 required:
   - success
 properties:

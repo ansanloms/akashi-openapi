@@ -1,5 +1,6 @@
 type: object
-description: 勤務処理更新のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostWorkingStatusesUpdate.md"
 required:
   - token
   - update

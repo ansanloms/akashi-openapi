@@ -1,5 +1,6 @@
 type: object
-description: タスク作成更新のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostTasks.md"
 required:
   - token
   - tasks

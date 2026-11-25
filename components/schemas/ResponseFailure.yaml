@@ -1,5 +1,6 @@
 type: object
-description: 処理失敗時の共通レスポンス。
+description:
+  $ref: "./descriptions/ResponseFailure.md"
 required:
   - success
 properties:

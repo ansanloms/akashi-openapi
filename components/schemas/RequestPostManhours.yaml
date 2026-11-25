@@ -1,5 +1,6 @@
 type: object
-description: 工数作成更新のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostManhours.md"
 required:
   - token
   - manhours

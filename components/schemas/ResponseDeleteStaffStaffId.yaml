@@ -1,5 +1,6 @@
 type: object
-description: 従業員退職/削除のレスポンス。
+description:
+  $ref: "./descriptions/ResponseDeleteStaffStaffId.md"
 required:
   - success
 properties:

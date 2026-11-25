@@ -1,5 +1,6 @@
 type: object
-description: タスク毎の工数。
+description:
+  $ref: "./descriptions/ManhourDailyHourItem.md"
 properties:
   task_id:
     type: integer

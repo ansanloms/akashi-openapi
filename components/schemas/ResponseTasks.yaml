@@ -1,5 +1,6 @@
 type: object
-description: タスク取得 (一覧)、およびタスク作成更新のレスポンス。
+description:
+  $ref: "./descriptions/ResponseTasks.md"
 required:
   - success
 properties:

@@ -1,5 +1,6 @@
 type: object
-description: 処理対象となった従業員。
+description:
+  $ref: "./descriptions/StaffResult.md"
 properties:
   staff_id:
     type: integer

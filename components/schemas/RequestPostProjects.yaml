@@ -1,5 +1,6 @@
 type: object
-description: プロジェクト作成更新のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostProjects.md"
 required:
   - token
   - projects

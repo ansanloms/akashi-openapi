@@ -1,5 +1,6 @@
 type: object
-description: 従業員新規登録・更新のリクエスト。
+description:
+  $ref: "./descriptions/RequestPatchStaffs.md"
 required:
   - token
   - staffs

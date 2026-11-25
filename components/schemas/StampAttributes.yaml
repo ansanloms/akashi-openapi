@@ -1,5 +1,6 @@
 type: object
-description: 実績参照結果。
+description:
+  $ref: "./descriptions/StampAttributes.md"
 properties:
   method:
     type: integer

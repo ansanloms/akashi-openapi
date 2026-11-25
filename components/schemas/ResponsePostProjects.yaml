@@ -1,5 +1,6 @@
 type: object
-description: プロジェクト作成更新のレスポンス。
+description:
+  $ref: "./descriptions/ResponsePostProjects.md"
 required:
   - success
 properties:

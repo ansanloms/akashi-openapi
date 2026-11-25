@@ -1,5 +1,6 @@
 type: object
-description: プロジェクト削除のリクエスト。
+description:
+  $ref: "./descriptions/RequestDeleteProjectsProjectId.md"
 required:
   - token
 properties:

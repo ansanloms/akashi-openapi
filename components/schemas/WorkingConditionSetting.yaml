@@ -1,7 +1,6 @@
 type: object
-description: >-
-  個別就業設定。従業員番号かメールアドレスのいずれかが必須。
-  パラメータの詳細は公開 API 仕様の添付「個別就業設定パラメータ」を参照。
+description:
+  $ref: "./descriptions/WorkingConditionSetting.md"
 required:
   - working_category
   - weekly_working_days

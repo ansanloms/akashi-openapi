@@ -1,5 +1,6 @@
 type: object
-description: プロジェクト毎の工数。
+description:
+  $ref: "./descriptions/ManhourProject.md"
 properties:
   project_id:
     type: integer

@@ -1,5 +1,6 @@
 type: object
-description: アラート情報取得のレスポンス。
+description:
+  $ref: "./descriptions/ResponseGetAlerts.md"
 required:
   - success
 properties:

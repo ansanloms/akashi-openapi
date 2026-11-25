@@ -1,5 +1,6 @@
 type: object
-description: 参加プロジェクト取得 (指定) のレスポンス。
+description:
+  $ref: "./descriptions/ResponseGetStaffProjectsStaffId.md"
 required:
   - success
 properties:

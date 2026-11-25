@@ -1,5 +1,6 @@
 type: object
-description: 工数削除のリクエスト。
+description:
+  $ref: "./descriptions/RequestDeleteManhoursStaffId.md"
 required:
   - token
   - date

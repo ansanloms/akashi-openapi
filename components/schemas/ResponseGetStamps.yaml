@@ -1,5 +1,6 @@
 type: object
-description: 打刻情報取得のレスポンス。
+description:
+  $ref: "./descriptions/ResponseGetStamps.md"
 required:
   - success
 properties:

@@ -1,5 +1,6 @@
 type: object
-description: 異動日を指定した異動の内容。従業員番号かメールアドレスのいずれかが必須。
+description:
+  $ref: "./descriptions/ImporterFactoryOrganization.md"
 required:
   - organization_change_date
   - employment_category

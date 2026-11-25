@@ -1,5 +1,6 @@
 type: object
-description: 従業員退職/削除のリクエスト。
+description:
+  $ref: "./descriptions/RequestDeleteStaffStaffId.md"
 required:
   - token
 properties:

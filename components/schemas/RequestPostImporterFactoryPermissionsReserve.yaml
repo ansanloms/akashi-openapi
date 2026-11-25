@@ -1,5 +1,6 @@
 type: object
-description: 権限と管理先予約のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostImporterFactoryPermissionsReserve.md"
 required:
   - token
   - permissions_reserve

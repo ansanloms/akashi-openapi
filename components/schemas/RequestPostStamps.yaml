@@ -1,5 +1,6 @@
 type: object
-description: 打刻のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostStamps.md"
 required:
   - token
 properties:

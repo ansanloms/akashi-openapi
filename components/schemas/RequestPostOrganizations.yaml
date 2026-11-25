@@ -1,5 +1,6 @@
 type: object
-description: 組織作成のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostOrganizations.md"
 required:
   - token
   - organizations

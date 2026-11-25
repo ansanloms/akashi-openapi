@@ -1,5 +1,6 @@
 type: object
-description: 組織。
+description:
+  $ref: "./descriptions/Organization.md"
 properties:
   organizationId:
     type: integer

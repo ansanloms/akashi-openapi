@@ -1,5 +1,6 @@
 type: object
-description: 従業員新規登録・更新のレスポンス。
+description:
+  $ref: "./descriptions/ResponsePatchStaffs.md"
 required:
   - success
 properties:

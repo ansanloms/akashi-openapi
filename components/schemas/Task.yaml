@@ -1,5 +1,6 @@
 type: object
-description: タスク。
+description:
+  $ref: "./descriptions/Task.md"
 properties:
   task_id:
     type: integer

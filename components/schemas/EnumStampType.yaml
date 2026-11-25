@@ -1,7 +1,6 @@
 type: integer
-description: >-
-  打刻種別。
-  11 : 出勤、12 : 退勤、21 : 直行、22 : 直帰、31 : 休憩入、32 : 休憩戻。
+description:
+  $ref: "./descriptions/EnumStampType.md"
 enum:
   - 11
   - 12

@@ -1,5 +1,6 @@
 type: object
-description: 個別就業設定のリクエスト。
+description:
+  $ref: "./descriptions/RequestPatchWorkingConditionSettings.md"
 required:
   - token
   - working_condition_settings

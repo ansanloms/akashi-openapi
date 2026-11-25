@@ -1,5 +1,6 @@
 type: object
-description: 従業員ごとの打刻情報。
+description:
+  $ref: "./descriptions/MultipleStamp.md"
 properties:
   staff_id:
     type: integer

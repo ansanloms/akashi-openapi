@@ -1,5 +1,6 @@
 type: object
-description: 権限と管理先指定のリクエスト。
+description:
+  $ref: "./descriptions/RequestPostImporterFactoryPermissions.md"
 required:
   - token
   - permissions

@@ -1,5 +1,6 @@
 type: object
-description: 雇用区分。
+description:
+  $ref: "./descriptions/EmploymentCategory.md"
 properties:
   employmentCategoryId:
     type:
