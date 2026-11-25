@@ -65,10 +65,7 @@ get:
       required: true
       description: 直系親取得有無。直系の親組織も取得対象と含める場合は 1、含めない場合は 0。
       schema:
-        type: integer
-        enum:
-          - 0
-          - 1
+        $ref: ../components/schemas/EnumIncludesParents.yaml
     - in: query
       name: orgId
       required: false

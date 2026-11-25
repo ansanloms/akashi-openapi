@@ -6,12 +6,8 @@ properties:
     description: yyyy/mm/dd 形式の日付。
     example: 2018/09/03
   working_day_category:
-    type: integer
+    $ref: ./EnumWorkingDayCategory.yaml
     description: "労働区分。0 : 労働日、1 : 所定休日、2 : 法定休日。"
-    enum:
-      - 0
-      - 1
-      - 2
   start_time:
     type:
       - string
